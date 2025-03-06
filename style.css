@@ -1,0 +1,442 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    background-color: #FCE3A5;
+    font-family: "Inter";
+    position: relative;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url(fonts/Inter-VariableFont_opsz\,wght.ttf);
+}
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: #32a1ce;
+    z-index: 100;
+}
+
+body::before {
+    left: 60px;
+}
+
+body::after {
+    right: 60px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+}
+
+.menu {
+    width: 100%;
+    background-color: #FCE3A5;
+    height: 130px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 60px;
+    box-sizing: border-box;
+}
+
+.Logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+}
+
+.logo {
+    width: 7vw;
+    height: 100%;
+    object-fit: contain;
+}
+
+.link_logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+}
+
+.zagolovok {
+    font-weight: 600;
+    font-size: 3vw;
+    line-height: 1;
+}
+
+.header-img {
+    width: 100%;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    gap: 7vw;
+    font-weight: 400;
+}
+
+.punkts {
+    color: black;
+    text-decoration: none;
+    font-size: 1.5vw;
+}
+
+.icons {
+    display: flex;
+    gap: 20px;
+    padding-right: 3px;
+}
+
+.korzina {
+    width: 4vw;
+    height: auto;
+}
+
+.offers {
+    padding: 0 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+}
+
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.slider {
+    display: flex;
+    gap: 60px;
+    transition: transform 0.5s ease;
+    will-change: transform;
+}
+
+.slides {
+    flex: 0 0 calc((100% - 180px) / 4);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 0;
+}
+
+.text-slider {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    background-color: #FFF0CA;
+    padding: 15px;
+    margin-top: 0;
+}
+
+.zagolovok-offers {
+    font-size: 38px;
+    font-weight: 600;
+}
+
+.bttn-slider {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.img-bttn {
+    width: 80px;
+    cursor: pointer;
+}
+
+.div-forest {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px;
+    background-color: #f5e6c3;
+    display: flex;
+    justify-content: center;
+}
+
+.forest {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.animated-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 31px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #333;
+    text-align: justify;
+    width: 1200px;
+    gap: 1em;
+}
+.products {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 60px;
+    gap: 60px;
+}
+.first_product-image {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+}
+.images_products {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    min-width: 150px;
+}
+.scnd_product-image {
+    max-width: 300px;
+}
+.mini-images {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+}
+.mini-products {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.first_product {
+    background-color: #f5e6c3;
+    /* height: 160px; */
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+}
+.brusok {
+    width: 250px;
+    height: auto;
+}
+h1 {
+    text-align: center;
+    font-size: 25px;
+}
+.brusok-class {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding-top: 5px;
+    justify-content: space-between;
+}
+.des-brusok {
+    font-size: 13px;
+    color: #707070;
+}
+.buy {
+    padding: 10px;
+    border: none;
+    background-color: #ebd294;
+    border-radius: 10px;
+    cursor: pointer;
+}
+@media (max-width: 1040px) {
+    .header-img {
+        position: relative;
+        top: 30px;
+    }
+    .text-slider {
+        font-size: 13px;
+    }
+}
+@media (max-width: 910px) {
+    .animated-text {
+        font-size: 25px;
+    }
+    .icons {
+        gap: 10px;
+    }
+    .menu {
+        height: 100px;
+    }
+    ul {
+        gap: 5vw;
+    }
+    .offers {
+        padding: 0 60px;
+    }
+
+    .slider {
+        gap: 20px;
+    }
+
+    .slides {
+        flex: 0 0 calc((100% - 60px) / 4);
+    }
+
+    .text-slider {
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .zagolovok-offers {
+        font-size: 28px;
+    }
+
+    .img-bttn {
+        width: 60px;
+    }
+}
+@media (max-width: 768px) {
+    body::before,
+    body::after {
+        display: none;
+    }
+
+    .menu {
+        padding: 0 20px;
+        height: 70px;
+    }
+
+    .Logo {
+        gap: 10px;
+    }
+
+    .zagolovok {
+        font-size: 2.5vw;
+    }
+
+    .offers {
+        padding: 0 20px;
+    }
+
+    .slider {
+        gap: 20px;
+    }
+
+    .slides {
+        flex: 0 0 calc((100% - 60px) / 4);
+    }
+
+    .text-slider {
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .zagolovok-offers {
+        font-size: 28px;
+    }
+
+    .img-bttn {
+        width: 60px;
+    }
+    .animated-text {
+        font-size: 21px;
+    }
+}
+    .punkts {
+        font-size: 1.7vw;
+    }
+@media (max-width: 600px) {
+    .animated-text {
+        font-size: 15px;
+    }
+    .div-forest {
+        padding: 30px;
+    }
+    .menu {
+        padding: 0 10px;
+    }
+    .punkts {
+        font-size: 2.3vw;
+    }
+    .zagolovok {
+        font-size: 3vw;
+    }
+    .korzina {
+        width: 5vw;
+    }
+    .offers {
+        padding: 0 10px;
+        gap: 20px;
+    }
+
+    .slider {
+        gap: 10px;
+    }
+
+    .slides {
+        flex: 0 0 calc((100% - 10px) / 3); /* 2 слайда, 10px - gap между ними */
+    }
+
+    .text-slider {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .zagolovok-offers {
+        font-size: 17px;
+    }
+
+    .img-bttn {
+        width: 50px;
+    }
+}
+@media (max-width: 450px) {
+    .animated-text {
+        font-size: 10px;
+    }
+    .menu {
+        height: 50px;
+    }
+    main {
+        gap: 60px;
+    }
+    .bttn-slider {
+        gap: 0;
+        margin-top: 0;
+    }
+    .text-slider {
+        font-size: 8px;
+    }
+    .img-bttn {
+        width: 30px;
+    }
+    .div-forest {
+        padding: 20px;
+    }
+}
