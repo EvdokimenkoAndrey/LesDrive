@@ -277,6 +277,13 @@
         }
         .des {
             font-size: 7px;
+            padding: 8px;
+        }
+        .advantage_img {
+            width: 33%;
+        }
+        .desc_advan {
+            font-size: 7px;
         }
     }
 

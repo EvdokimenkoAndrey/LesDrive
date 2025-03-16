@@ -220,17 +220,17 @@
         <div class="email_num">
           <div class="email">
             <img src="images/mail.png" class="info_img">
-            <p class="address">lesdrive@mail.ru</p>
+            <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
           </div>
           <div class="email">
             <img src="images/phone.png" class="info_img">
-            <p class="address">89123456789</p>
+            <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
           </div>
         </div>
         <div class="email_num">
           <div class="email karts">
             <img src="images/karts.png" class="info_img kart">
-            <p class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</p>
+            <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
           </div>
         </div>
       </div>

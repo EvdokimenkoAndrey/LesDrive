@@ -16,12 +16,14 @@
 .value {
     width: 100%;
     padding: 50px;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     border-radius: 10px;
     gap: 20px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    max-width: 400px;
+    background-color: #FFF0CA;
 }
 .img_aboutus {
     width: 100%;
@@ -34,7 +36,7 @@
     font-size: 25px;
 }
 .partner {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     border-radius: 10px;
     padding: 20px;
     display: flex;
@@ -42,6 +44,7 @@
     align-items: center;
     width: 25%;
     gap: 10px;
+    background-color: #FFF0CA;
 }
 .partner_img {
     width: 25%;
@@ -59,14 +62,14 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 20px;
+    gap: 40px; /* Расстояние между картинками */
 }
 
 .image_directors {
     position: relative;
-    width: 65%;
-    padding: 0 60px;
-    gap: 20px;
+    width: 70%; /* Увеличиваем начальную ширину */
+    padding: 0 60px; /* Сохраняем отступы */
+    box-sizing: border-box; /* Учитываем padding в общей ширине */
 }
 
 .img_aboutus {
@@ -124,6 +127,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 .infos {
     display: flex;
@@ -138,10 +142,246 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    width: 250px;
 }
 .carts {
     width: 100%;
     height: 400px;
     background-color: #d8d8d8;
     border-radius: 10px;
+}
+.informations {
+    text-align: center;
+}
+@media (max-width: 1260px) {
+    .text_value {
+        font-size: 20px;
+    }
+    .zag_value {
+        font-size: 30px;
+    }
+    .value {
+        padding: 40px;
+    }
+    .aboutus {
+        gap: 40px;
+    }
+    .one_info {
+        width: 225px;
+    }
+    .answe {
+        padding: 15px;
+        font-size: 12px;
+    }
+    .director-question {
+        height: 80px;
+        font-size: 16px;
+    }
+}
+@media (max-width: 1110px) {
+    .text_value {
+        font-size: 15px;
+    }
+    .zag_value {
+        font-size: 20px;
+    }
+    .value {
+        padding: 30px;
+        gap: 15px;
+    }
+    .one_info {
+        width: 190px;
+        padding: 25px;
+    }
+    .zag_info {
+        font-size: 16px;
+    }
+    .informations {
+        font-size: 15px;
+    }
+    .director-question {
+        font-size: 14px;
+        height: 70px;
+    }
+
+}
+@media (max-width: 980px) {
+    .text_value {
+        font-size: 12px;
+    }
+    .zag_value {
+        font-size: 17px;
+    }
+    .value {
+        padding: 20px;
+    }
+    .aboutus {
+        gap: 40px;
+    }
+    .value_mission {
+        gap: 40px;
+    }
+    .partner_img {
+        width: 40%;
+    }
+    .one_info {
+        width: 139px;
+        padding: 15px;
+    }
+    .informations {
+        font-size: 10px;
+    }
+    .zag_info {
+        font-size: 13px;
+    }
+    .togle-icon {
+        font-size: 20px;
+    }
+    .director-question {
+        font-size: 11px;
+        height: 60px;
+    }
+    .answe {
+        font-size: 10px;
+        padding: 10px;
+    }
+    .overlay-text {
+        padding: 0 70px;
+    }
+}
+@media (max-width: 770px) {
+    .aboutus {
+        flex-direction: column;
+    }
+    .value_mission {
+        gap: 20px;
+    }
+    .aboutus {
+        gap: 20px;
+    }
+    .zag_value {
+        text-align: center;
+    }
+    .text_value {
+        text-align: center;
+    }
+    .partner {
+        width: 30%;
+        padding: 15px;
+    }
+    .infos {
+        gap: 15px;
+    }
+    .one_info {
+        width: 119px;
+    }
+    .zag_info {
+        font-size: 11px;
+    }
+    .directors_people {
+        gap: 0px;
+    }
+
+    .image_directors {
+        width: 100%; 
+        padding: 0 40px;
+    }
+    .directors {
+        gap: 30px;
+    }
+    .director-question {
+        font-size: 8px;
+        height: 40px;
+    }
+    .answe {
+        font-size: 8px;
+        padding: 10px;
+    }
+    .overlay-text {
+        padding: 0 60px;
+    }
+    .director-question {
+        font-size: 9px;
+    }
+    .togle-icon {
+        font-size: 15px;
+    }
+}
+@media (max-width: 560px) {
+    .value {
+        width: 150%;
+    }
+    .value_mission {
+        align-items: center;
+    }
+    .informations {
+        font-size: 7px;
+    }
+    .one_info {
+        width: 99px;
+        padding: 10px;
+    }
+    .zag_info {
+        font-size: 8px;
+    }
+    .infos {
+        gap: 5px;
+    }
+    .info {
+        padding: 0 10px;
+    }
+    .image_directors {
+        padding: 0 10px;
+    }
+    .directors {
+        gap: 30px;
+    }
+    .directors_people {
+        flex-direction: row;
+        justify-content: center;
+    }
+    .director-question {
+        font-size: 9px;
+        height: 40px;
+    }
+    .answe {
+        font-size: 8px;
+        padding: 10px;
+    }
+    .overlay-text {
+        padding: 0 30px;
+    }
+    .director-question {
+        font-size: 9px;
+    }
+}
+@media (max-width: 430px) {
+    .aboutus {
+        padding: 0 10px;
+    }
+    .partner_img {
+        width: 50%;
+    }
+    .partner {
+        padding: 10px;
+    }
+    .infos {
+        flex-direction: column;
+    }
+    .one_info {
+        width: 230px;
+    }
+    .zag_info {
+        font-size: 10px;
+    }
+    .informations {
+        font-size: 9px;
+    }
+    .directors_people {
+        flex-direction: column;
+        align-items: center;
+    }
+    .image_directors {
+        width: 80%;
+    }
 }

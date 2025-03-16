@@ -92,7 +92,7 @@
                 <div class="director-question-item">
                     <div class="director-question">
                     Директор компании — Стюнякова Лариса Николаевна
-                        <span class="toggle-icon">+</span>
+                        <span class="togle-icon">+</span>
                     </div>
                     <div class="answe">
                     Лариса Николаевна — опытный руководитель с более чем 15-летним стажем в деревообработке. Она направляет компанию к развитию, уделяя особое внимание качеству продукции и экологичности.                    </div>
@@ -105,7 +105,7 @@
                 <div class="director-question-item">
                     <div class="director-question">
                     Коммерческий директор — Иванов Виктор Сергеевич
-                        <span class="toggle-icon">+</span>
+                        <span class="togle-icon">+</span>
                     </div>
                     <div class="answe">
                     Виктор Сергеевич отвечает за продажи и работу с клиентами. Его опыт и деловой подход помогают компании стабильно расти и укреплять партнерские связи.                    </div>
@@ -117,25 +117,26 @@
 <div class="info">
   <div class="infos">
     <div class="one_info">
-      <h2>Адрес</h2>
-      <p>г. Москва, пер. Протопоповский, д. 19</p>
+      <h3 class="zag_info">Адрес</h3>
+      <p class="informations">г. Москва, пер. Протопоповский, д. 19</p>
     </div>
     <div class="one_info">
-      <h2>Адрес</h2>
-      <p>г. Москва, пер. Протопоповский, д. 19</p>
+      <h3 class="zag_info">График работы</h3>
+      <p class="informations">пн-пт 8-18.00, сб 9 -15, вс -выходной</p>
     </div>
     <div class="one_info">
-      <h2>Адрес</h2>
-      <p>г. Москва, пер. Протопоповский, д. 19</p>
+      <h3 class="zag_info">Почта</h3>
+      <p class="informations">lesdrive163@mail.ru</p>
     </div>
     <div class="one_info">
-      <h2>Адрес</h2>
-      <p>г. Москва, пер. Протопоповский, д. 19</p>
+      <h3 class="zag_info">Телефон</h3>
+      <p class="informations">8(912) 345-67-89</p>
     </div>
   </div>
   <div class="carts">
   <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Ab2cdec616796c54bea895862e8cc3fc04d27838464baaa4b279ba9188dfcc4f4&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
   </div>
+</div>
     <footer>
       <div class="pages">
         <p class="zagolovok-footer">ЛесДрайв</p>

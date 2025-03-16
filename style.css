@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    outline: 2px solid green
+    /* outline: 2px solid green */
 }
 
 body {
@@ -541,6 +541,8 @@ h2 {
   
   .address {
     text-align: center;
+    color: black;
+    text-decoration: none;
   }
   
   .ooo {
@@ -835,7 +837,7 @@ h2 {
         padding-left: 135px;
     }
     .comments {
-        padding: 0 0;
+        padding: 0 10px;
     }
     .image-comment1 {
         width: 60px;
@@ -917,7 +919,7 @@ h2 {
     }
 
     .offers {
-        padding: 0 24px;
+        padding: 0 23.5px;
         gap: 20px;
     }
 
@@ -1103,7 +1105,7 @@ h2 {
     }
 
     .text-slider {
-        font-size: 8px;
+        font-size: 7px;
     }
 
     .img-bttn {
@@ -1132,8 +1134,8 @@ h2 {
 
     .product {
         padding: 14px;
-        width: 300px;
-        height: 120px;
+        width: 280px;
+        height: 100px;
     }
 
     .brusok {
@@ -1210,5 +1212,11 @@ h2 {
     }
     .punkts {
         font-size: 2.3vw;
+    }
+    .images_products img {
+        width: 130px;
+    }
+    .menu {
+        height: 50px;
     }
 }
