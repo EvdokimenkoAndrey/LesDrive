@@ -28,8 +28,10 @@
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <img src="images/LogIn.png" class="korzina">
-            <img src="images/corsina.png" class="korzina">
+          <a href="login-form.php">
+            <img src="images/LogIn.png" class="korzina"></a>
+            <a href="corsina.php">
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>

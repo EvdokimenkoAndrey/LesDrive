@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: "Inter";
+    background-color: #FCE3A5;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+    left: 0;
+    /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+    box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)
+}
+header, footer {
+    width: 100%;
+}
+main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 90px;
+}
+
+.form_login {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    background-color: #FFF0CA;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: auto;
+    max-width: 500px;
+    align-items: center;
+    margin-top: 130px; /* Отступ сверху */
+    margin-bottom: auto; /* Отступ снизу */
+}
+
+.login {
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+
+.zag_login {
+    font-size: 30px;
+}
+
+.bttn-login {
+    width: 100%;
+    background-color: #EAD08E;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.register_page {
+    color: black;
+    text-decoration: none;
+}
+
+footer {
+    width: 100%;
+    background-color: #FFF0CA;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 40px;
+}
