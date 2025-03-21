@@ -92,3 +92,33 @@ footer {
     gap: 50px;
     padding: 40px;
 }
+.register {
+    width: 370px;
+    outline: none;
+}
+.form_login input[type="file"] {
+    display: none;
+}
+
+/* Стилизуем кружочек */
+.custom-upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background-color: #ccc; /* Серый цвет */
+    border-radius: 50%; /* Делаем круг */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.custom-upload:hover {
+    background-color: #bbb; /* Изменяем цвет при наведении */
+}
+
+.custom-upload i {
+    font-size: 30px;
+    color: #fff;
+    font-family: Inte;
+    font-weight: bold;
+}
