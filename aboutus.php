@@ -74,7 +74,7 @@
             </div>
             <div class="partner">
                 <img src="images/services/partner5.png" class="partner_img">
-                <p class="name_advantage">Лидинг строй</p>
+                <p class="name_advantage">Конкорд групп</p>
             </div>
             <div class="partner">
                 <img src="images/services/partner6.png" class="partner_img">

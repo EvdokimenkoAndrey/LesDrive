@@ -39,22 +39,30 @@
     <div class="catalogi">
       <div class="two_catalogs">
         <div class="catalog1">
+          <a href="materials_first.php">
           <p class="pilom">Пиломатериалы</p>
           <img src="images/pilo.png" class="catalogs">
+          </a>
         </div>
         <div class="catalog1">
+        <a href="materials_scnd.php">
           <p class="pilom">Материалы для отделки</p>
           <img src="images/mat.png" class="catalogs">
+        </a>
         </div>
       </div>
       <div class="two_catalogs">
         <div class="catalog1">
+        <a href="materials_third.php">
           <p class="pilom">Строительные материалы</p>
           <img src="images/stroi.png" class="catalogs">
+        </a>
         </div>
         <div class="catalog1">
+        <a href="materials_forth.php">
           <p class="pilom">Инструменты и крепеж</p>
           <img src="images/instr.png" class="catalogs">
+        </a>
         </div>
       </div>
     </div>

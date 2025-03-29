@@ -36,7 +36,7 @@
         <h1 class="zag_login">Войдите в свой аккаунт</h1>
         <div class="inputs">
         <input type="text" class="login" placeholder="Введите логин">
-        <input type="text" class="login" placeholder="Введите логин">
+        <input type="text" class="login" placeholder="Введите пароль">
         </div>
         <button class="bttn-login">Войти</button>
         <a href="registration-form.php" class="register_page">Нет аккаунта?</a>

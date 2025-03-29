@@ -1,0 +1,111 @@
+.pilomaterials {
+    display: flex;
+    flex-direction: column;
+    padding: 0 60px;
+    gap: 70px;
+}
+
+.all-materials {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* По умолчанию 4 товара в строке */
+    gap: 40px; /* Отступы между товарами */
+}
+
+.material {
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.material-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 0;
+}
+
+.information_material {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    background-color: #FFF0CA;
+    padding: 25px;
+    margin-top: 0;
+    border-radius: 0 0 8px 8px;
+    gap: 30px;
+}
+
+.price_corsina {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.corsina {
+    width: 17%;
+    height: auto;
+}
+@media (max-width: 910px) {
+    .material-slider {
+        font-size: 13px;
+    }
+    .information_material {
+        padding: 20px;
+    }
+    .price {
+        font-size: 11px;
+    }
+}
+@media (max-width: 768px) {
+    .all-materials {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .pilomaterials {
+        padding: 0 20px;
+    }
+}
+@media (max-width: 500px) {
+    .all-materials {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .pilomaterials {
+        padding: 0 20px;
+        gap: 40px;
+    }
+    .material-slider {
+        font-size: 12px;
+    }
+    .information_material {
+        padding: 15px;
+    }
+    .corsina {
+        width: 17%;
+    }
+}
+@media (max-width: 450px) {
+    .all-materials {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .pilomaterials {
+        padding: 0 20px;
+        gap: 40px;
+    }
+    .material-slider {
+        font-size: 10px;
+    }
+    .information_material {
+        padding: 15px;
+    }
+    .corsina {
+        width: 22%;
+    }
+    .price {
+        font-size: 9px;
+    }
+}

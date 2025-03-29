@@ -126,7 +126,7 @@ ul {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 70px;
     align-items: center;
 }
 
@@ -356,7 +356,7 @@ h1 {
     display: flex;
     flex-direction: column;
     padding: 0 60px;
-    gap: 40px;
+    gap: 70px;
 }
 .three_comments {
     display: flex;
@@ -372,7 +372,7 @@ h1 {
     gap: 30px;
     align-items: center;
     width: 350px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 .image-comment1 {
     width: 125px;
@@ -393,7 +393,7 @@ h2 {
     width: 100px;
     margin: 0 auto;
     font-size: 15px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: none;
     background-color: #FFF0CA;
     height: 80px;
@@ -409,7 +409,7 @@ h2 {
     flex-direction: column;
     padding: 0 60px;
     align-items: center;
-    gap: 40px;
+    gap: 70px;
   }
   
   .questions-container {
@@ -574,6 +574,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .pilom {
@@ -586,6 +587,7 @@ h2 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    padding: 0 20px;
 }
 
 .catalogs {
@@ -798,6 +800,11 @@ h2 {
 
     .offers {
         padding: 0 20px;
+        gap: 45px;
+    }
+
+    .bttn-slider {
+        margin-top: 0;
     }
 
     .slider {
@@ -860,6 +867,7 @@ h2 {
 
     footer {
         height: auto;
+        padding: 10px;
       }
     
       .pages {
@@ -879,7 +887,7 @@ h2 {
       }
 
       .pilom {
-        font-size: 20px;
+        font-size: 18px;
       }
       .question-item {
         width: 540px;
@@ -890,6 +898,12 @@ h2 {
       }
       .answer {
         font-size: 17px;
+      }
+      .comments {
+        gap: 45px;
+      }
+      .first-comment {
+        border-radius: 10px;
       }
 
 }
@@ -1073,7 +1087,7 @@ h2 {
         padding: 10px;
     }
     .image-comment1 {
-        width: 45px;
+        width: 35px;
     }
     .text-comment1 {
         font-size: 8px;
@@ -1174,9 +1188,10 @@ h2 {
     }
     .first-comment {
         padding: 8px;
+        border-radius: 10px;
     }
     .text-comment1 {
-        font-size: 8px;
+        font-size: 7px;
     }
     .comments {
         gap: 20px;
@@ -1196,7 +1211,7 @@ h2 {
         font-size: 11px;
     }
     .pilom {
-        font-size: 12px;
+        font-size: 11px;
     }
     .question-item {
         width: 290px;
@@ -1211,8 +1226,11 @@ h2 {
     .mini-products {
         padding: 0;
     }
+    .products {
+        padding: 20px;
+    }
     .punkts {
-        font-size: 2.3vw;
+        font-size: 1.9vw;
     }
     .images_products img {
         width: 130px;
