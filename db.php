@@ -1,11 +1,12 @@
 <?php
-$host = "localhost";
-$user = "root";
+$dsb = "mysql:host=localhost;dbname=lesdrive_users";
+$name = "root";
 $pass = "";
-$db = "lesdrive_users";
 
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn -> connect_error) {
-    die("Ошибка подключения" . mysqli_connect_error());
+try {
+    $pdo = new PDO($dsb, $name, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Ошибка " . $e->getMessage();
 }
+?>

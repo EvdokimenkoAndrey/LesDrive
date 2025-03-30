@@ -13,7 +13,7 @@
 <body>
   <main>
     <div class="create-line">
-      <header>
+    <header>
         <div class="menu">
           <div class="Logo">
             <a href="index.php" class="link_logo">
@@ -28,10 +28,10 @@
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <a href="login-form.php">
-              <img src="images/LogIn.png" class="korzina"></a>
+          <a href="login-form.php">
+            <img src="images/LogIn.png" class="korzina"></a>
             <a href="corsina.php">
-              <img src="images/corsina.png" class="korzina"></a>
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>

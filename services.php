@@ -14,26 +14,28 @@
 <body>
     <main>
         <div class="create-line">
-            <header>
-                <div class="menu">
-                    <div class="Logo">
-                        <a href="index.php" class="link_logo">
-                            <img src="images/logo.png" class="logo">
-                            <h1 class="zagolovok">ЛесДрайв</h1>
-                        </a>
-                    </div>
-                    <ul>
-                        <li><a href="catalog.php" class="punkts">Каталог</a></li>
-                        <li><a href="aboutus.php" class="punkts">О нас</a></li>
-                        <li><a href="services.php" class="punkts">Услуги</a></li>
-                        <li><a href="comments.php" class="punkts">Отзывы</a></li>
-                    </ul>
-                    <div class="icons">
-                        <img src="images/LogIn.png" class="korzina">
-                        <img src="images/corsina.png" class="korzina">
-                    </div>
-                </div>
-            </header>
+        <header>
+        <div class="menu">
+          <div class="Logo">
+            <a href="index.php" class="link_logo">
+              <img src="images/logo.png" class="logo">
+              <h1 class="zagolovok">ЛесДрайв</h1>
+            </a>
+          </div>
+          <ul>
+            <li><a href="catalog.php" class="punkts">Каталог</a></li>
+            <li><a href="aboutus.php" class="punkts">О нас</a></li>
+            <li><a href="services.php" class="punkts">Услуги</a></li>
+            <li><a href="comments.php" class="punkts">Отзывы</a></li>
+          </ul>
+          <div class="icons">
+          <a href="login-form.php">
+            <img src="images/LogIn.png" class="korzina"></a>
+            <a href="corsina.php">
+            <img src="images/corsina.png" class="korzina"></a>
+          </div>
+        </div>
+      </header>
             <div class="class-header-img">
                 <img src="images/header1.png" class="header-img">
             </div>
@@ -126,11 +128,11 @@
             <div class="raspil">
                 <div class="rectangle">
                     <div class="text-recta">
-                        <h1>Услуги по распилу</h1>
+                        <h1>Услуги по обработке</h1>
                         <ul class="list_uslugi">
-                            <li>Подготовим материалы по индивидуальным размерам и формам.</li>
-                            <li>Делаем скосы, вырезы и сложные формы для отделочных и строительных целей.</li>
-                            <li>Доски, бруски, балки и другие материалы будут обработаны с максимальной точностью.</li>
+                            <li>Достигаем гладкости поверхности для покраски/лакировки.</li>
+                            <li>Выполняем сверление и нарезку для упрощения сборки.</li>
+                            <li>Создаем ровные края для удобного монтажа.</li>
                         </ul>
                     </div>
                 </div>

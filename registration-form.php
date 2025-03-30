@@ -27,14 +27,14 @@
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <a href="login-form.php">
-              <img src="images/LogIn.png" class="korzina"></a>
+          <a href="login-form.php">
+            <img src="images/LogIn.png" class="korzina"></a>
             <a href="corsina.php">
-              <img src="images/corsina.png" class="korzina"></a>
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>
-      <form action="registration.php" method="post">
+      <form action="registration.php" method="post" enctype="multipart/form-data">
         <div class="form_login">
           <h1 class="zag_login">Регистрация</h1>
           <label for="image-upload" class="custom-upload">
