@@ -88,6 +88,9 @@
         </div>
       </div>
     </div>
+    <button class="choose_reviews">
+      <a href="write_comment.php" class="punkts watch">Написать рецензию</a>
+    </button>
   </main>
   <style>
 

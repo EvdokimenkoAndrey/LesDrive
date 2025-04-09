@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+        /* outline: 2px solid green */
 }
 
 body {
@@ -10,10 +11,11 @@ body {
     min-height: 100vh;
     font-family: "Inter";
     background-color: #FCE3A5;
+    gap: 130px;
 }
 
 header {
-    position: absolute;
+    position: relative;
     top: 0;
     width: 100%;
     z-index: 2;
@@ -24,12 +26,10 @@ header, footer {
     width: 100%;
 }
 main {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 90px;
-}
+    gap: 70px;
+    flex-grow: 0;
+    padding: 0;
+  }
 
 .form_login {
     display: flex;
@@ -42,8 +42,7 @@ main {
     width: auto;
     max-width: 500px;
     align-items: center;
-    margin-top: 130px; /* Отступ сверху */
-    margin-bottom: auto; /* Отступ снизу */
+    margin: 130px auto; 
 }
 
 .login {
@@ -136,7 +135,7 @@ footer {
         margin-top: 80px;
     }
     main {
-        padding: 70px;
+        padding-top: 70px;
     }
     footer {
         padding: 10px;
@@ -148,6 +147,9 @@ footer {
     .register {
         width: 300px;
     }
+    header {
+        position: absolute;
+    }
 }
 @media (max-width: 600px) {
     .zag_login {
@@ -157,9 +159,10 @@ footer {
         padding: 30px;
         margin-top: 80px;
         gap: 30px;
+        max-width: 400px;
     }
     main {
-        padding: 70px;
+        padding-top: 70px;
     }
     .login {
         font-size: 10px;
@@ -182,7 +185,7 @@ footer {
         width: 230px;
     }
     main {
-        padding: 70px;
+        padding-top: 70px;
     }
     .login {
         font-size: 10px;

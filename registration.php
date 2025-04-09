@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Хеширование пароля
     $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
-    // Обработка загруженного изображения
     $profileImage = null;
     $imageType = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -37,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imageType = $_FILES['image']['type'];
     }
 
-    // Проверка уникальности логина и email
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE login = :login OR email = :email");
     $stmt->execute([':login' => $login, ':email' => $email]);
     $count = $stmt->fetchColumn();
@@ -93,10 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?= htmlspecialchars($successMessage) ?>
         </div>
         <script>
-            // Через 5 секунд перенаправляем пользователя на главную страницу
             setTimeout(function() {
-                window.location.href = 'index.php'; // Укажите путь к главной странице
-            }, 5000); // 5000 миллисекунд = 5 секунд
+                window.location.href = 'index.php'; 
+            }, 5000);
         </script>
     <?php endif; ?>
 </body>
