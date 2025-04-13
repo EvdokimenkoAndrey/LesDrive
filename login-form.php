@@ -1,7 +1,10 @@
 <?php
+session_start();
 // Подключение к базе данных
 require_once 'db.php';
-
+if (isset($_SESSION["user_id"])) {
+  header("Location: login.php");
+}
 // Переменная для хранения сообщения об ошибке
 $errorMessage = '';
 
@@ -24,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Проверка пароля
             if (password_verify($pass, $user['pass'])) {
                 // Авторизация успешна
-                session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_login'] = $user['login'];
                 $_SESSION['user_email'] = $user['email'];
@@ -73,10 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <a href="login-form.php">
-              <img src="images/LogIn.png" class="korzina"></a>
+          <a href="login-form.php">
+            <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+            <?php else: ?>
+            <img src="images/LogIn.png" class="korzina"></a>
+            <?php endif; ?>
             <a href="corsina.php">
-              <img src="images/corsina.png" class="korzina"></a>
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>

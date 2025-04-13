@@ -1,4 +1,5 @@
 <?php
+session_start();
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
 $username = 'root';
@@ -33,216 +34,8 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="login_register.css">
+  <link rel="stylesheet" href="corsina.css">
   <title>Корзина</title>
-  <style>
-    header {
-      position: relative;
-    }
-
-    .cart-item {
-      display: flex;
-      align-items: center;
-      background-color: #FFF0CA;
-      margin-bottom: 20px;
-      padding: 20px;
-      border-radius: 10px;
-      width: 85%;
-      height: 37%;
-    }
-
-    .cart-item img {
-      width: 110px;
-      height: 80px;
-      object-fit: cover;
-      margin-right: 20px;
-      border-radius: 8px;
-    }
-
-    .cart-item-details {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
-      width: 30%;
-    }
-
-    .cart-item-price {
-      font-size: 12px;
-      color: #555;
-    }
-
-    .cart-item-quantity {
-      font-size: 12px;
-      color: #555;
-    }
-
-    .cart-item-total {
-      font-size: 14px;
-      font-weight: bold;
-      color: #e74c3c;
-    }
-
-    .corzina {
-      padding: 0 60px;
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 60px;
-      margin: 80px auto;
-    }
-
-    .empty-cart {
-      text-align: center;
-      font-size: 18px;
-      color: #777;
-    }
-
-    .cart-item-details {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .delete-form {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .delete-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      margin-left: 20px;
-    }
-
-    .delete-icon {
-      width: 20px;
-      height: 20px;
-      object-fit: cover;
-      filter: brightness(0) saturate(100%) invert(29%) sepia(76%) saturate(2457%) hue-rotate(358deg) brightness(97%) contrast(93%);
-      transition: transform 0.3s ease;
-      width: 20px;
-      height: auto;
-    }
-
-    .delete-icon:hover {
-      transform: scale(1.2);
-    }
-
-    .quantity-control {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .quantity-button {
-      background-color: #f4f4f4;
-      border: 1px solid #ccc;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background-color 0.3s ease;
-    }
-
-    .quantity-button:hover {
-      background-color: #e0e0e0;
-    }
-
-    .quantity-value {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .quantity-form {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .products_corzina {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .checkout-form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 35px;
-      padding: 40px;
-      background-color: #FFF0CA;
-      border-radius: 10px;
-      width: 30%;
-    }
-
-    .checkout-form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .product_corzina {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .zagolovok_order {
-      text-align: center;
-    }
-
-    .place-order-button {
-      padding: 20px;
-      border-radius: 10px;
-      border: none;
-      background-color: #ebd294;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .order-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 16px;
-    color: #555;
-}
-
-.order-summary p {
-    margin: 0;
-}
-
-.order-summary span {
-    font-weight: bold;
-    color: #333;
-}
-
-.place-order-button {
-    padding: 20px;
-    border-radius: 10px;
-    border: none;
-    background-color: #ebd294;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.place-order-button:hover {
-    background-color: #dabf7a;
-}
-  </style>
 </head>
 
 <body>
@@ -263,10 +56,15 @@ try {
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <a href="login-form.php">
-              <img src="images/LogIn.png" class="korzina"></a>
+          <a href="login-form.php">
+            <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+            <?php else: ?>
+            <img src="images/LogIn.png" class="korzina"></a>
+            <?php endif; ?>
             <a href="corsina.php">
-              <img src="images/corsina.png" class="korzina"></a>
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>
@@ -279,10 +77,10 @@ try {
             <?php else: ?>
               <?php foreach ($cartItems as $item): ?>
                 <div class="cart-item">
-                  <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>">
+                  <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
                   <div class="cart-item-details">
                     <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
-                    <div class="cart-item-price">Цена за шт.: <br><?= number_format($item['product_price'], 2) ?> руб.</div>
+                    <div class="cart-item-price">Цена за шт: <br><?= number_format($item['product_price'], 2) ?> руб.</div>
                     <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
                     <div class="quantity-control">
                       <form action="update_quantity.php" method="POST" class="quantity-form">
@@ -296,7 +94,7 @@ try {
                   <form action="delete_corsina.php" method="POST" class="delete-form">
                     <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
                     <button type="submit" class="delete-button">
-                      <img src="images/delete-icon.png" alt="Удалить" class="delete-icon">
+                      <img src="images/delete_icon.png" alt="Удалить" class="delete_icon">
                     </button>
                   </form>
                 </div>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Подключение к базе данных
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
@@ -149,7 +150,12 @@ try {
           </ul>
           <div class="icons">
           <a href="login-form.php">
+            <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+            <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
+            <?php endif; ?>
             <a href="corsina.php">
             <img src="images/corsina.png" class="korzina"></a>
           </div>

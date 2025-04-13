@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +14,7 @@
 <body>
   <main>
     <div class="create-line">
-      <header>
+    <header>
         <div class="menu">
           <div class="Logo">
             <a href="index.php" class="link_logo">
@@ -26,8 +29,15 @@
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-            <img src="images/LogIn.png" class="korzina">
-            <img src="images/corsina.png" class="korzina">
+          <a href="login-form.php">
+            <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+            <?php else: ?>
+            <img src="images/LogIn.png" class="korzina"></a>
+            <?php endif; ?>
+            <a href="corsina.php">
+            <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
       </header>

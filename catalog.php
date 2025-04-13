@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +15,7 @@
 <body>
   <main>
     <div class="create-line">
-    <header>
+      <header>
         <div class="menu">
           <div class="Logo">
             <a href="index.php" class="link_logo">
@@ -27,9 +30,14 @@
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-          <a href="login-form.php">
+            <a href="login-form.php">
+              <?php
+              if (isset($_SESSION['user_id'])) : ?>
+                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+          <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
-            <a href="corsina.php">
+          <?php endif; ?>
+          <a href="corsina.php">
             <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
@@ -42,29 +50,29 @@
       <div class="two_catalogs">
         <div class="catalog1">
           <a href="materials_first.php">
-          <p class="pilom">Пиломатериалы</p>
-          <img src="images/pilo.png" class="catalogs">
+            <p class="pilom">Пиломатериалы</p>
+            <img src="images/pilo.png" class="catalogs">
           </a>
         </div>
         <div class="catalog1">
-        <a href="materials_scnd.php">
-          <p class="pilom">Материалы для отделки</p>
-          <img src="images/mat.png" class="catalogs">
-        </a>
+          <a href="materials_scnd.php">
+            <p class="pilom">Материалы для отделки</p>
+            <img src="images/mat.png" class="catalogs">
+          </a>
         </div>
       </div>
       <div class="two_catalogs">
         <div class="catalog1">
-        <a href="materials_third.php">
-          <p class="pilom">Строительные материалы</p>
-          <img src="images/stroi.png" class="catalogs">
-        </a>
+          <a href="materials_third.php">
+            <p class="pilom">Строительные материалы</p>
+            <img src="images/stroi.png" class="catalogs">
+          </a>
         </div>
         <div class="catalog1">
-        <a href="materials_forth.php">
-          <p class="pilom">Инструменты и крепеж</p>
-          <img src="images/instr.png" class="catalogs">
-        </a>
+          <a href="materials_forth.php">
+            <p class="pilom">Инструменты и крепеж</p>
+            <img src="images/instr.png" class="catalogs">
+          </a>
         </div>
       </div>
     </div>
