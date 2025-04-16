@@ -297,11 +297,13 @@ h1 {
     flex-direction: column;
     gap: 10px;
     text-align: center;
+    align-items: center;
 }
 
 .buy {
     padding: 15px 20px;
     border: none;
+    width: 330px;
     background-color: #ebd294;
     border-radius: 10px;
     cursor: pointer;

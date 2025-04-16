@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Подключение к базе данных
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
 $username = 'root';
@@ -41,21 +40,6 @@ try {
     <link rel="stylesheet" href="login_register.css">
     <title>Оформление заказа</title>
     <style>
-        /* body {
-            font-family: "Inter", sans-serif;
-            background-color: #FCE3A5;
-            margin: 0;
-            padding: 0;
-        }
-
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        } */
-
         .order-page-container {
             background-color: #FFF0CA;
             padding: 40px;
@@ -165,11 +149,10 @@ try {
             <h1>Оформление заказа</h1>
             <form action="confirm_order.php" method="POST" class="order-form">
                 <label for="name">Имя:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['user']['login'] ?? '') ?>" required>
 
                 <label for="phone">Телефон:</label>
-                <input type="tel" id="phone" name="phone" required>
-
+                <input type="text" id="phone" class="input_info" name="phone" value="<?= htmlspecialchars($_SESSION['user']['phone'] ?? '') ?>">
                 <label for="address">Адрес доставки:</label>
                 <textarea id="address" name="address" rows="4" required></textarea>
 

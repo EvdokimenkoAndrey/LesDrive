@@ -11,13 +11,42 @@ if (!isset($_SESSION['user_id'])) {
 require_once 'db.php';
 
 // Получение данных пользователя из базы данных
-$stmt = $pdo->prepare("SELECT id, login, email, first_name, last_name, middle_name, phone, address FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type FROM users WHERE id = :id");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Обработка POST-запроса для обновления данных
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Получение данных из формы
+    // Обновление аватара
+    if (isset($_FILES['new_image']) && $_FILES['new_image']['error'] === UPLOAD_ERR_OK) {
+        // Проверка размера файла (не более 1 МБ)
+        if ($_FILES['new_image']['size'] > 1 * 1024 * 1024) {
+            die("Размер изображения слишком большой. Максимальный размер: 1 МБ.");
+        }
+
+        // Чтение данных изображения
+        $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
+        $imageType = $_FILES['new_image']['type'];
+
+        // Обновление изображения в базе данных
+        $update_stmt = $pdo->prepare("
+            UPDATE users 
+            SET profile_image = :profile_image, 
+                image_type = :image_type 
+            WHERE id = :id
+        ");
+        $update_stmt->execute([
+            ':profile_image' => $imageData,
+            ':image_type' => $imageType,
+            ':id' => $_SESSION['user_id']
+        ]);
+
+        // Обновление данных в сессии
+        $_SESSION['profile_image'] = $imageData;
+        $_SESSION['image_type'] = $imageType;
+    }
+
+    // Обработка остальных полей (имя, фамилия и т.д.)
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $middle_name = trim($_POST['middle_name']);
@@ -25,29 +54,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['address']);
 
     $update_stmt = $pdo->prepare("
-    UPDATE users 
-    SET first_name = :first_name, 
-        last_name = :last_name, 
-        middle_name = :middle_name, 
-        phone = :phone, 
-        address = :address 
-    WHERE id = :id
-");
+        UPDATE users 
+        SET first_name = :first_name, 
+            last_name = :last_name, 
+            middle_name = :middle_name, 
+            phone = :phone, 
+            address = :address 
+        WHERE id = :id
+    ");
     $update_stmt->execute([
-        ':first_name' => $first_name,
-        ':last_name' => $last_name,
-        ':middle_name' => $middle_name,
-        ':phone' => $phone,
-        ':address' => $address,
+        ':first_name' => $first_name ?: null,
+        ':last_name' => $last_name ?: null,
+        ':middle_name' => $middle_name ?: null,
+        ':phone' => $phone ?: null,
+        ':address' => $address ?: null,
         ':id' => $_SESSION['user_id']
     ]);
 
     // Обновление данных в сессии
-    $_SESSION['first_name'] = $first_name;
-    $_SESSION['last_name'] = $last_name;
-    $_SESSION['middle_name'] = $middle_name;
-    $_SESSION['phone'] = $phone;
-    $_SESSION['address'] = $address;
+    $_SESSION['first_name'] = $first_name ?: null;
+    $_SESSION['last_name'] = $last_name ?: null;
+    $_SESSION['middle_name'] = $middle_name ?: null;
+    $_SESSION['phone'] = $phone ?: null;
+    $_SESSION['address'] = $address ?: null;
 
     // Перенаправление обратно в личный кабинет
     header("Location: login.php");
@@ -64,88 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="login_register.css">
     <title>Личный кабинет</title>
-    <style>
-        .welcome {
-            font-size: 30px;
-        }
-        .dashboard {
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            margin-top: 80px;
-            align-items: center;
-            padding: 0 60px;
-        }
-
-        .hello {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .information-user {
-            padding: 0 60px;
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-        }
-
-        .inputs_info {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-first {
-            display: flex;
-            flex-direction: row;
-            gap: 50px;
-            /* Расстояние между инпутами внутри одного блока */
-        }
-
-        .form-group {
-            flex: 1;
-            /* Растягивает инпуты на всю доступную ширину */
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .input_info {
-            box-sizing: border-box;
-            width: 100%;
-            /* Инпуты занимают всю ширину */
-            padding: 28px 18px;
-            outline: none;
-            border: none;
-            border-radius: 10px;
-            background-color: #fff;
-            font-size: 18px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .sign_inputs {
-            font-size: 23px;
-        }
-
-        button {
-            align-self: flex-start;
-            /* Кнопка выравнивается слева */
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            background-color: #007bff;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin: 0 auto;
-            display: flex;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 
 <body>
@@ -178,21 +125,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </header>
         <main>
-            <div class="dashboard">
-                <?php if (!empty($_SESSION['profile_image'])): ?>
-                    <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" alt="Profile Image" class="profile-image">
-                <?php endif; ?>
-                <div class="hello">
-                    <h1 class="welcome">Добро пожаловать, <?= htmlspecialchars($_SESSION['user_login']) ?>!</h1>
-                    <a href="logout.php">Выйти</a>
+
+            <form method="POST" action="" class="information-user" enctype="multipart/form-data">
+                <div class="dashboard">
+                    <div class="profile-image-container" id="profile-image-container">
+                        <?php if (!empty($_SESSION['profile_image'])): ?>
+                            <label for="new_image" class="profile-image-label">
+                                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" alt="Profile Image" class="profile-image clickable" id="current-profile-image">
+                            </label>
+                        <?php else: ?>
+                            <label for="new_image" class="profile-image-label">
+                                <p>Добавить аватар</p>
+                            </label>
+                        <?php endif; ?>
+                        <input type="file" id="new_image" name="new_image" accept="image/jpeg, image/png, image/gif" style="display: none;">
+                    </div>
+                    <div class="hello">
+                        <h1 class="welcome">Добро пожаловать, <?= htmlspecialchars($user['first_name']) ?>!</h1>
+                        <a href="logout.php">Выйти</a>
+                    </div>
                 </div>
-            </div>
-            <form method="POST" action="" class="information-user">
                 <div class="inputs_info">
                     <div class="form-group-first">
                         <div class="form-group">
                             <label for="first_name" class="sign_inputs">Имя:</label>
-                            <input type="text" id="first_name" class="input_info" name="first_name" value="<?= htmlspecialchars($user['login'] ?? '') ?>">
+                            <input type="text" id="first_name" class="input_info" name="first_name" value="<?= htmlspecialchars($user['first_name'] ?? '') ?>">
                         </div>
                         <div class="form-group">
                             <label for="last_name" class="sign_inputs">Фамилия:</label>
@@ -216,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-group">
                             <label for="address" class="sign_inputs">Адрес:</label>
-                            <input type="text" id="address" class="input_info" name="address"><?= htmlspecialchars($user['address'] ?? '') ?></input>
+                            <input type="text" id="address" class="input_info" name="address"><?= htmlspecialchars($user['address'] ?? '') ?>
                         </div>
                     </div>
                 </div>
@@ -263,6 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
             </footer>
         </main>
+        <script src="upload-image.js"></script>
 </body>
 
 </html>

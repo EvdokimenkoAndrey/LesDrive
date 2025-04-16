@@ -11,16 +11,16 @@ $errorMessage = '';
 // Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
-    $login = trim($_POST['login']);
+    $first_name = trim($_POST['first_name']);
     $pass = $_POST['pass'];
 
     // Проверка на пустые поля
-    if (empty($login) || empty($pass)) {
+    if (empty($first_name) || empty($pass)) {
         $errorMessage = "Все поля должны быть заполнены.";
     } else {
         // Поиск пользователя в базе данных
-        $stmt = $pdo->prepare("SELECT id, login, email, pass, profile_image, image_type FROM users WHERE login = :login");
-        $stmt->execute([':login' => $login]);
+        $stmt = $pdo->prepare("SELECT id, first_name, email, pass, profile_image, image_type FROM users WHERE first_name = :first_name");
+        $stmt->execute([':first_name' => $first_name]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($pass, $user['pass'])) {
                 // Авторизация успешна
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_login'] = $user['login'];
+                $_SESSION['user_first_name'] = $user['first_name'];
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['profile_image'] = $user['profile_image']; // Добавляем изображение
                 $_SESSION['image_type'] = $user['image_type']; // Добавляем тип изображения
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form_login">
             <h1 class="zag_login">Войдите в свой аккаунт</h1>
             <div class="inputs">
-                <input type="text" class="login" placeholder="Введите логин" name="login" required>
+                <input type="text" class="login" placeholder="Введите логин" name="first_name" required>
                 <input type="password" class="login" placeholder="Введите пароль" name="pass" required>
             </div>
             <button class="bttn-login" type="submit">Войти</button>

@@ -98,7 +98,119 @@ footer {
 .form_login input[type="file"] {
     display: none;
 }
+.welcome {
+    font-size: 30px;
+}
 
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 80px;
+    align-items: center;
+}
+
+.hello {
+    display: flex;
+    flex-direction: column;
+}
+
+.information-user {
+    padding: 0 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.inputs_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-group-first {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input_info {
+    box-sizing: border-box;
+    width: 100%;
+    /* Инпуты занимают всю ширину */
+    padding: 28px 18px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 18px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sign_inputs {
+    font-size: 23px;
+}
+
+button {
+    align-self: flex-start;
+    /* Кнопка выравнивается слева */
+    padding: 20px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #e6cf96;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 0 auto;
+    display: flex;
+}
+
+button:hover {
+    background-color: #dab87a;
+}
+
+.profile-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image-label {
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+.profile-image.clickable {
+    max-width: 150px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.profile-image {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.1);
+}
+.profile-image-label p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: underline;
+}
 /* Стилизуем кружочек */
 .custom-upload {
     display: inline-flex;

@@ -1,6 +1,5 @@
 <?php
-// Файл: index.php
-
+session_start();
 // Подключение к базе данных
 require_once 'db.php';
 
@@ -10,18 +9,16 @@ $successMessage = '';
 // Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
-    $login = trim($_POST['login']);
+    $first_name = trim($_POST['first_name']);
     $email = trim($_POST['email']);
     $pass = $_POST['pass'];
     $againpass = $_POST['againpass'];
 
-    // Проверка соответствия паролей
     if ($pass !== $againpass) {
         die("Пароли не совпадают.");
     }
 
-    // Проверка на пустые поля
-    if (empty($login) || empty($email) || empty($pass)) {
+    if (empty($first_name) || empty($email) || empty($pass)) {
         die("Все поля должны быть заполнены.");
     }
 
@@ -31,27 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $profileImage = null;
     $imageType = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        if ($_FILES['image']['size'] > 1 * 1024 * 1024) {
+            die("Размер изображения слишком большой. Максимальный размер: 1 МБ.");
+        }
         $imageData = file_get_contents($_FILES['image']['tmp_name']);
         $profileImage = $imageData;
         $imageType = $_FILES['image']['type'];
     }
 
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE login = :login OR email = :email");
-    $stmt->execute([':login' => $login, ':email' => $email]);
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE first_name = :first_name OR email = :email");
+    $stmt->execute([':first_name' => $first_name, ':email' => $email]);
     $count = $stmt->fetchColumn();
 
     if ($count > 0) {
-        die("Логин или email уже используются.");
+        die("Имя или email уже используются.");
     }
 
-    // Вставка данных в базу данных
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO users (login, email, pass, profile_image, image_type)
-            VALUES (:login, :email, :pass, :profile_image, :image_type)
+            INSERT INTO users (first_name, email, pass, profile_image, image_type)
+            VALUES (:first_name, :email, :pass, :profile_image, :image_type)
         ");
         $stmt->execute([
-            ':login' => $login,
+            ':first_name' => $first_name,
             ':email' => $email,
             ':pass' => $hashedPass,
             ':profile_image' => $profileImage,

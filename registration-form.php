@@ -50,10 +50,10 @@ session_start();
           </label>
           <input type="file" id="image-upload" accept="image/*" name="image">
           <div class="inputs">
-            <input type="text" class="register login" placeholder="Введите логин" name="login">
+            <input type="text" class="register login" placeholder="Введите имя" name="first_name">
             <input type="text" class="register login" placeholder="Введите почту" name="email">
-            <input type="text" class="register login" placeholder="Введите пароль" name="pass">
-            <input type="text" class="register login" placeholder="Повторите пароль" name="againpass">
+            <input type="password" class="register login" placeholder="Введите пароль" name="pass">
+            <input type="password" class="register login" placeholder="Повторите пароль" name="againpass">
           </div>
           <button class="bttn-login">Зарегестрироваться</button>
         </div>
