@@ -85,7 +85,7 @@ session_start();
             <a href="services.php" class="punkts-footer">Услуги</a>
             <a href="aboutus.php" class="punkts-footer">О нас</a>
             <a href="comments.php" class="punkts-footer">Отзывы</a>
-            <a href="login.php" class="punkts-footer">Войти</a>
+            <a href="login-form.php" class="punkts-footer">Войти</a>
           </div>
           <hr>
           <div class="first_categories">

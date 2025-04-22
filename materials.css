@@ -39,14 +39,29 @@
 }
 
 .price_corsina {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
+.corsina-wrapper {
+    position: absolute; /* Выносим кнопку из основного потока */
+    right: 0; /* Размещаем справа */
+    top: 50%; /* Центрируем по вертикали */
+    transform: translateY(-50%); /* Корректируем центрирование */
+}
+
+.corsina-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Убираем отступы */
+}
+
 .corsina {
-    width: 17%;
+    width: 40px; /* Увеличиваем размер изображения */
     height: auto;
 }
 @media (max-width: 910px) {

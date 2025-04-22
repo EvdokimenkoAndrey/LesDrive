@@ -30,3 +30,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// document.addEventListener('DOMContentLoaded', function () {
+//     const fileInput = document.getElementById('image-upload');
+//     const profileImageContainer = document.querySelector('.profile-image-container');
+
+//     if (fileInput && profileImageContainer) {
+//         fileInput.addEventListener('change', function (event) {
+//             const file = event.target.files[0];
+//             if (file) {
+//                 const reader = new FileReader();
+
+//                 // Когда файл загружен, обновляем src для предварительного просмотра
+//                 reader.onload = function (e) {
+//                     // Создаем элемент <img> для предварительного просмотра
+//                     const previewImage = document.createElement('img');
+//                     previewImage.src = e.target.result;
+//                     previewImage.alt = 'Preview Image';
+//                     previewImage.classList.add('profile-image');
+
+//                     // Заменяем текущее содержимое контейнера
+//                     profileImageContainer.innerHTML = '';
+//                     profileImageContainer.appendChild(previewImage);
+
+//                     // Добавляем label обратно для возможности повторной загрузки
+//                     const label = document.createElement('label');
+//                     label.setAttribute('for', 'image-upload');
+//                     label.classList.add('profile-image-label');
+//                     profileImageContainer.appendChild(label);
+//                 };
+
+//                 // Читаем файл как Data URL
+//                 reader.readAsDataURL(file);
+//             }
+//         });
+//     }
+// });

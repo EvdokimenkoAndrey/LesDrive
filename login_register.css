@@ -112,9 +112,16 @@ footer {
 
 .hello {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
-
+.logout {
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+}
 .information-user {
     padding: 0 60px;
     display: flex;
@@ -179,7 +186,6 @@ button:hover {
 
 .profile-image-container {
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .profile-image-label {
@@ -192,24 +198,39 @@ button:hover {
     max-width: 150px;
     border-radius: 50%;
     transition: transform 0.2s ease;
+    height: 6vw; width:6vw;
 }
-
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 5px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+}
 .profile-image {
     max-width: 150px;
-    height: auto;
+    max-height: 150px;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
-
+.plus-icon {
+    font-size: 35px;
+    color: white;
+}
 .profile-image:hover {
     transform: scale(1.1);
 }
-.profile-image-label p {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #007bff;
-    text-decoration: underline;
+.success-message {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
 }
 /* Стилизуем кружочек */
 .custom-upload {

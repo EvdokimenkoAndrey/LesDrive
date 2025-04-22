@@ -1,4 +1,10 @@
 <?php
+session_start();
+require_once 'db.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login-form.php");
+    exit;
+}
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
 $username = 'root';
@@ -12,7 +18,7 @@ try {
     $productPrice = $_POST['product_price'];
     $productImage = $_POST['product_image'];
 
-    $userId = 1;
+    $userId = $_SESSION['user_id'];
 
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id AND product_name = :product_name");
     $stmt->execute(['user_id' => $userId, 'product_name' => $productName]);

@@ -99,6 +99,32 @@ session_start();
     </div>
     <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
   </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('image-upload');
+    const previewContainer = document.querySelector('.custom-upload');
+
+    input.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = "Profile Image";
+                img.className = "profile-image";
+
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+});
+  </script>
 </body>
 
 </html>

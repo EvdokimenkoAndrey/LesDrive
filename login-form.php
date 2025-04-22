@@ -3,7 +3,7 @@ session_start();
 // Подключение к базе данных
 require_once 'db.php';
 if (isset($_SESSION["user_id"])) {
-  header("Location: login.php");
+  header("Location: user.php");
 }
 // Переменная для хранения сообщения об ошибке
 $errorMessage = '';
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMessage = "Все поля должны быть заполнены.";
     } else {
         // Поиск пользователя в базе данных
-        $stmt = $pdo->prepare("SELECT id, first_name, email, pass, profile_image, image_type FROM users WHERE first_name = :first_name");
+        $stmt = $pdo->prepare("SELECT id, first_name, email, pass, profile_image, image_type, role FROM users WHERE first_name = :first_name");
         $stmt->execute([':first_name' => $first_name]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,9 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['profile_image'] = $user['profile_image']; // Добавляем изображение
                 $_SESSION['image_type'] = $user['image_type']; // Добавляем тип изображения
+                $_SESSION['role'] = $user['role'];
 
-                // Перенаправление на главную страницу после успешной авторизации
-                header("Location: login.php");
+                if ($_SESSION['role'] === 'admin') {
+                  header("Location: admin.php");
+                } else {
+                  header("Location: user.php");
+                }
                 exit;
             } else {
                 $errorMessage = "Неверный пароль.";
@@ -87,6 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
       </header>
+      <?php if (!empty($errorMessage)): ?>
+        <div class="error-message">
+            <?= htmlspecialchars($errorMessage) ?>
+        </div>
+    <?php endif; ?>
     <form action="login-form.php" method="post">
         <div class="form_login">
             <h1 class="zag_login">Войдите в свой аккаунт</h1>

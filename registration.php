@@ -1,14 +1,10 @@
 <?php
 session_start();
-// Подключение к базе данных
 require_once 'db.php';
 
-// Переменная для хранения сообщения об успешной регистрации
 $successMessage = '';
 
-// Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Получение данных из формы
     $first_name = trim($_POST['first_name']);
     $email = trim($_POST['email']);
     $pass = $_POST['pass'];
@@ -22,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Все поля должны быть заполнены.");
     }
 
-    // Хеширование пароля
     $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
     $profileImage = null;

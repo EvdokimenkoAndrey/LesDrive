@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="hello">
                         <h1 class="welcome">Добро пожаловать, <?= htmlspecialchars($user['first_name']) ?>!</h1>
-                        <a href="logout.php">Выйти</a>
+                        <a href="logout.php" class="logout">Выйти из аккаунта</a>
                     </div>
                 </div>
                 <div class="inputs_info">
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-group">
                             <label for="address" class="sign_inputs">Адрес:</label>
-                            <input type="text" id="address" class="input_info" name="address"><?= htmlspecialchars($user['address'] ?? '') ?>
+                            <input type="text" id="address" class="input_info" name="address" value="<?= htmlspecialchars($user['address'] ?? '') ?>">
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'db.php';
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
 $username = 'root';
@@ -9,10 +10,17 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $userId = 1;
+
+    if (!isset($_SESSION['user_id'])) {
+      echo '<div class="error-message">
+              Для просмотра корзины необходимо <a href="login-form.php">войти</a> или <a href="register-form.php">зарегистрироваться</a>.
+            </div>';
+      exit;
+  }
+    $userId = $_SESSION['user_id'];
 
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
-    $stmt->execute(['user_id' => $userId]);
+    $stmt->execute([':user_id' => $userId]);
     $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $totalQuantity = 0;
@@ -32,9 +40,9 @@ try {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="login_register.css">
-  <link rel="stylesheet" href="corsina.css">
+  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="login_register.css?v=1">
+  <link rel="stylesheet" href="corsina.css?v=1">
   <title>Корзина</title>
 </head>
 
@@ -70,11 +78,13 @@ try {
       </header>
       <div class="corzina">
         <h1 class="zagolovok-offers">Корзина</h1>
+        <?php if (empty($cartItems)): ?>
+            <div class="empty-cart-container">
+                <p class="empty-cart">Ваша корзина пуста.</p>
+            </div>
+        <?php else: ?>
         <div class="products_corzina">
           <div class="product_corzina">
-            <?php if (empty($cartItems)): ?>
-              <p class="empty-cart">Ваша корзина пуста.</p>
-            <?php else: ?>
               <?php foreach ($cartItems as $item): ?>
                 <div class="cart-item">
                   <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
@@ -99,7 +109,6 @@ try {
                   </form>
                 </div>
               <?php endforeach; ?>
-            <?php endif; ?>
           </div>
           <div class="checkout-form-container">
             <h2 class="zagolovok_order">Оформление заказа</h2>
@@ -111,9 +120,11 @@ try {
               <button type="submit" class="place-order-button">Перейти к оформлению</button>
             </form>
           </div>
+          <?php endif; ?>
         </div>
       </div>
-      <footer>
+  </main>
+  <footer>
         <div class="pages">
           <p class="zagolovok-footer">ЛесДрайв</p>
           <div class="categories">
@@ -122,7 +133,7 @@ try {
               <a href="services.php" class="punkts-footer">Услуги</a>
               <a href="aboutus.php" class="punkts-footer">О нас</a>
               <a href="comments.php" class="punkts-footer">Отзывы</a>
-              <a href="login.php" class="punkts-footer">Войти</a>
+              <a href="login-form.php" class="punkts-footer">Войти</a>
             </div>
             <hr>
             <div class="first_categories">
@@ -153,7 +164,6 @@ try {
         </div>
         <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
       </footer>
-  </main>
 </body>
 
 </html>
