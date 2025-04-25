@@ -11,7 +11,11 @@ if (!isset($_SESSION['user_id'])) {
 require_once 'db.php';
 
 // Получение данных пользователя из базы данных
-$stmt = $pdo->prepare("SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type FROM users WHERE id = :id");
+$stmt = $pdo->prepare("
+    SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
+    FROM users 
+    WHERE id = :id
+");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -79,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['address'] = $address ?: null;
 
     // Перенаправление обратно в личный кабинет
-    header("Location: admin.php");
+    header("Location: user.php");
     exit;
 }
 ?>

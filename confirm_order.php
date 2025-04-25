@@ -1,4 +1,6 @@
 <?php
+require_once "db.php";
+session_start();
 // Подключение к базе данных
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
@@ -14,8 +16,9 @@ try {
     $phone = $_POST['phone'];
     $address = $_POST['address'];
 
+
     // Для примера используем user_id = 1
-    $userId = 1;
+    $userId = $_SESSION['user_id'];
 
     // Получаем все товары из корзины
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");

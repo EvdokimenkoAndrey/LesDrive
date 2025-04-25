@@ -19,20 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMessage = "Все поля должны быть заполнены.";
     } else {
         // Поиск пользователя в базе данных
-        $stmt = $pdo->prepare("SELECT id, first_name, email, pass, profile_image, image_type, role FROM users WHERE first_name = :first_name");
+        $stmt = $pdo->prepare("SELECT id, pass, first_name, last_name, middle_name, phone, address, profile_image, image_type, role FROM users WHERE first_name = :first_name");
         $stmt->execute([':first_name' => $first_name]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
             // Проверка пароля
             if (password_verify($pass, $user['pass'])) {
-                // Авторизация успешна
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_first_name'] = $user['first_name'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['profile_image'] = $user['profile_image']; // Добавляем изображение
-                $_SESSION['image_type'] = $user['image_type']; // Добавляем тип изображения
-                $_SESSION['role'] = $user['role'];
+              $_SESSION['user_id'] = $user['id'];
+              $_SESSION['first_name'] = $user['first_name'];
+              $_SESSION['last_name'] = $user['last_name'];
+              $_SESSION['middle_name'] = $user['middle_name'];
+              $_SESSION['phone'] = $user['phone'];
+              $_SESSION['address'] = $user['address'];
+              $_SESSION['profile_image'] = $user['profile_image'];
+              $_SESSION['image_type'] = $user['image_type'];
+              $_SESSION['role'] = $user['role'];
 
                 if ($_SESSION['role'] === 'admin') {
                   header("Location: admin.php");

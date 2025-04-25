@@ -1,5 +1,13 @@
 <?php
 session_start();
+require_once 'db.php';
+
+// Проверка авторизации
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login-form.php");
+    exit;
+}
+
 $host = 'localhost';
 $dbname = 'korzina_lesdrive';
 $username = 'root';
@@ -9,8 +17,8 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Для примера используем user_id = 1
-    $userId = 1;
+    // Получаем ID текущего пользователя из сессии
+    $userId = $_SESSION['user_id'];
 
     // Получаем все товары из корзины
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
@@ -34,138 +42,139 @@ try {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="login_register.css">
-    <title>Оформление заказа</title>
-    <style>
-        .order-page-container {
-            background-color: #FFF0CA;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login_register.css">
+  <title>Оформление заказа</title>
+  <style>
+    .order-page-container {
+      background-color: #FFF0CA;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        .order-page-container h1 {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 40px;
-            text-align: center;
-        }
+    .order-page-container h1 {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 40px;
+      text-align: center;
+    }
 
-        .order-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    .order-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-        .order-form label {
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
-        }
+    .order-form label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+    }
 
-        .order-form input,
-        .order-form textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+    .order-form input,
+    .order-form textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
 
-        .order-form textarea {
-            resize: none;
-        }
+    .order-form textarea {
+      resize: none;
+    }
 
-        .order-summary {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .order-summary {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        .order-summary p {
-            margin: 0;
-            font-size: 16px;
-            color: #555;
-        }
+    .order-summary p {
+      margin: 0;
+      font-size: 16px;
+      color: #555;
+    }
 
-        .order-summary span {
-            font-weight: bold;
-            color: #333;
-        }
+    .order-summary span {
+      font-weight: bold;
+      color: #333;
+    }
 
-        .place-order-button {
-            padding: 15px;
-            border-radius: 5px;
-            border: none;
-            background-color: #ebd294;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .place-order-button {
+      padding: 15px;
+      border-radius: 5px;
+      border: none;
+      background-color: #ebd294;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        .place-order-button:hover {
-            background-color: #dabf7a;
-        }
-    </style>
+    .place-order-button:hover {
+      background-color: #dabf7a;
+    }
+  </style>
 </head>
 
 <body>
-    <main>
+  <main>
     <header>
-        <div class="menu">
-          <div class="Logo">
-            <a href="index.php" class="link_logo">
-              <img src="images/logo.png" class="logo">
-              <h1 class="zagolovok">ЛесДрайв</h1>
-            </a>
-          </div>
-          <ul>
-            <li><a href="catalog.php" class="punkts">Каталог</a></li>
-            <li><a href="aboutus.php" class="punkts">О нас</a></li>
-            <li><a href="services.php" class="punkts">Услуги</a></li>
-            <li><a href="comments.php" class="punkts">Отзывы</a></li>
-          </ul>
-          <div class="icons">
+      <div class="menu">
+        <div class="Logo">
+          <a href="index.php" class="link_logo">
+            <img src="images/logo.png" class="logo">
+            <h1 class="zagolovok">ЛесДрайв</h1>
+          </a>
+        </div>
+        <ul>
+          <li><a href="catalog.php" class="punkts">Каталог</a></li>
+          <li><a href="aboutus.php" class="punkts">О нас</a></li>
+          <li><a href="services.php" class="punkts">Услуги</a></li>
+          <li><a href="comments.php" class="punkts">Отзывы</a></li>
+        </ul>
+        <div class="icons">
           <a href="login-form.php">
             <?php
             if (isset($_SESSION['user_id'])) : ?>
               <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
-            <?php else: ?>
-            <img src="images/LogIn.png" class="korzina"></a>
-            <?php endif; ?>
-            <a href="corsina.php">
-            <img src="images/corsina.png" class="korzina"></a>
-          </div>
+        <?php else: ?>
+          <img src="images/LogIn.png" class="korzina"></a>
+        <?php endif; ?>
+        <a href="corsina.php">
+          <img src="images/corsina.png" class="korzina"></a>
         </div>
-      </header>
-        <div class="order-page-container">
-            <h1>Оформление заказа</h1>
-            <form action="confirm_order.php" method="POST" class="order-form">
-                <label for="name">Имя:</label>
-                <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['user']['login'] ?? '') ?>" required>
+      </div>
+    </header>
+    <div class="order-page-container">
+      <h1>Оформление заказа</h1>
+      <form action="confirm_order.php" method="POST" class="order-form">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
 
-                <label for="phone">Телефон:</label>
-                <input type="text" id="phone" class="input_info" name="phone" value="<?= htmlspecialchars($_SESSION['user']['phone'] ?? '') ?>">
-                <label for="address">Адрес доставки:</label>
-                <textarea id="address" name="address" rows="4" required></textarea>
+    <label for="phone">Телефон:</label>
+    <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($_SESSION['phone']) ?>">
 
-                <!-- Информация о заказе -->
-                <div class="order-summary">
-                    <p>Количество товаров: <span><?= $totalQuantity ?></span></p>
-                    <p>Общая стоимость: <span><?= number_format($totalPrice, 2) ?> руб.</span></p>
-                </div>
+    <label for="address">Адрес доставки:</label>
+    <textarea id="address" name="address" rows="4" required><?= htmlspecialchars($_SESSION['address']) ?></textarea>
 
-                <button type="submit" class="place-order-button">Подтвердить заказ</button>
-            </form>
-        </div>
-        <footer>
+    <!-- Информация о заказе -->
+    <div class="order-summary">
+        <p>Количество товаров: <span><?= $totalQuantity ?></span></p>
+        <p>Общая стоимость: <span><?= number_format($totalPrice, 2) ?> руб.</span></p>
+    </div>
+
+    <button type="submit" class="place-order-button">Подтвердить заказ</button>
+</form>
+    </div>
+    <footer>
       <div class="pages">
         <p class="zagolovok-footer">ЛесДрайв</p>
         <div class="categories">
@@ -205,7 +214,7 @@ try {
       </div>
       <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
     </footer>
-    </main>
+  </main>
 </body>
 
 </html>

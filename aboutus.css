@@ -24,6 +24,8 @@
     box-sizing: border-box;
     max-width: 400px;
     background-color: #FFF0CA;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 .img_aboutus {
     width: 100%;
@@ -45,6 +47,7 @@
     width: 25%;
     gap: 10px;
     background-color: #FFF0CA;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .partner_img {
     width: 25%;
@@ -128,7 +131,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 50px;
 }
 .infos {
     display: flex;
@@ -144,6 +147,7 @@
     align-items: center;
     gap: 10px;
     width: 250px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .carts {
     width: 100%;

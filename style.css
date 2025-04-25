@@ -269,6 +269,7 @@ ul {
     width: 600px;
     height: 180px;
     position: relative;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .brusok {
@@ -380,6 +381,7 @@ h1 {
     align-items: center;
     width: 350px;
     border-radius: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .image-comment1 {
     width: 125px;
@@ -406,6 +408,7 @@ h2 {
     height: 80px;
     width: 200px;
     cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .watch {
     font-size: 1.3vw;
