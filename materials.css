@@ -38,12 +38,27 @@
     gap: 30px;
 }
 
-.price_corsina {
-    position: relative;
+.price-service-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px; /* Отступ между ценой и выпадающим списком */
+}
+.price {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+    flex: 1; /* Занимает доступное пространство */
+    text-align: left; /* Выравнивание по левому краю */
+}
+
+select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
 }
 
 .corsina-wrapper {
@@ -54,12 +69,19 @@
 }
 
 .corsina-button {
-    background: none;
+    background-color: #ebd294;
+    padding: 10px;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
-    padding: 0; /* Убираем отступы */
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
-
+.add-to-cart-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 .corsina {
     width: 40px; /* Увеличиваем размер изображения */
     height: auto;
@@ -74,6 +96,9 @@
     .price {
         font-size: 11px;
     }
+}
+#service {
+    margin-right: 6px;
 }
 @media (max-width: 768px) {
     .all-materials {

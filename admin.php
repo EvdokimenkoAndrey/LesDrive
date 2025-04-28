@@ -137,10 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="new_image" class="profile-image-label">
                                 <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" alt="Profile Image" class="profile-image clickable" id="current-profile-image">
                             </label>
-                        <?php else: ?>
-                            <label for="new_image" class="profile-image-label">
-                                <p>Добавить аватар</p>
-                            </label>
                         <?php endif; ?>
                         <input type="file" id="new_image" name="new_image" accept="image/jpeg, image/png, image/gif" style="display: none;">
                     </div>
@@ -183,6 +179,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit">Сохранить изменения</button>
             </form>
+            <div class="form-product">
+                <form action="admin_add_product.php" method="POST" class="inputs_product" enctype="multipart/form-data">
+                    <h1>Добавление нового товара</h1>
+                    <label for="image-upload" class="custom-upload">
+                            <i>+</i>
+                        </label>
+                        <input type="file" id="image-upload" accept="image/*" name="product_image">
+                    <div class="info-product">
+                        <label for="product_name" class="sign_product">Название товара:</label>
+                        <input type="text" id="product_name" name="product_name" class="register login" required>
+
+                        <label for="product_price" class="sign_product">Цена товара (в рублях):</label>
+                        <input type="number" step="0.01" id="product_price" name="product_price" class="register login" required>
+
+                        <button type="submit">Добавить товар</button>
+                    </div>
+                </form>
+            </div>
             <footer>
                 <div class="pages">
                     <p class="zagolovok-footer">ЛесДрайв</p>
@@ -225,6 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </footer>
         </main>
         <script src="upload-image.js"></script>
+        <script src="custom-upload.js"></script>
 </body>
 
 </html>

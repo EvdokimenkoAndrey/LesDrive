@@ -3,7 +3,11 @@ session_start();
 // Подключение к базе данных
 require_once 'db.php';
 if (isset($_SESSION["user_id"])) {
-  header("Location: user.php");
+  if ($_SESSION['role'] === 'admin') {
+    header("Location: admin.php");
+  } else {
+    header("Location: user.php");
+  }
 }
 // Переменная для хранения сообщения об ошибке
 $errorMessage = '';

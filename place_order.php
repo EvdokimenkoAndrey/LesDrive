@@ -1,40 +1,44 @@
 <?php
 session_start();
 require_once 'db.php';
+require_once "db_korzina.php";
 
 // Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login-form.php");
-    exit;
+  header("Location: login-form.php");
+  exit;
 }
 
-$host = 'localhost';
-$dbname = 'korzina_lesdrive';
-$username = 'root';
-$password = '';
-
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  // Получаем ID текущего пользователя из сессии
+  $userId = $_SESSION['user_id'];
 
-    // Получаем ID текущего пользователя из сессии
-    $userId = $_SESSION['user_id'];
+  // Получаем все товары из корзины
+  $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
+  $stmt->execute(['user_id' => $userId]);
+  $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Получаем все товары из корзины
-    $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
-    $stmt->execute(['user_id' => $userId]);
-    $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  // Вычисляем общее количество товаров и общую стоимость
+  $totalQuantity = 0;
+  $totalPrice = 0;
 
-    // Вычисляем общее количество товаров и общую стоимость
-    $totalQuantity = 0;
-    $totalPrice = 0;
+  foreach ($cartItems as $item) {
+    $totalQuantity += $item['quantity'];
+    $totalPrice += $item['product_price'] * $item['quantity'];
+  }
+  $selectedTransport = $_POST['transport'] ?? null;
+  $transportPrice = 0;
+  $transportName = '';
 
-    foreach ($cartItems as $item) {
-        $totalQuantity += $item['quantity'];
-        $totalPrice += $item['product_price'] * $item['quantity'];
-    }
+  if ($selectedTransport) {
+    list($transportName, $transportPrice) = explode('|', $selectedTransport);
+    $transportPrice = (float)$transportPrice;
+  }
+
+  // Вычисляем общую стоимость с учетом транспорта
+  $finalTotalPrice = $totalPrice + $transportPrice;
 } catch (PDOException $e) {
-    echo "Ошибка: " . $e->getMessage();
+  echo "Ошибка: " . $e->getMessage();
 }
 ?>
 
@@ -47,81 +51,6 @@ try {
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="login_register.css">
   <title>Оформление заказа</title>
-  <style>
-    .order-page-container {
-      background-color: #FFF0CA;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .order-page-container h1 {
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .order-form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .order-form label {
-      font-size: 14px;
-      font-weight: bold;
-      color: #555;
-    }
-
-    .order-form input,
-    .order-form textarea {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .order-form textarea {
-      resize: none;
-    }
-
-    .order-summary {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .order-summary p {
-      margin: 0;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .order-summary span {
-      font-weight: bold;
-      color: #333;
-    }
-
-    .place-order-button {
-      padding: 15px;
-      border-radius: 5px;
-      border: none;
-      background-color: #ebd294;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .place-order-button:hover {
-      background-color: #dabf7a;
-    }
-  </style>
 </head>
 
 <body>
@@ -156,23 +85,57 @@ try {
     <div class="order-page-container">
       <h1>Оформление заказа</h1>
       <form action="confirm_order.php" method="POST" class="order-form">
-    <label for="name">Имя:</label>
-    <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
 
-    <label for="phone">Телефон:</label>
-    <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($_SESSION['phone']) ?>">
+        <label for="phone">Телефон:</label>
+        <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($_SESSION['phone']) ?>">
 
-    <label for="address">Адрес доставки:</label>
-    <textarea id="address" name="address" rows="4" required><?= htmlspecialchars($_SESSION['address']) ?></textarea>
+        <label for="address">Адрес доставки:</label>
+        <textarea id="address" name="address" rows="4" required><?= htmlspecialchars($_SESSION['address']) ?></textarea>
 
-    <!-- Информация о заказе -->
-    <div class="order-summary">
-        <p>Количество товаров: <span><?= $totalQuantity ?></span></p>
-        <p>Общая стоимость: <span><?= number_format($totalPrice, 2) ?> руб.</span></p>
-    </div>
+        <label for="address">Доставка:</label>
 
-    <button type="submit" class="place-order-button">Подтвердить заказ</button>
-</form>
+        <div class="delivery-order">
+          <div class="three-transports">
+            <div class="transport">
+              <input type="radio" name="transport" id="truck" class="transport-radio" value="Грузовой автомобиль|500">
+              <p>Грузовой автомобиль (500 руб.)</p>
+            </div>
+            <div class="transport">
+              <input type="radio" name="transport" id="gazel" class="transport-radio" value="Газель|300">
+              <p>Газель (300 руб.)</p>
+            </div>
+            <div class="transport">
+              <input type="radio" name="transport" id="forest-truck" class="transport-radio" value="Лесовоз|700">
+              <p>Лесовоз (700 руб.)</p>
+            </div>
+          </div>
+          <div class="three-transports">
+            <div class="transport">
+              <input type="radio" name="transport" id="manipulator" class="transport-radio" value="Манипуляторы|600">
+              <p>Манипуляторы (600 руб.)</p>
+            </div>
+            <div class="transport">
+              <input type="radio" name="transport" id="furgon" class="transport-radio" value="Автомобиль с кузовом-фургоном|400">
+              <p>Автомобиль с кузовом-фургоном (400 руб.)</p>
+            </div>
+            <div class="transport">
+              <input type="radio" name="transport" id="refrigerator" class="transport-radio" value="Рефрижераторы|800">
+              <p>Рефрижераторы (800 руб.)</p>
+            </div>
+          </div>
+        </div>
+        <!-- Информация о заказе -->
+        <div class="order-summary">
+          <p>Количество товаров: <span id="total-quantity"><?= $totalQuantity ?></span></p>
+          <p>Стоимость товаров: <span id="product-price"><?= number_format($totalPrice, 2) ?> руб.</span></p>
+          <p>Стоимость доставки: <span id="delivery-price">0 руб.</span></p>
+          <p>Общая стоимость: <span id="total-price"><?= number_format($totalPrice, 2) ?> руб.</span></p>
+        </div>
+
+        <button type="submit" class="place-order-button">Подтвердить заказ</button>
+      </form>
     </div>
     <footer>
       <div class="pages">
@@ -215,6 +178,43 @@ try {
       <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
     </footer>
   </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Получаем элементы из DOM
+      const transportRadios = document.querySelectorAll('.transport-radio');
+      const deliveryPriceElement = document.getElementById('delivery-price');
+      const totalPriceElement = document.getElementById('total-price');
+      const productPriceElement = document.getElementById('product-price');
+
+      // Инициализация базовых значений
+      let productPrice = parseFloat(productPriceElement.textContent.replace(/[^0-9.-]+/g, ""));
+      let deliveryPrice = 0;
+
+      // Функция для обновления общей стоимости
+      function updateTotalPrice() {
+        const total = productPrice + deliveryPrice;
+        totalPriceElement.textContent = `${total.toFixed(2)} руб.`;
+      }
+
+      // Добавляем обработчик событий на каждую радиокнопку
+      transportRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked) {
+            // Получаем данные о транспорте из значения радиокнопки
+            const [transportName, transportCost] = this.value.split('|');
+            deliveryPrice = parseFloat(transportCost);
+
+            // Обновляем стоимость доставки и общую стоимость
+            deliveryPriceElement.textContent = `${deliveryPrice.toFixed(2)} руб.`;
+            updateTotalPrice();
+          }
+        });
+      });
+
+      // Инициализация при загрузке страницы
+      updateTotalPrice();
+    });
+  </script>
 </body>
 
 </html>

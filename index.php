@@ -106,7 +106,8 @@ session_start();
               <h1>Брусок обрезной</h1>
               <p class="des-brusok">Идеальный брусок для каркасного строительства</p>
             </div>
-            <button class="buy">Купить</button>
+            <a href="materials_first.php">
+            <button class="buy">Купить</button></a>
           </div>
         </div>
         <div class="product">

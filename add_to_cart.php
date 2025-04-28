@@ -1,44 +1,43 @@
 <?php
 session_start();
 require_once 'db.php';
+require_once 'db_korzina.php';
 if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
 }
-$host = 'localhost';
-$dbname = 'korzina_lesdrive';
-$username = 'root';
-$password = '';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     $productName = $_POST['product_name'];
     $productPrice = $_POST['product_price'];
     $productImage = $_POST['product_image'];
+    $service = $_POST['service'] ?? null; // Получаем выбранную услугу (если есть)
 
     $userId = $_SESSION['user_id'];
 
+    // Проверяем, есть ли товар уже в корзине
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id AND product_name = :product_name");
     $stmt->execute(['user_id' => $userId, 'product_name' => $productName]);
     $existingItem = $stmt->fetch();
 
     if ($existingItem) {
+        // Если товар уже есть, увеличиваем количество
         $newQuantity = $existingItem['quantity'] + 1;
         $updateStmt = $pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
         $updateStmt->execute(['quantity' => $newQuantity, 'id' => $existingItem['id']]);
     } else {
-        $insertStmt = $pdo->prepare("INSERT INTO cart (user_id, product_name, product_price, product_image, quantity) VALUES (:user_id, :product_name, :product_price, :product_image, 1)");
+        // Если товара нет, добавляем его в корзину
+        $insertStmt = $pdo->prepare("INSERT INTO cart (user_id, product_name, product_price, product_image, service, quantity) VALUES (:user_id, :product_name, :product_price, :product_image, :service, 1)");
         $insertStmt->execute([
             'user_id' => $userId,
             'product_name' => $productName,
             'product_price' => $productPrice,
-            'product_image' => $productImage
+            'product_image' => $productImage,
+            'service' => $service
         ]);
     }
 
-    header("Location: catalog.php");
+    header("Location: corsina.php");
     exit();
 } catch (PDOException $e) {
     echo "Ошибка: " . $e->getMessage();

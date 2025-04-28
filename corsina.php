@@ -85,30 +85,33 @@ try {
         <?php else: ?>
         <div class="products_corzina">
           <div class="product_corzina">
-              <?php foreach ($cartItems as $item): ?>
-                <div class="cart-item">
-                  <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
-                  <div class="cart-item-details">
-                    <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
-                    <div class="cart-item-price">Цена за шт: <br><?= number_format($item['product_price'], 2) ?> руб.</div>
-                    <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
-                    <div class="quantity-control">
-                      <form action="update_quantity.php" method="POST" class="quantity-form">
-                        <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
-                        <button type="submit" name="action" value="decrease" class="quantity-button minus">-</button>
-                        <span class="quantity-value"><?= $item['quantity'] ?></span>
-                        <button type="submit" name="action" value="increase" class="quantity-button plus">+</button>
-                      </form>
-                    </div>
-                  </div>
-                  <form action="delete_corsina.php" method="POST" class="delete-form">
+          <?php foreach ($cartItems as $item): ?>
+    <div class="cart-item">
+        <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
+        <div class="cart-item-details">
+            <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
+            <div class="cart-item-price">Цена за шт: <br><?= number_format($item['product_price'], 2) ?> руб.</div>
+            <div class="cart-item-service">
+                Услуга: <?= $item['service'] ? htmlspecialchars($item['service']) : 'Без услуги' ?>
+            </div>
+            <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
+            <div class="quantity-control">
+                <form action="update_quantity.php" method="POST" class="quantity-form">
                     <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
-                    <button type="submit" class="delete-button">
-                      <img src="images/delete_icon.png" alt="Удалить" class="delete_icon">
-                    </button>
-                  </form>
-                </div>
-              <?php endforeach; ?>
+                    <button type="submit" name="action" value="decrease" class="quantity-button minus">-</button>
+                    <span class="quantity-value"><?= $item['quantity'] ?></span>
+                    <button type="submit" name="action" value="increase" class="quantity-button plus">+</button>
+                </form>
+            </div>
+        </div>
+        <form action="delete_corsina.php" method="POST" class="delete-form">
+            <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
+            <button type="submit" class="delete-button">
+                <img src="images/delete_icon.png" alt="Удалить" class="delete_icon">
+            </button>
+        </form>
+    </div>
+<?php endforeach; ?>
           </div>
           <div class="checkout-form-container">
             <h2 class="zagolovok_order">Оформление заказа</h2>

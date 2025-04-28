@@ -1,5 +1,14 @@
 <?php
 session_start();
+require_once 'db.php';
+require_once "db_korzina.php";
+
+try {
+    $stmt = $pdo->query("SELECT * FROM products");
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Ошибка: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 
@@ -51,147 +60,31 @@ session_start();
         <div class="pilomaterials">
             <h1 class="zagolovok-offers">Пиломатериалы</h1>
             <div class="all-materials">
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
+    <?php foreach ($products as $product): ?>
+        <div class="material">
+            <img src="<?= htmlspecialchars($product['product_image']) ?>" class="material-image">
+            <div class="information_material">
+                <div class="material-slider"><?= htmlspecialchars($product['product_name']) ?></div>
+                <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
+                    <input type="hidden" name="product_name" value="<?= htmlspecialchars($product['product_name']) ?>">
+                    <input type="hidden" name="product_price" value="<?= htmlspecialchars($product['product_price']) ?>">
+                    <input type="hidden" name="product_image" value="<?= htmlspecialchars($product['product_image']) ?>">
+                    
+                    <div class="price-service-container">
+                        <p class="price"><?= htmlspecialchars($product['product_price']) ?> р за шт.</p>
+                        <select name="service" id="service" required>
+                            <option value="Без услуги">Без услуги</option>
+                            <option value="Обработка">Обработка</option>
+                            <option value="Распил">Распил</option>
+                        </select>
                     </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из дуба 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">123 р за шт.</p>
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из дуба 150х150х6000">
-                                <input type="hidden" name="product_price" value="123">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <!-- Форма для добавления товара -->
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <!-- Форма для добавления товара -->
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <!-- Форма для добавления товара -->
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <!-- Форма для добавления товара -->
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="material">
-                    <img src="images/materials/material1.png" class="material-image">
-                    <div class="information_material">
-                        <div class="material-slider">Брус обрезной из сосны 150х150х6000</div>
-                        <div class="price_corsina">
-                            <p class="price">780 р за шт.</p>
-                            <form action="add_to_cart.php" method="POST" class="add-to-cart-form">
-                                <input type="hidden" name="product_name" value="Брус обрезной из сосны 150х150х6000">
-                                <input type="hidden" name="product_price" value="780">
-                                <input type="hidden" name="product_image" value="images/materials/material1.png">
-                                <button type="submit" class="corsina-button">
-                                    <img src="images/corsina.png" class="corsina">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                    
+                    <button type="submit" class="corsina-button">В корзину</button>
+                </form>
             </div>
+        </div>
+    <?php endforeach; ?>
+</div>
         </div>
     </main>
 </body>

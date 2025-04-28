@@ -198,7 +198,8 @@ button:hover {
     max-width: 150px;
     border-radius: 50%;
     transition: transform 0.2s ease;
-    height: 6vw; width:6vw;
+    height: 6vw; 
+    width:6vw;
 }
 .error-message {
     background-color: #ffebee;
@@ -254,6 +255,132 @@ button:hover {
     font-family: Inte;
     font-weight: bold;
 }
+.form-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.inputs_product {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    background-color: #FFF0CA;
+    padding: 50px;
+    border-radius: 10px;
+}
+.info-product {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+.image-product {
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s ease;
+}
+.profile-image-product {
+    width: 150px;
+    height: auto;
+    border-radius: 0;
+}
+.inputs_product input[type="file"] {
+    display: none;
+}
+.sign_product {
+    font-size: 20px;
+}
+.delivery-order {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+.transport {
+    display: flex;
+    align-items: center;
+}
+.three-transports {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.order-page-container {
+    background-color: #FFF0CA;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .order-page-container h1 {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .order-form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+  }
+
+  .order-form input,
+  .order-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .order-form textarea {
+    resize: none;
+  }
+
+  .order-summary {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .order-summary p {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .order-summary span {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .place-order-button {
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ebd294;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .place-order-button:hover {
+    background-color: #dabf7a;
+  }
 @media (max-width: 910px) {
     .zag_login {
         font-size: 25px;
