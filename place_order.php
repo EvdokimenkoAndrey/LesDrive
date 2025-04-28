@@ -189,6 +189,7 @@ try {
       // Инициализация базовых значений
       let productPrice = parseFloat(productPriceElement.textContent.replace(/[^0-9.-]+/g, ""));
       let deliveryPrice = 0;
+      let lastSelectedRadio = null; // Переменная для хранения последней выбранной радиокнопки
 
       // Функция для обновления общей стоимости
       function updateTotalPrice() {
@@ -198,16 +199,22 @@ try {
 
       // Добавляем обработчик событий на каждую радиокнопку
       transportRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-          if (this.checked) {
-            // Получаем данные о транспорте из значения радиокнопки
+        radio.addEventListener('click', function() {
+          if (lastSelectedRadio === this && this.checked) {
+            // Если нажата уже выбранная радиокнопка, сбрасываем её
+            this.checked = false;
+            lastSelectedRadio = null; // Обнуляем последнюю выбранную кнопку
+            deliveryPrice = 0; // Сбрасываем стоимость доставки
+          } else {
+            // Если выбрана новая радиокнопка
+            lastSelectedRadio = this; // Сохраняем текущую радиокнопку
             const [transportName, transportCost] = this.value.split('|');
-            deliveryPrice = parseFloat(transportCost);
-
-            // Обновляем стоимость доставки и общую стоимость
-            deliveryPriceElement.textContent = `${deliveryPrice.toFixed(2)} руб.`;
-            updateTotalPrice();
+            deliveryPrice = parseFloat(transportCost); // Устанавливаем новую стоимость доставки
           }
+
+          // Обновляем стоимость доставки и общую стоимость
+          deliveryPriceElement.textContent = deliveryPrice > 0 ? `${deliveryPrice.toFixed(2)} руб.` : '0 руб.';
+          updateTotalPrice();
         });
       });
 
