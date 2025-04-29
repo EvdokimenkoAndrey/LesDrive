@@ -1,5 +1,9 @@
-<?php
+x   <?php
 session_start();
+
+// Очистка предыдущих сообщений
+unset($_SESSION['successMessage']);
+unset($_SESSION['errorMessage']);
 
 // Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
@@ -18,36 +22,61 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+require_once 'db_korzina.php';
+// Получение истории заказов пользователя
+$orders_stmt = $pdo->prepare("
+    SELECT o.id AS order_id, o.name, o.phone, o.address, o.total_price, o.created_at, o.transport
+    FROM orders o
+    WHERE o.user_id = :user_id
+    ORDER BY o.created_at DESC
+");
+$orders_stmt->execute([':user_id' => $_SESSION['user_id']]);
+$orders = $orders_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Для каждого заказа получаем список товаров
+foreach ($orders as &$order) {
+    $items_stmt = $pdo->prepare("
+    SELECT oi.product_name, oi.product_price, oi.quantity, p.product_image AS product_image
+    FROM order_items oi
+    LEFT JOIN products p ON oi.product_name = p.product_name
+    WHERE oi.order_id = :order_id
+");
+    $items_stmt->execute([':order_id' => $order['order_id']]);
+    $order['items'] = $items_stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+unset($order); // Разрушаем ссылку
 
 // Обработка POST-запроса для обновления данных
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $errors = [];
+
     // Обновление аватара
     if (isset($_FILES['new_image']) && $_FILES['new_image']['error'] === UPLOAD_ERR_OK) {
         // Проверка размера файла (не более 1 МБ)
         if ($_FILES['new_image']['size'] > 1 * 1024 * 1024) {
-            die("Размер изображения слишком большой. Максимальный размер: 1 МБ.");
+            $errors[] = "Размер изображения слишком большой. Максимальный размер: 1 МБ.";
+        } else {
+            // Чтение данных изображения
+            $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
+            $imageType = $_FILES['new_image']['type'];
+
+            // Обновление изображения в базе данных
+            $update_stmt = $pdo->prepare("
+                UPDATE users 
+                SET profile_image = :profile_image, 
+                    image_type = :image_type 
+                WHERE id = :id
+            ");
+            $update_stmt->execute([
+                ':profile_image' => $imageData,
+                ':image_type' => $imageType,
+                ':id' => $_SESSION['user_id']
+            ]);
+
+            // Обновление данных в сессии
+            $_SESSION['profile_image'] = $imageData;
+            $_SESSION['image_type'] = $imageType;
         }
-
-        // Чтение данных изображения
-        $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
-        $imageType = $_FILES['new_image']['type'];
-
-        // Обновление изображения в базе данных
-        $update_stmt = $pdo->prepare("
-            UPDATE users 
-            SET profile_image = :profile_image, 
-                image_type = :image_type 
-            WHERE id = :id
-        ");
-        $update_stmt->execute([
-            ':profile_image' => $imageData,
-            ':image_type' => $imageType,
-            ':id' => $_SESSION['user_id']
-        ]);
-
-        // Обновление данных в сессии
-        $_SESSION['profile_image'] = $imageData;
-        $_SESSION['image_type'] = $imageType;
     }
 
     // Обработка остальных полей (имя, фамилия и т.д.)
@@ -81,6 +110,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['middle_name'] = $middle_name ?: null;
     $_SESSION['phone'] = $phone ?: null;
     $_SESSION['address'] = $address ?: null;
+
+    // Если ошибок нет, добавляем успешное сообщение
+    if (empty($errors)) {
+        $_SESSION['successMessage'] = "Данные успешно обновлены!";
+    } else {
+        $_SESSION['errorMessage'] = $errors; // Сохраняем массив ошибок
+    }
 
     // Перенаправление обратно в личный кабинет
     header("Location: user.php");
@@ -128,9 +164,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </header>
-        <main>
-
             <form method="POST" action="" class="information-user" enctype="multipart/form-data">
+        <div class="cart-container">
+            <!-- Отображение сообщений -->
+            <?php if (!empty($successMessage)): ?>
+                <div class="message-container success-message">
+                    <?= htmlspecialchars($successMessage) ?>
+                </div>
+            <?php elseif (!empty($errorMessage)): ?>
+                <div class="message-container error-message">
+                    <ul class="error-list">
+                        <?php foreach ($errorMessage as $error): ?>
+                            <li><?= htmlspecialchars($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            <main style="padding: 0 60px;">
                 <div class="dashboard">
                     <div class="profile-image-container" id="profile-image-container">
                         <?php if (!empty($_SESSION['profile_image'])): ?>
@@ -183,7 +233,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit">Сохранить изменения</button>
             </form>
-            <footer>
+            <div class="order-history">
+    <h2>История заказов</h2>
+    <?php if (empty($orders)): ?>
+        <p style="text-align: center; color: #777;">У вас пока нет заказов.</p>
+    <?php else: ?>
+        <?php foreach ($orders as $order): ?>
+            <div class="order-card">
+                <div class="order-header">
+                    <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
+                    <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
+                </div>
+                <ul class="order-items">
+                    <?php foreach ($order['items'] as $item): ?>
+                        <li class="order-item">
+                            <!-- Изображение товара -->
+                            <div class="product-image-container">
+                                <?php if (!empty($item['product_image'])): ?>
+                                    <img src=<?= htmlspecialchars($item['product_image']) ?> alt="<?= htmlspecialchars($item['product_name']) ?>" class="product-image">
+                                <?php else: ?>
+                                    <span class="no-image">Нет изображения</span>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Детали товара -->
+                            <div class="product-details">
+                                <div class="product-name"><?= htmlspecialchars($item['product_name']) ?></div>
+                                <div class="product-price"><?= htmlspecialchars($item['product_price']) ?> руб.</div>
+                                <div class="product-quantity">Количество: <?= htmlspecialchars($item['quantity']) ?></div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <div class="order-total" style="text-align: right; font-size: 14px; color: #333; margin-top: 10px;">
+                    Итого: <strong><?= htmlspecialchars($order['total_price']) ?> руб.</strong>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+        </main>
+        <footer style="margin-top: 100px;">
                 <div class="pages">
                     <p class="zagolovok-footer">ЛесДрайв</p>
                     <div class="categories">
@@ -223,7 +313,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
             </footer>
-        </main>
         <script src="upload-image.js"></script>
 </body>
 

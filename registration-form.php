@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+$successMessage = $_SESSION['successMessage'] ?? '';
+$errorMessage = $_SESSION['errorMessage'] ?? '';
+
+// Очистка сообщений после отображения
+unset($_SESSION['successMessage']);
+unset($_SESSION['errorMessage']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +50,19 @@ session_start();
         </div>
       </header>
       <form action="registration.php" method="post" enctype="multipart/form-data">
+      <?php if (!empty($successMessage)): ?>
+          <div class="message-container success-message">
+            <?= htmlspecialchars($successMessage) ?>
+          </div>
+        <?php elseif (!empty($errorMessage)): ?>
+          <div class="message-container error-message">
+            <ul style="justify-content: center;">
+              <?php foreach ($errorMessage as $error): ?>
+                <li><?= htmlspecialchars($error) ?></li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        <?php endif; ?>
         <div class="form_login">
           <h1 class="zag_login">Регистрация</h1>
           <label for="image-upload" class="custom-upload">

@@ -3,8 +3,11 @@ session_start();
 require_once 'db.php';
 require_once "db_korzina.php";
 
+$category = 'page1'; // Категория для этой страницы
+
 try {
-    $stmt = $pdo->query("SELECT * FROM products");
+    $stmt = $pdo->prepare("SELECT * FROM products WHERE category = :category");
+    $stmt->execute(['category' => $category]);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Ошибка: " . $e->getMessage();

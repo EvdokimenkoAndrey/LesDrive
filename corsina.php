@@ -1,22 +1,14 @@
 <?php
 session_start();
 require_once 'db.php';
-$host = 'localhost';
-$dbname = 'korzina_lesdrive';
-$username = 'root';
-$password = '';
-
+require_once "db_korzina.php";
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-
-    if (!isset($_SESSION['user_id'])) {
-      echo '<div class="error-message">
-              Для просмотра корзины необходимо <a href="login-form.php">войти</a> или <a href="register-form.php">зарегистрироваться</a>.
-            </div>';
-      exit;
-  }
+  if (!isset($_SESSION['user_id'])) {
+    echo '<div class="message-container error-message">
+            Для просмотра корзины необходимо <a href="login-form.php" style="color: #007bff;">войти</a> или <a href="register-form.php" style="color: #007bff;">зарегистрироваться</a>.
+          </div>';
+    exit;
+}
     $userId = $_SESSION['user_id'];
 
     $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
@@ -31,8 +23,9 @@ try {
         $totalPrice += $item['product_price'] * $item['quantity'];
     }
 } catch (PDOException $e) {
-    echo "Ошибка: " . $e->getMessage();
-}
+  echo '<div class="message-container error-message">
+  Ошибка подключения к базе данных: ' . htmlspecialchars($e->getMessage()) . '
+</div>';}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,6 +70,14 @@ try {
         </div>
       </header>
       <div class="corzina">
+      <?php if (!isset($_SESSION['user_id'])): ?>
+                <!-- Сообщение о необходимости авторизации -->
+                <div class="message-container error-message">
+                    Для просмотра корзины необходимо 
+                    <a href="login-form.php" style="color: #007bff;">войти</a> или 
+                    <a href="register-form.php" style="color: #007bff;">зарегистрироваться</a>.
+                </div>
+            <?php else: ?>
         <h1 class="zagolovok-offers">Корзина</h1>
         <?php if (empty($cartItems)): ?>
             <div class="empty-cart-container">
@@ -123,6 +124,7 @@ try {
               <button type="submit" class="place-order-button">Перейти к оформлению</button>
             </form>
           </div>
+          <?php endif; ?>
           <?php endif; ?>
         </div>
       </div>

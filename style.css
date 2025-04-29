@@ -387,8 +387,9 @@ h1 {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .image-comment1 {
-    width: 125px;
+    width: 100px;
     height: auto;
+    border-radius: 50%;
 }
 .class1-comments {
     display: flex;
@@ -415,8 +416,42 @@ h2 {
 }
 .watch {
     font-size: 1.3vw;
+    display: flex;
+}
+.container-comment {
+    display: flex;
+    flex-direction: column;
+    padding: 0 60px;
+}
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 600px;
+    height: 300px;
+    margin: 0 auto;
 }
 
+.comment-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+    height: 200px;
+}
+
+.bttn-login {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    transition: background-color 0.3s ease;
+}
 .questions {
     display: flex;
     flex-direction: column;
@@ -609,7 +644,10 @@ h2 {
     object-fit: cover;
     filter: brightness(0.4);
 }
-
+.error-message {
+    display: flex;
+    justify-content: center;
+}
 @media (max-width: 1200px) {
     .products {
         flex-direction: column;

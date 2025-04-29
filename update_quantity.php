@@ -1,14 +1,7 @@
 <?php
-// Подключение к базе данных
-$host = 'localhost';
-$dbname = 'korzina_lesdrive';
-$username = 'root';
-$password = '';
+require_once "db_korzina.php";
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     // Получаем данные из POST-запроса
     $cartItemId = $_POST['cart_item_id'];
     $action = $_POST['action'];

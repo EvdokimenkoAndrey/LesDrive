@@ -9,7 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 
 // Подключение к базе данных
 require_once 'db.php';
+$successMessage = $_SESSION['successMessage'] ?? '';
+$errorMessage = $_SESSION['errorMessage'] ?? [];
 
+// Очистка сообщений после отображения
+unset($_SESSION['successMessage']);
+unset($_SESSION['errorMessage']);
 // Получение данных пользователя из базы данных
 $stmt = $pdo->prepare("
     SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
@@ -128,9 +133,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </header>
-        <main>
-
             <form method="POST" action="" class="information-user" enctype="multipart/form-data">
+            <?php if (!empty($successMessage)): ?>
+                    <div class="message-container success-message">
+                        <?= htmlspecialchars($successMessage) ?>
+                    </div>
+                <?php elseif (!empty($errorMessage)): ?>
+                    <div class="message-container error-message">
+                        <ul class="error-list">
+                            <?php foreach ($errorMessage as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+                <main style="padding: 0 60px;">
                 <div class="dashboard">
                     <div class="profile-image-container" id="profile-image-container">
                         <?php if (!empty($_SESSION['profile_image'])): ?>
@@ -183,9 +200,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="admin_add_product.php" method="POST" class="inputs_product" enctype="multipart/form-data">
                     <h1>Добавление нового товара</h1>
                     <label for="image-upload" class="custom-upload">
-                            <i>+</i>
-                        </label>
-                        <input type="file" id="image-upload" accept="image/*" name="product_image">
+                        <i>+</i>
+                    </label>
+                    <input type="file" id="image-upload" accept="image/*" name="product_image">
                     <div class="info-product">
                         <label for="product_name" class="sign_product">Название товара:</label>
                         <input type="text" id="product_name" name="product_name" class="register login" required>
@@ -193,11 +210,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="product_price" class="sign_product">Цена товара (в рублях):</label>
                         <input type="number" step="0.01" id="product_price" name="product_price" class="register login" required>
 
+                        <label for="product_category" class="sign_product">Категория (страница):</label>
+                        <select id="product_category" name="product_category" required>
+                            <option value="page1">Страница 1 (Пиломатериалы)</option>
+                            <option value="page2">Страница 2 (Материалы для отделки)</option>
+                            <option value="page3">Страница 3 (Строительтные материалы)</option>
+                            <option value="page4">Страница 4 (Инструменты и крепеж)</option>
+                        </select>
                         <button type="submit">Добавить товар</button>
                     </div>
                 </form>
             </div>
-            <footer>
+        </main>
+        <footer style="margin-top: 100px;">
                 <div class="pages">
                     <p class="zagolovok-footer">ЛесДрайв</p>
                     <div class="categories">
@@ -237,7 +262,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
             </footer>
-        </main>
         <script src="upload-image.js"></script>
         <script src="custom-upload.js"></script>
 </body>
