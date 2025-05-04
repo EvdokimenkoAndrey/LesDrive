@@ -1,61 +1,3 @@
-<?php
-session_start();
-// Подключение к базе данных
-require_once 'db.php';
-if (isset($_SESSION["user_id"])) {
-  if ($_SESSION['role'] === 'admin') {
-    header("Location: admin.php");
-  } else {
-    header("Location: user.php");
-  }
-}
-// Переменная для хранения сообщения об ошибке
-$errorMessage = '';
-
-// Обработка POST-запроса
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Получение данных из формы
-    $first_name = trim($_POST['first_name']);
-    $pass = $_POST['pass'];
-
-    // Проверка на пустые поля
-    if (empty($first_name) || empty($pass)) {
-        $errorMessage = "Все поля должны быть заполнены.";
-    } else {
-        // Поиск пользователя в базе данных
-        $stmt = $pdo->prepare("SELECT id, pass, first_name, last_name, middle_name, phone, address, profile_image, image_type, role FROM users WHERE first_name = :first_name");
-        $stmt->execute([':first_name' => $first_name]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user) {
-            // Проверка пароля
-            if (password_verify($pass, $user['pass'])) {
-              $_SESSION['user_id'] = $user['id'];
-              $_SESSION['first_name'] = $user['first_name'];
-              $_SESSION['last_name'] = $user['last_name'];
-              $_SESSION['middle_name'] = $user['middle_name'];
-              $_SESSION['phone'] = $user['phone'];
-              $_SESSION['address'] = $user['address'];
-              $_SESSION['profile_image'] = $user['profile_image'];
-              $_SESSION['image_type'] = $user['image_type'];
-              $_SESSION['role'] = $user['role'];
-
-                if ($_SESSION['role'] === 'admin') {
-                  header("Location: admin.php");
-                } else {
-                  header("Location: user.php");
-                }
-                exit;
-            } else {
-                $errorMessage = "Неверный пароль.";
-            }
-        } else {
-            $errorMessage = "Пользователь с таким логином не найден.";
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -97,22 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
       </header>
-      <?php if (!empty($errorMessage)): ?>
-        <div class="error-message">
-            <?= htmlspecialchars($errorMessage) ?>
+      <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-message">Упс! Страница не найдена</h2>
+            <p class="error-description">
+                Кажется, вы попали на несуществующую страницу. Пожалуйста, проверьте URL или вернитесь на главную страницу.
+            </p>
+            <a href="index.php" class="error-button">Вернуться на главную</a>
         </div>
-    <?php endif; ?>
-    <form action="login-form" method="post">
-        <div class="form_login">
-            <h1 class="zag_login">Войдите в свой аккаунт</h1>
-            <div class="inputs">
-                <input type="text" class="login" placeholder="Введите логин" name="first_name" required>
-                <input type="password" class="login" placeholder="Введите пароль" name="pass" required>
-            </div>
-            <button class="bttn-login" type="submit">Войти</button>
-            <a href="registration-form.php" class="register_page">Нет аккаунта?</a>
-        </div>
-    </form>
+    </div>
     <footer>
       <div class="pages">
         <p class="zagolovok-footer">ЛесДрайв</p>

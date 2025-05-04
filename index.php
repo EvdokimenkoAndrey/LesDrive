@@ -1,14 +1,21 @@
 <?php
 session_start();
-require_once "db.php";
-// Получение всех отзывов из базы данных
+
+require_once 'db.php';
+
+// Получение только одобренных отзывов из базы данных с аватарами пользователей
 $stmt = $pdo->prepare("
-    SELECT r.id, r.username, r.comment, r.created_at
+    SELECT r.id, r.username, r.comment, r.created_at, u.profile_image, u.image_type
     FROM reviews r
+    LEFT JOIN users u ON r.user_id = u.id
+    WHERE r.is_approved = 1
     ORDER BY r.created_at DESC
 ");
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Разделение отзывов на группы по 3 отзыва
+$reviews_chunks = array_chunk($reviews, 3);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +49,7 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <a href="login-form.php">
             <?php
             if (isset($_SESSION['user_id'])) : ?>
-              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
             <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
             <?php endif; ?>
@@ -221,14 +228,14 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="services.php" class="punkts-footer">Услуги</a>
             <a href="aboutus.php" class="punkts-footer">О нас</a>
             <a href="comments.php" class="punkts-footer">Отзывы</a>
-            <a href="login.php" class="punkts-footer">Войти</a>
+            <a href="login-form.php" class="punkts-footer">Войти</a>
           </div>
           <hr>
           <div class="first_categories">
-            <a href="pilomaterials.php" class="punkts-footer">Пиломатериалы</a>
-            <a href="materials_first.php" class="punkts-footer">Материалы для отделки</a>
-            <a href="materials_scnd.php" class="punkts-footer">Строительные материалы</a>
-            <a href="tools.php" class="punkts-footer">Инструменты и крепеж</a>
+            <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+            <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+            <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+            <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
           </div>
         </div>
       </div>

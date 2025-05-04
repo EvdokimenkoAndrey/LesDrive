@@ -3,14 +3,19 @@ session_start();
 
 require_once 'db.php';
 
-// Получение всех отзывов из базы данных
+// Получение только одобренных отзывов из базы данных с аватарами пользователей
 $stmt = $pdo->prepare("
-    SELECT r.id, r.username, r.comment, r.created_at
+    SELECT r.id, r.username, r.comment, r.created_at, u.profile_image, u.image_type
     FROM reviews r
+    LEFT JOIN users u ON r.user_id = u.id
+    WHERE r.is_approved = 1
     ORDER BY r.created_at DESC
 ");
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Разделение отзывов на группы по 3 отзыва
+$reviews_chunks = array_chunk($reviews, 3);
 ?>
 <!DOCTYPE html>
 
@@ -20,6 +25,7 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login_register.css">
   <link rel="icon" href="images/logo.png">
   <title>Главная страница</title>
 </head>
@@ -59,31 +65,39 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
     <div class="comments">
-            <h1 class="zagolovok-offers">Отзывы наших клиентов</h1>
-
-            <?php if (empty($reviews)): ?>
-                <p style="text-align: center; color: #777;">Пока нет отзывов.</p>
-            <?php else: ?>
-                <div class="three_comments">
-                    <?php foreach ($reviews as $review): ?>
-                        <div class="first-comment">
-                            <div class="class1-comments">
-                                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="image-comment1" alt="Avatar">
-                                <h2><?= htmlspecialchars($review['username']) ?></h2>
-                            </div>
-                            <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
-                            <small style="color: #777; font-size: 12px;">
-                                Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
-                            </small>
-                        </div>
-                    <?php endforeach; ?>
+      <h1 class="zagolovok-offers">Отзывы наших клиентов</h1>
+      <?php if (empty($reviews)): ?>
+        <p style="text-align: center; color: #777;">Пока нет одобренных отзывов.</p>
+      <?php else: ?>
+        <!-- Отображение отзывов в контейнерах по 3 отзыва -->
+        <?php foreach ($reviews_chunks as $chunk): ?>
+          <div class="three_comments">
+            <?php foreach ($chunk as $review): ?>
+              <div class="first-comment">
+                <div class="class1-comments">
+                  <!-- Отображение аватара пользователя -->
+                  <?php if (!empty($review['profile_image']) && !empty($review['image_type'])): ?>
+                    <img src="data:<?php echo htmlspecialchars($review['image_type']); ?>;base64,<?php echo base64_encode($review['profile_image']); ?>"
+                      alt="Avatar" class="image-comment1">
+                  <?php else: ?>
+                    <img src="images/default_avatar.png" alt="Default Avatar" class="image-comment1">
+                  <?php endif; ?>
+                  <h2><?= htmlspecialchars($review['username']) ?></h2>
                 </div>
-            <?php endif; ?>
-        </div>
-        <a href="write_comment.php" class="punkts watch">
-    <button class="choose_reviews">
-Написать рецензию
-    </button></a>
+                <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
+                <small>
+                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
+                </small>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+      <a href="write_comment.php" class="punkts watch">
+      <button class="choose_reviews">
+        Написать рецензию
+      </button></a>
+    </div>
     <footer>
       <div class="pages">
         <p class="zagolovok-footer">ЛесДрайв</p>
@@ -93,14 +107,14 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="services.php" class="punkts-footer">Услуги</a>
             <a href="aboutus.php" class="punkts-footer">О нас</a>
             <a href="comments.php" class="punkts-footer">Отзывы</a>
-            <a href="login.php" class="punkts-footer">Войти</a>
+            <a href="login-form.php" class="punkts-footer">Войти</a>
           </div>
           <hr>
           <div class="first_categories">
-            <a href="pilomaterials.php" class="punkts-footer">Пиломатериалы</a>
-            <a href="materials_first.php" class="punkts-footer">Материалы для отделки</a>
-            <a href="materials_scnd.php" class="punkts-footer">Строительные материалы</a>
-            <a href="tools.php" class="punkts-footer">Инструменты и крепеж</a>
+            <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+            <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+            <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+            <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
           </div>
         </div>
       </div>

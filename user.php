@@ -1,4 +1,4 @@
-x   <?php
+<?php
 session_start();
 
 // Очистка предыдущих сообщений
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="create-line">
-        <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)">
+        <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)" class="header-admin">
             <div class="menu">
                 <div class="Logo">
                     <a href="index.php" class="link_logo">
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="login-form.php">
                         <?php
                         if (isset($_SESSION['user_id'])) : ?>
-                            <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+                            <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
                 <?php else: ?>
                     <img src="images/LogIn.png" class="korzina"></a>
                 <?php endif; ?>
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </ul>
                 </div>
             <?php endif; ?>
-            <main style="padding: 0 60px;">
+            <main class="main-admin">
                 <div class="dashboard">
                     <div class="profile-image-container" id="profile-image-container">
                         <?php if (!empty($_SESSION['profile_image'])): ?>
@@ -239,6 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="text-align: center; color: #777;">У вас пока нет заказов.</p>
     <?php else: ?>
         <?php foreach ($orders as $order): ?>
+            <div class="orders">
             <div class="order-card">
                 <div class="order-header">
                     <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
@@ -265,9 +266,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </li>
                     <?php endforeach; ?>
                 </ul>
-                <div class="order-total" style="text-align: right; font-size: 14px; color: #333; margin-top: 10px;">
+                <div class="order-total">
                     Итого: <strong><?= htmlspecialchars($order['total_price']) ?> руб.</strong>
                 </div>
+            </div>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>

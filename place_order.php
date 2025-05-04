@@ -54,8 +54,7 @@ try {
 </head>
 
 <body>
-  <main>
-    <header>
+<header class="header-admin">
       <div class="menu">
         <div class="Logo">
           <a href="index.php" class="link_logo">
@@ -73,7 +72,7 @@ try {
           <a href="login-form.php">
             <?php
             if (isset($_SESSION['user_id'])) : ?>
-              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
         <?php else: ?>
           <img src="images/LogIn.png" class="korzina"></a>
         <?php endif; ?>
@@ -82,9 +81,10 @@ try {
         </div>
       </div>
     </header>
+  <main class="main-admin">
     <div class="order-page-container">
       <h1>Оформление заказа</h1>
-      <form action="confirm_order.php" method="POST" class="order-form">
+      <form action="confirm_order" method="POST" class="order-form">
         <label for="name">Имя:</label>
         <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
 
@@ -100,29 +100,29 @@ try {
           <div class="three-transports">
             <div class="transport">
               <input type="radio" name="transport" id="truck" class="transport-radio" value="Грузовой автомобиль|500">
-              <p>Грузовой автомобиль (500 руб.)</p>
+              <p class="transports">Грузовой автомобиль (500 руб.)</p>
             </div>
             <div class="transport">
               <input type="radio" name="transport" id="gazel" class="transport-radio" value="Газель|300">
-              <p>Газель (300 руб.)</p>
+              <p class="transports">Газель (300 руб.)</p>
             </div>
             <div class="transport">
               <input type="radio" name="transport" id="forest-truck" class="transport-radio" value="Лесовоз|700">
-              <p>Лесовоз (700 руб.)</p>
+              <p class="transports">Лесовоз (700 руб.)</p>
             </div>
           </div>
           <div class="three-transports">
             <div class="transport">
               <input type="radio" name="transport" id="manipulator" class="transport-radio" value="Манипуляторы|600">
-              <p>Манипуляторы (600 руб.)</p>
+              <p class="transports">Манипуляторы (600 руб.)</p>
             </div>
             <div class="transport">
               <input type="radio" name="transport" id="furgon" class="transport-radio" value="Автомобиль с кузовом-фургоном|400">
-              <p>Автомобиль с кузовом-фургоном (400 руб.)</p>
+              <p class="transports">Автомобиль с кузовом-фургоном (400 руб.)</p>
             </div>
             <div class="transport">
               <input type="radio" name="transport" id="refrigerator" class="transport-radio" value="Рефрижераторы|800">
-              <p>Рефрижераторы (800 руб.)</p>
+              <p class="transports">Рефрижераторы (800 руб.)</p>
             </div>
           </div>
         </div>
@@ -137,7 +137,8 @@ try {
         <button type="submit" class="place-order-button">Подтвердить заказ</button>
       </form>
     </div>
-    <footer>
+  </main>
+  <footer>
       <div class="pages">
         <p class="zagolovok-footer">ЛесДрайв</p>
         <div class="categories">
@@ -146,14 +147,14 @@ try {
             <a href="services.php" class="punkts-footer">Услуги</a>
             <a href="aboutus.php" class="punkts-footer">О нас</a>
             <a href="comments.php" class="punkts-footer">Отзывы</a>
-            <a href="login.php" class="punkts-footer">Войти</a>
+            <a href="login-form.php" class="punkts-footer">Войти</a>
           </div>
           <hr>
           <div class="first_categories">
-            <a href="pilomaterials.php" class="punkts-footer">Пиломатериалы</a>
-            <a href="materials_first.php" class="punkts-footer">Материалы для отделки</a>
-            <a href="materials_scnd.php" class="punkts-footer">Строительные материалы</a>
-            <a href="tools.php" class="punkts-footer">Инструменты и крепеж</a>
+            <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+            <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+            <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+            <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
           </div>
         </div>
       </div>
@@ -177,7 +178,6 @@ try {
       </div>
       <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
     </footer>
-  </main>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Получаем элементы из DOM

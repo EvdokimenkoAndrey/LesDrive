@@ -33,7 +33,7 @@ session_start();
             <a href="login-form.php">
               <?php
               if (isset($_SESSION['user_id'])) : ?>
-                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
           <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
           <?php endif; ?>
@@ -89,10 +89,10 @@ session_start();
           </div>
           <hr>
           <div class="first_categories">
-            <a href="pilomaterials.php" class="punkts-footer">Пиломатериалы</a>
-            <a href="materials_first.php" class="punkts-footer">Материалы для отделки</a>
-            <a href="materials_scnd.php" class="punkts-footer">Строительные материалы</a>
-            <a href="tools.php" class="punkts-footer">Инструменты и крепеж</a>
+            <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+            <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+            <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+            <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
           </div>
         </div>
       </div>
@@ -100,17 +100,17 @@ session_start();
         <div class="email_num">
           <div class="email">
             <img src="images/mail.png" class="info_img">
-            <p class="address">lesdrive@mail.ru</p>
+            <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
           </div>
           <div class="email">
             <img src="images/phone.png" class="info_img">
-            <p class="address">89123456789</p>
+            <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
           </div>
         </div>
         <div class="email_num">
           <div class="email karts">
             <img src="images/karts.png" class="info_img kart">
-            <p class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</p>
+            <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
           </div>
         </div>
       </div>

@@ -89,10 +89,9 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 50px;
-    padding: 40px;
+    padding-top: 40px;
 }
 .register {
-    width: 370px;
     outline: none;
 }
 .form_login input[type="file"] {
@@ -116,6 +115,7 @@ footer {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 20px;
 }
 .logout {
     font-size: 16px;
@@ -177,6 +177,7 @@ button {
     transition: background-color 0.2s ease;
     margin: 0 auto;
     display: flex;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
@@ -293,9 +294,174 @@ select {
     padding: 25px;
     border: 1px solid #f5c6cb;
   }
+  .reviews-moderation {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.moderation-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.moderation-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.moderation-comment {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.moderation-actions {
+    display: flex;
+    width: 100%;
+}
+.inline-form {
+    width: 50%;
+}
+.bttn-kind {
+    background-color: #44b85f;
+    border: none;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border-radius: 0px 0px 0px 5px;
+    width: 100%;
+    cursor: pointer;
+    font-family: "Inter";
+    height: 100%;
+    align-items: center;
+}
+.bttn-kind:hover {
+    background-color: #35ea5f;
+}
+.bttn-delete {
+    background-color: #e3515f;
+    border: none;
+    width: 100%;
+    color: white;
+    padding: 20px;
+    border-radius: 0px 0px 5px 0px;
+    cursor: pointer;
+    font-family: "Inter";
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}
+.bttn-delete:hover {
+    background-color: #ff7683;
+}
+
+.approved-badge {
+    background-color: #45e06a;
+    color: white;
+    width: 50%;
+    padding: 15px;
+    border-radius: 0px 0px 0px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.comments {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    gap: 70px;
+}
+
+.three_comments {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.first-comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #FFF0CA;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.main-admin {
+    padding: 0 60px;
+}
+.image-comment1 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.class1-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+.text-comment1 {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+    word-wrap: break-word; /* Перенос текста внутри параграфа */
+    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
+    max-width: 100%; /* Ограничиваем ширину текста */
+    padding: 20px;
+}
+
+small {
+    font-size: 12px;
+    padding-bottom: 20px;
+    color: #777;
+    text-align: center;
+    word-wrap: break-word; /* Перенос текста в дате */
+    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
+}
+
+.choose_reviews {
+    width: 200px;
+    margin: 0 auto;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #FFF0CA;
+    height: 80px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /* Общие стили для истории заказов */
 .order-history {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
 }
 
 .order-card {
@@ -305,6 +471,9 @@ select {
     margin-bottom: 15px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     background-color: #FFF0CA;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
 }
 
 /* .order-card:hover {
@@ -323,7 +492,7 @@ select {
 }
 
 .order-header span {
-    font-size: 14px;
+    font-size: 18px;
     color: #777;
 }
 
@@ -340,8 +509,8 @@ select {
 }
 
 .product-image-container {
-    width: 110px;
-    height: 80px;
+    width: 120px;
+    height: 90px;
     flex-shrink: 0;
     margin-right: 15px;
     border-radius: 6px;
@@ -357,23 +526,33 @@ select {
 
 .product-details {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
-
+.order-total {
+    text-align: right; 
+    font-size: 18px; 
+    color: #333; 
+    margin-top: 10px;
+}
 .product-name {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
     color: #333;
     margin-bottom: 5px;
 }
 
 .product-price {
-    font-size: 13px;
+    font-size: 16px;
     color: #555;
+    font-weight: 500;
 }
 
 .product-quantity {
-    font-size: 13px;
+    font-size: 16px;
     color: #777;
+    font-weight: 500;
 }
 
 .no-image {
@@ -481,12 +660,72 @@ select {
     transition: background-color 0.3s ease;
   }
 
-  .place-order-button:hover {
+  /* .place-order-button:hover {
     background-color: #dabf7a;
-  }
+  } */
+@media (max-width: 1040px) {
+    .three_comments {
+        gap: 15px; /* Уменьшаем промежутки между карточками */
+    }
+
+    .first-comment {
+        max-width: 350px; /* Уменьшаем максимальную ширину карточек */
+    }
+
+    .text-comment1 {
+        font-size: 14px; /* Уменьшаем размер текста */
+    }
+
+    h2 {
+        font-size: 22px; /* Уменьшаем размер заголовка */
+    }
+    .welcome {
+        font-size: 25px;
+    }
+    .sign_inputs {
+        font-size: 20px;
+    }
+}
 @media (max-width: 910px) {
     .zag_login {
         font-size: 25px;
+    }
+    .three_comments {
+        gap: 10px; /* Ещё уменьшаем промежутки между карточками */
+    }
+
+    .first-comment {
+        width: 300px; /* Дальнейшее уменьшение ширины карточек */
+        gap: 5px;
+        padding: 0;
+    }
+
+    .text-comment1 {
+        font-size: 11px; /* Ещё уменьшаем размер текста */
+    }
+    small {
+        font-size: 9px;
+    }
+    h2 {
+        font-size: 20px; /* Ещё уменьшаем размер заголовка */
+    }
+    .image-comment1 {
+        width: 70px;
+        height: 70px;
+    }
+    .choose_reviews {
+        width: 150px;
+        height: 60px;
+        font-size: 12px;
+    }
+    .logout {
+        font-size: 13px
+    }
+    .welcome {
+        font-size: 20px;
+    }
+    .dashboard {
+        gap: 10px;
     }
 }
 @media (max-width: 768px) {
@@ -507,11 +746,50 @@ select {
         width: 80px;
         height: 80px;
     }
-    .register {
-        width: 300px;
-    }
     header {
         position: absolute;
+    }
+    .header-admin {
+        position: relative;
+    }
+    .three_comments {
+        justify-content: center; /* Центрируем карточки */
+        gap: 10px;
+    }
+    .hello {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .profile-image.clickable {
+        width: 10vw;
+        height: 10vw;
+    }
+    .input_info {
+        padding: 18px 18px;
+        font-size: 14px;
+    }
+    .sign_inputs {
+        font-size: 15px;
+    }
+    .form-group {
+        gap: 15px;
+    }
+    .first-comment {
+        padding: 0; /* Уменьшаем внутренние отступы */
+        max-width: 200px;
+    }
+
+    .image-comment1 {
+        width: 60px; /* Уменьшаем размер аватара */
+        height: 60px;
+    }
+
+    .text-comment1 {
+        font-size: 10px; /* Уменьшаем размер текста */
+    }
+
+    h2 {
+        font-size: 14px; /* Уменьшаем размер заголовка */
     }
 }
 @media (max-width: 600px) {
@@ -535,6 +813,82 @@ select {
     }
     .register_page {
         font-size: 11px;
+    }
+    .three_comments {
+        gap: 15px; /* Минимальные промежутки между карточками */
+        flex-wrap: wrap;
+    }
+    .order-page-container {
+        margin: -40px auto;
+        padding: 30px;
+    }
+    .order-form label {
+        font-size: 11px;
+    }
+    .order-form input, .order-form textarea {
+        font-size: 11px;
+    }
+    .order-summary p {
+        font-size: 12px;
+    }
+    .place-order-button {
+        font-size: 13px;
+    }
+    .transports {
+        font-size: 12px;
+    }
+    .first-comment {
+        max-width: 190px;
+    }
+    .comments {
+        gap: 15px;
+    }
+    .image-comment1 {
+        width: 50px; /* Минимальный размер аватара */
+        height: 50px;
+    }
+
+    .text-comment1 {
+        font-size: 10px; /* Минимальный размер текста */
+    }
+
+    h2 {
+        font-size: 16px; /* Минимальный размер заголовка */
+    }
+    .main-admin {
+        padding: 0 20px;
+    }
+    .inputs_product {
+        gap: 20px;
+        padding: 30px;
+    }
+    .custom-upload {
+        width: 60px;
+        height: 60px;
+    }
+    .custom-upload i {
+        font-size: 20px;
+    }
+    .sign_product {
+        font-size: 13px;
+    }
+    .info-product {
+        gap: 15px;
+    }
+    select {
+        font-size: 11px;
+    }
+    .add-product {
+        font-size: 12px;
+    }
+    .bttn-delete, .bttn-kind, .approved-badge {
+        font-size: 13px;
+    }
+    .welcome {
+        font-size: 18px;
+    }
+    .bttn-save {
+        margin-top: -20px;
     }
 }
 @media (max-width: 450px) {
@@ -572,7 +926,78 @@ select {
     .custom-upload i {
         font-size: 20px;
     }
+    .form-group-first {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .dashboard {
+        flex-direction: column;
+        margin-top: 50px;
+    }
     .register {
         width: 100%;
+    }
+    .three_comments {
+        gap: 15px; /* Минимальные промежутки между карточками */
+    }
+    .comments {
+        gap: 15px;
+    }
+    .first-comment {
+        max-width: 100%; /* Карточки занимают всю доступную ширину */
+    }
+
+    .image-comment1 {
+        width: 50px; /* Минимальный размер аватара */
+        height: 50px;
+    }
+
+    .text-comment1 {
+        font-size: 10px; /* Минимальный размер текста */
+    }
+
+    h2 {
+        font-size: 14px; /* Минимальный размер заголовка */
+    }
+    .zagolovok-add {
+        font-size: 12px;
+    }
+    .bttn-delete, .bttn-kind, .approved-badge {
+        font-size: 12px;
+    }
+    .profile-image.clickable {
+        width: 17vw;
+        height: 17vw;
+    }
+    .welcome {
+        font-size: 14px;
+    }
+    .order-page-container {
+        padding: 20px;
+    }
+    .order-form label, .order-form input, .order-form textarea {
+        font-size: 10px;
+    }
+    .transports {
+        font-size: 9px;
+    }
+    .order-summary p, .place-order-button {
+        font-size: 10px;
+    }
+    .order-history {
+        gap: 30px;
+    }
+    .order-header span {
+        font-size: 13px;
+    }
+    .product-name {
+        font-size: 14px;
+    }
+    .product-price, .product-quantity, .order-total {
+        font-size: 13px;
+    }
+    .product-image-container {
+        width: 100px;
+        height: 70px;
     }
 }

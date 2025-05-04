@@ -3,7 +3,7 @@ session_start();
 require_once 'db.php';
 require_once "db_korzina.php";
 
-$category = 'page1'; // Категория для этой страницы
+$category = 'page3'; // Категория для этой страницы
 
 try {
     $stmt = $pdo->prepare("SELECT * FROM products WHERE category = :category");

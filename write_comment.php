@@ -12,6 +12,15 @@ require_once 'db.php';
 $successMessage = '';
 $errorMessage = '';
 
+// Получение данных пользователя
+$stmt = $pdo->prepare("
+    SELECT first_name, profile_image, image_type 
+    FROM users 
+    WHERE id = :user_id
+");
+$stmt->execute([':user_id' => $_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment = trim($_POST['comment']);
@@ -20,14 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMessage = "Пожалуйста, напишите отзыв.";
     } else {
         try {
-            // Получение данных пользователя
-            $stmt = $pdo->prepare("
-                SELECT first_name FROM users WHERE id = :user_id
-            ");
-            $stmt->execute([':user_id' => $_SESSION['user_id']]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Добавление отзыва в базу данных
+// Добавление отзыва в базу данных
             $insert_stmt = $pdo->prepare("
                 INSERT INTO reviews (user_id, username, comment)
                 VALUES (:user_id, :username, :comment)
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             // Установка сообщения в сессии
-            $_SESSION['successMessage'] = "Ваш отзыв успешно добавлен!";
+            $_SESSION['successMessage'] = "Ваш отзыв отправлен на модерацию и будет опубликован после проверки.";
 
             // Перенаправление на ту же страницу (Post/Redirect/Get)
             header("Location: write_comment.php");
@@ -87,7 +89,7 @@ unset($_SESSION['successMessage']); // Очистка сообщения пос�
           <a href="login-form.php">
             <?php
             if (isset($_SESSION['user_id'])) : ?>
-              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image" style="height: 4vw;"></a>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
         <?php else: ?>
           <img src="images/LogIn.png" class="korzina"></a>
         <?php endif; ?>
@@ -110,9 +112,10 @@ unset($_SESSION['successMessage']); // Очистка сообщения пос�
       <h1 class="zagolovok-offers">Написать отзыв</h1>
 
       <form method="POST" action="" class="comment-form">
-        <textarea name="comment" placeholder="Напишите ваш отзыв..." rows="5" required></textarea>
+        <textarea name="comment" placeholder="Напишите ваш отзыв..." rows="5" required maxlength="300"></textarea>
+        <div class="char-counter">Осталось символов: <span id="counter">300</span></div>
         <button type="submit" class="bttn-login">Отправить отзыв</button>
-      </form>
+    </form>
     </div>
     <footer>
       <div class="pages">
@@ -155,6 +158,29 @@ unset($_SESSION['successMessage']); // Очистка сообщения пос�
       <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
     </footer>
   </main>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const textarea = document.querySelector('.comment-form textarea');
+    const counterElement = document.getElementById('counter');
+    const maxLength = parseInt(textarea.getAttribute('maxlength'));
+
+    // Обновление счетчика при вводе текста
+    textarea.addEventListener('input', function () {
+        const remaining = maxLength - textarea.value.length;
+        counterElement.textContent = remaining;
+
+        // Изменение цвета счетчика, если осталось мало символов
+        if (remaining <= 10) {
+            counterElement.style.color = 'red';
+        } else {
+            counterElement.style.color = '#333';
+        }
+    });
+
+    // Инициализация счетчика при загрузке страницы
+    counterElement.textContent = maxLength;
+});
+</script>
 </body>
 
 </html>

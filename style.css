@@ -126,7 +126,7 @@ ul {
 
 .korzina {
     width: 4vw;
-    height: auto;
+    height: 4vw;
 }
 
 .offers {
@@ -363,56 +363,8 @@ h1 {
     padding-left: 270px;
 }
 
-.comments {
-    display: flex;
-    flex-direction: column;
-    padding: 0 60px;
-    gap: 70px;
-}
-.three_comments {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 30px;
-}
-.first-comment {
-    display: flex;
-    flex-direction: column;
-    padding: 30px;
-    background-color: #FFF0CA;
-    gap: 30px;
-    align-items: center;
-    width: 350px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-.image-comment1 {
-    width: 100px;
-    height: auto;
-    border-radius: 50%;
-}
-.class1-comments {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.text-comment1 {
-    text-align: center;
-}
 h2 {
     font-size: 25px;
-}
-.choose_reviews {
-    width: 100px;
-    margin: 0 auto;
-    font-size: 15px;
-    border-radius: 10px;
-    border: none;
-    background-color: #FFF0CA;
-    height: 80px;
-    width: 200px;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .watch {
     font-size: 1.3vw;
@@ -422,13 +374,13 @@ h2 {
     display: flex;
     flex-direction: column;
     padding: 0 60px;
+    gap: 70px;
 }
 .comment-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     width: 600px;
-    height: 300px;
     margin: 0 auto;
 }
 
@@ -438,9 +390,19 @@ h2 {
     border-radius: 5px;
     font-size: 16px;
     resize: none;
-    height: 200px;
+    height: 400px;
+    outline: none;
+}
+.char-counter {
+    font-size: 14px;
+    color: #777;
+    text-align: right;
 }
 
+.char-counter span {
+    font-weight: bold;
+    color: #333;
+}
 .bttn-login {
     padding: 10px;
     background-color: #007bff;
@@ -648,6 +610,50 @@ h2 {
     display: flex;
     justify-content: center;
 }
+.error-container {
+    text-align: center;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #FFF0CA;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 100px auto;
+}
+.error-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.error-code {
+    font-size: 100px;
+    font-weight: bold;
+    color: #ff5722; /* Оранжевый цвет для кода ошибки */
+    margin: 0;
+}
+.error-description {
+    font-size: 16px;
+    margin: 20px 0;
+    color: #777;
+    line-height: 1.5;
+}
+
+.error-button {
+    display: inline-block;
+    padding: 20px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ff5722;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.error-button:hover {
+    background-color: #e64a19; /* Темно-оранжевый при наведении */
+}
 @media (max-width: 1200px) {
     .products {
         flex-direction: column;
@@ -674,7 +680,6 @@ h2 {
 @media (max-width: 1040px) {
     .header-img {
         position: relative;
-        top: 30px;
     }
 
     .text-slider {
@@ -807,6 +812,7 @@ h2 {
     }
     .image-comment1 {
         width: 80px;
+        height: 80px;
     }
     h2 {
         font-size: 17px;
@@ -818,6 +824,7 @@ h2 {
     .choose_reviews {
         width: 150px;
         height: 50px;
+        font-size: 12px;
     }
     .pilom {
         font-size: 30px;
@@ -899,8 +906,12 @@ h2 {
     .comments {
         padding: 0 10px;
     }
+    small {
+        font-size: 10px;
+    }
     .image-comment1 {
         width: 60px;
+        height: 60px;
     }
     .text-comment1 {
         font-size: 11px;
@@ -957,7 +968,12 @@ h2 {
       .first-comment {
         border-radius: 10px;
       }
-
+      .container-comment {
+        padding: 0;
+      }
+      .comment-form {
+        width: 570px;
+      }
 }
 
 @media (max-width: 600px) {
@@ -983,6 +999,7 @@ h2 {
 
     .korzina {
         width: 5vw;
+        height: 5vw;
     }
 
     .offers {
@@ -1057,6 +1074,7 @@ h2 {
     }
     .image-comment1 {
         width: 55px;
+        height: 55px;
     }
     .three_comments {
         gap: 15px;
@@ -1104,6 +1122,12 @@ h2 {
       .answer {
         font-size: 14px;
       }
+      .comment-form {
+        width: 370px;
+      }
+      .container-comment {
+        gap: 40px;
+      }
 }
 
 @media (max-width: 500px) {
@@ -1140,6 +1164,13 @@ h2 {
     }
     .image-comment1 {
         width: 35px;
+        height: 35px;
+    }
+    small {
+        font-size: 7px;
+    }
+    .choose_reviews {
+        font-size: 9px;
     }
     .text-comment1 {
         font-size: 8px;
@@ -1289,5 +1320,14 @@ h2 {
     }
     .menu {
         height: 50px;
+    }
+    .comment-form {
+        width: 270px;
+    }
+    .comment-form textarea {
+        font-size: 12px;
+    }
+    .char-counter {
+        font-size: 11px;
     }
 }
