@@ -3,7 +3,7 @@ session_start();
 require_once 'db.php';
 require_once "db_korzina.php";
 
-$category = 'page2'; // Категория для этой страницы
+$category = 'page4'; // Категория для этой страницы
 
 try {
     $stmt = $korzina_pdo->prepare("SELECT * FROM products WHERE category = :category");
@@ -23,7 +23,7 @@ try {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="materials.css">
     <link rel="icon" href="images/logo.png">
-    <title>Материалы для отедлки</title>
+    <title>Инструменты и крепеж</title>
 </head>
 
 <body>
@@ -61,33 +61,39 @@ try {
             </div>
         </div>
         <div class="pilomaterials">
-            <h1 class="zagolovok-offers">Материалы для отделки</h1>
+            <h1 class="zagolovok-offers">Инструменты и крепеж</h1>
             <div class="all-materials">
-    <?php foreach ($products as $product): ?>
-        <div class="material">
-            <img src="<?= htmlspecialchars($product['product_image']) ?>" class="material-image">
-            <div class="information_material">
-                <div class="material-slider"><?= htmlspecialchars($product['product_name']) ?></div>
-                <form action="add_to_cart" method="POST" class="add-to-cart-form">
-                    <input type="hidden" name="product_name" value="<?= htmlspecialchars($product['product_name']) ?>">
-                    <input type="hidden" name="product_price" value="<?= htmlspecialchars($product['product_price']) ?>">
-                    <input type="hidden" name="product_image" value="<?= htmlspecialchars($product['product_image']) ?>">
-                    
-                    <div class="price-service-container">
-                        <p class="price"><?= htmlspecialchars($product['product_price']) ?> р за шт.</p>
-                        <select name="service" id="service" required>
-                            <option value="Без услуги">Без услуги</option>
-                            <option value="Обработка">Обработка</option>
-                            <option value="Распил">Распил</option>
-                        </select>
+                <?php foreach ($products as $product): ?>
+                    <div class="material">
+                        <img src="<?= htmlspecialchars($product['product_image']) ?>" class="material-image">
+                        <div class="information_material">
+                            <div class="material-slider"><?= htmlspecialchars($product['product_name']) ?></div>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                            <form action="add_to_cart" method="POST" class="add-to-cart-form">
+                                <input type="hidden" name="product_name" value="<?= htmlspecialchars($product['product_name']) ?>">
+                                <input type="hidden" name="product_price" value="<?= htmlspecialchars($product['product_price']) ?>">
+                                <input type="hidden" name="product_image" value="<?= htmlspecialchars($product['product_image']) ?>">
+
+                                <div class="price-service-container">
+                                    <p class="price"><?= htmlspecialchars($product['product_price']) ?> р за шт.</p>
+                                    <select name="service" id="service" required>
+                                        <option value="Без услуги">Без услуги</option>
+                                        <option value="Обработка">Обработка</option>
+                                        <option value="Распил">Распил</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="corsina-button">В корзину</button>
+                            </form>
+                            <?php else: ?>
+                                <div class="not-logged-in-message">
+                                    <p>Чтобы добавить товар в корзину, пожалуйста, <a href="login-form.php">войдите</a> или <a href="registration-form.php">зарегистрируйтесь</a>.</p>
+                                </div>
+                                <?php endif; ?>
+                            </div>
                     </div>
-                    
-                    <button type="submit" class="corsina-button">В корзину</button>
-                </form>
+                <?php endforeach; ?>
             </div>
-        </div>
-    <?php endforeach; ?>
-</div>
         </div>
         <footer>
       <div class="pages">

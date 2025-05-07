@@ -22,9 +22,11 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 require_once 'db_korzina.php';
+
 // Получение истории заказов пользователя
-$orders_stmt = $pdo->prepare("
+$orders_stmt = $korzina_pdo->prepare("
     SELECT o.id AS order_id, o.name, o.phone, o.address, o.total_price, o.created_at, o.transport
     FROM orders o
     WHERE o.user_id = :user_id
@@ -35,7 +37,7 @@ $orders = $orders_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Для каждого заказа получаем список товаров
 foreach ($orders as &$order) {
-    $items_stmt = $pdo->prepare("
+    $items_stmt = $korzina_pdo->prepare("
     SELECT oi.product_name, oi.product_price, oi.quantity, p.product_image AS product_image
     FROM order_items oi
     LEFT JOIN products p ON oi.product_name = p.product_name
@@ -132,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="login_register.css">
+    <link rel="icon" href="images/logo.png">
     <title>Личный кабинет</title>
 </head>
 

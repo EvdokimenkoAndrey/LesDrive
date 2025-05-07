@@ -7,7 +7,7 @@ try {
     $action = $_POST['action'];
 
     // Получаем текущее количество товара
-    $stmt = $pdo->prepare("SELECT quantity FROM cart WHERE id = :id");
+    $stmt = $korzina_pdo->prepare("SELECT quantity FROM cart WHERE id = :id");
     $stmt->execute(['id' => $cartItemId]);
     $currentQuantity = $stmt->fetchColumn();
 
@@ -23,7 +23,7 @@ try {
     }
 
     // Обновляем количество в базе данных
-    $updateStmt = $pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
+    $updateStmt = $korzina_pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
     $updateStmt->execute(['quantity' => $newQuantity, 'id' => $cartItemId]);
 
     // Перенаправляем обратно в корзину

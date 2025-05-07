@@ -16,6 +16,7 @@ unset($_SESSION['errorMessage']);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="login_register.css">
+  <link rel="icon" href="images/logo.png">
   <title>Форма регистрации</title>
 </head>
 

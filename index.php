@@ -10,6 +10,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN users u ON r.user_id = u.id
     WHERE r.is_approved = 1
     ORDER BY r.created_at DESC
+    LIMIT 3
 ");
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -46,14 +47,14 @@ $reviews_chunks = array_chunk($reviews, 3);
             <li><a href="comments.php" class="punkts">Отзывы</a></li>
           </ul>
           <div class="icons">
-          <a href="login-form.php">
-            <?php
-            if (isset($_SESSION['user_id'])) : ?>
-              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
-            <?php else: ?>
+            <a href="login-form.php">
+              <?php
+              if (isset($_SESSION['user_id'])) : ?>
+                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
+          <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
-            <?php endif; ?>
-            <a href="corsina.php">
+          <?php endif; ?>
+          <a href="corsina.php">
             <img src="images/corsina.png" class="korzina"></a>
           </div>
         </div>
@@ -119,31 +120,33 @@ $reviews_chunks = array_chunk($reviews, 3);
           <img src="images/product-one.png" class="brusok">
           <div class="brusok-class">
             <div>
-              <h1>Брусок обрезной</h1>
+              <h1>Брусок</h1>
               <p class="des-brusok">Идеальный брусок для каркасного строительства</p>
             </div>
-            <a href="materials_first.php">
-            <button class="buy">Купить</button></a>
+            <a class="link-materials" href="materials_first.php">
+              <button class="buy">Купить</button></a>
           </div>
         </div>
         <div class="product">
           <img src="images/product-two.png" class="brusok" id="brusok">
           <div class="brusok-class parket" id="brusok-class"">
             <div>
-              <h1>Паркет</h1>
-              <p class=" des-brusok">Качественный паркет из разных материалов</p>
+              <h1>Плинтус</h1>
+              <p class=" des-brusok">Качественный деревянный плинтус для пола</p>
           </div>
-          <button class="buy">Купить</button>
+          <a class="link-materials" href="materials_third.php">
+            <button class="buy">Купить</button></a>
         </div>
       </div>
       <div class="product">
-        <img src="images/product-three.png" class="brusok" id="brusok">
+        <img src="images/product-three.png" class="brusok" id="brusok" style="width: 160px;">
         <div class="brusok-class" id="brusok-class">
           <div>
-            <h1>Балка</h1>
-            <p class="des-brusok">Прочная балка выдержит любую нагрузку</p>
+            <h1>Рубанок</h1>
+            <p class="des-brusok">Надежный электрический рубанок мощностью 750 Вт</p>
           </div>
-          <button class="buy">Купить</button>
+          <a class="link-materials" href="materials_first.php">
+            <button class="buy">Купить</button></a>
         </div>
       </div>
     </div>
@@ -156,31 +159,39 @@ $reviews_chunks = array_chunk($reviews, 3);
       <img src="images/lesorub.png" class="lesorub-img">
     </div>
     <div class="comments">
-            <h1 class="zagolovok-offers">Отзывы наших клиентов</h1>
-
-            <?php if (empty($reviews)): ?>
-                <p style="text-align: center; color: #777;">Пока нет отзывов.</p>
-            <?php else: ?>
-                <div class="three_comments">
-                    <?php foreach ($reviews as $review): ?>
-                        <div class="first-comment">
-                            <div class="class1-comments">
-                                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="image-comment1" alt="Avatar">
-                                <h2><?= htmlspecialchars($review['username']) ?></h2>
-                            </div>
-                            <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
-                            <small style="color: #777; font-size: 12px;">
-                                Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
-                            </small>
-                        </div>
-                    <?php endforeach; ?>
+      <h1 class="zagolovok-offers">Отзывы наших клиентов</h1>
+      <?php if (empty($reviews)): ?>
+        <p style="text-align: center; color: #777;">Пока нет одобренных отзывов.</p>
+      <?php else: ?>
+        <!-- Отображение отзывов в контейнерах по 3 отзыва -->
+        <?php foreach ($reviews_chunks as $chunk): ?>
+          <div class="three_comments">
+            <?php foreach ($chunk as $review): ?>
+              <div class="first-comment">
+                <div class="class1-comments">
+                  <!-- Отображение аватара пользователя -->
+                  <?php if (!empty($review['profile_image']) && !empty($review['image_type'])): ?>
+                    <img src="data:<?php echo htmlspecialchars($review['image_type']); ?>;base64,<?php echo base64_encode($review['profile_image']); ?>"
+                      alt="Avatar" class="image-comment1">
+                  <?php else: ?>
+                    <img src="images/default_avatar.png" alt="Default Avatar" class="image-comment1">
+                  <?php endif; ?>
+                  <h2><?= htmlspecialchars($review['username']) ?></h2>
                 </div>
-            <?php endif; ?>
-            <a href="comments.php" class="punkts watch">
-            <button class="choose_reviews">
-        Смотреть отзывы
+                <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
+                <small>
+                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
+                </small>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+      <a href="comments.php" class="punkts watch">
+      <button class="choose_reviews">
+        Посмотреть отзывы
       </button></a>
-        </div>
+    </div>
     <div class="questions">
       <h1 class="zagolovok-offers">Часто задаваемые вопросы</h1>
       <div class="questions-container">

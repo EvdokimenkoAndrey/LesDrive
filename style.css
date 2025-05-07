@@ -293,7 +293,9 @@ h1 {
     color: #707070;
     margin-top: 10px;
 }
-
+.link-materials {
+    width: 100%;
+}
 .brusok-class {
     flex: 1;
     min-width: 300px;
@@ -307,7 +309,7 @@ h1 {
 .buy {
     padding: 15px 20px;
     border: none;
-    width: 330px;
+    width: 100%;
     background-color: #ebd294;
     border-radius: 10px;
     cursor: pointer;
@@ -362,7 +364,87 @@ h1 {
     padding-top: 10%;
     padding-left: 270px;
 }
+.comments {
+    display: flex;
+    flex-direction: column;
+    padding: 0 60px;
+    gap: 70px;
+}
 
+.three_comments {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.first-comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #FFF0CA;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.main-admin {
+    padding: 0 60px;
+}
+.image-comment1 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.class1-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+.text-comment1 {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+    word-wrap: break-word; /* Перенос текста внутри параграфа */
+    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
+    max-width: 100%; /* Ограничиваем ширину текста */
+    padding: 20px;
+}
+
+small {
+    font-size: 12px;
+    padding-bottom: 20px;
+    color: #777;
+    text-align: center;
+    word-wrap: break-word; /* Перенос текста в дате */
+    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
+}
+.choose_reviews {
+    width: 200px;
+    margin: 0 auto;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #FFF0CA;
+    height: 80px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 h2 {
     font-size: 25px;
 }
@@ -716,8 +798,16 @@ h2 {
     h2 {
         font-size: 20px;
     }
+    .three_comments {
+        gap: 15px; /* Уменьшаем промежутки между карточками */
+    }
+
     .first-comment {
-        padding: 20px;
+        max-width: 350px; /* Уменьшаем максимальную ширину карточек */
+    }
+
+    .text-comment1 {
+        font-size: 14px; /* Уменьшаем размер текста */
     }
 
     .pages {
@@ -807,23 +897,32 @@ h2 {
     .img-bttn {
         width: 60px;
     }
-    .text-comment1 {
-        font-size: 13px;
+    .three_comments {
+        gap: 10px; /* Ещё уменьшаем промежутки между карточками */
     }
-    .image-comment1 {
-        width: 80px;
-        height: 80px;
+
+    .first-comment {
+        width: 300px; /* Дальнейшее уменьшение ширины карточек */
+        gap: 5px;
+        padding: 0;
+    }
+
+    .text-comment1 {
+        font-size: 11px; /* Ещё уменьшаем размер текста */
+    }
+    small {
+        font-size: 9px;
     }
     h2 {
         font-size: 17px;
     }
-    .first-comment {
-        gap: 20px;
-        padding: 15px;
+    .image-comment1 {
+        width: 70px;
+        height: 70px;
     }
     .choose_reviews {
         width: 150px;
-        height: 50px;
+        height: 60px;
         font-size: 12px;
     }
     .pilom {
@@ -903,18 +1002,18 @@ h2 {
     .author {
         padding-left: 135px;
     }
-    .comments {
-        padding: 0 10px;
+    .first-comment {
+        padding: 0; /* Уменьшаем внутренние отступы */
+        max-width: 200px;
     }
-    small {
-        font-size: 10px;
-    }
+
     .image-comment1 {
-        width: 60px;
+        width: 60px; /* Уменьшаем размер аватара */
         height: 60px;
     }
+
     .text-comment1 {
-        font-size: 11px;
+        font-size: 10px; /* Уменьшаем размер текста */
     }
     h2 {
         font-size: 14px;
@@ -1072,18 +1171,24 @@ h2 {
     h2 {
         font-size: 11px;
     }
-    .image-comment1 {
-        width: 55px;
-        height: 55px;
-    }
     .three_comments {
-        gap: 15px;
+        gap: 15px; /* Минимальные промежутки между карточками */
+        flex-wrap: wrap;
     }
-    .text-comment1 {
-        font-size: 9px;
+    .first-comment {
+        max-width: 190px;
     }
     .comments {
-        gap: 30px;
+        gap: 15px;
+        padding: 0 10px;
+    }
+    .image-comment1 {
+        width: 50px; /* Минимальный размер аватара */
+        height: 50px;
+    }
+
+    .text-comment1 {
+        font-size: 10px; /* Минимальный размер текста */
     }
     .punkts {
         font-size: 1.6vw;
@@ -1267,17 +1372,22 @@ h2 {
         font-size: 9px;
     }
     .three_comments {
-        gap: 6px;
-    }
-    .first-comment {
-        padding: 8px;
-        border-radius: 10px;
-    }
-    .text-comment1 {
-        font-size: 7px;
+        gap: 15px; /* Минимальные промежутки между карточками */
     }
     .comments {
-        gap: 20px;
+        gap: 15px;
+    }
+    .first-comment {
+        max-width: 100%; /* Карточки занимают всю доступную ширину */
+    }
+
+    .image-comment1 {
+        width: 50px; /* Минимальный размер аватара */
+        height: 50px;
+    }
+
+    .text-comment1 {
+        font-size: 10px; /* Минимальный размер текста */
     }
 
     .first_categories {

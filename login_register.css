@@ -374,88 +374,6 @@ select {
     justify-content: center;
     height: 100%;
 }
-.comments {
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
-    gap: 70px;
-}
-
-.three_comments {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-}
-
-.first-comment {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #FFF0CA;
-    gap: 20px;
-    align-items: center;
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-.main-admin {
-    padding: 0 60px;
-}
-.image-comment1 {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.class1-comments {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding-top: 20px;
-}
-
-.text-comment1 {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.5;
-    word-wrap: break-word; /* Перенос текста внутри параграфа */
-    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
-    max-width: 100%; /* Ограничиваем ширину текста */
-    padding: 20px;
-}
-
-small {
-    font-size: 12px;
-    padding-bottom: 20px;
-    color: #777;
-    text-align: center;
-    word-wrap: break-word; /* Перенос текста в дате */
-    overflow-wrap: break-word; /* Дополнительное свойство для переноса */
-}
-
-.choose_reviews {
-    width: 200px;
-    margin: 0 auto;
-    font-size: 15px;
-    border-radius: 10px;
-    border: none;
-    background-color: #FFF0CA;
-    height: 80px;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 /* Общие стили для истории заказов */
 .order-history {
     margin-top: 20px;
@@ -659,7 +577,25 @@ small {
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
+  .pickup-map {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    display: none; /* Скрыт по умолчанию */
+}
 
+
+.pickup-map .address {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+}
+
+.pickup-map .address:hover {
+    text-decoration: underline;
+}
   /* .place-order-button:hover {
     background-color: #dabf7a;
   } */
@@ -979,7 +915,7 @@ small {
         font-size: 10px;
     }
     .transports {
-        font-size: 9px;
+        font-size: 8px;
     }
     .order-summary p, .place-order-button {
         font-size: 10px;

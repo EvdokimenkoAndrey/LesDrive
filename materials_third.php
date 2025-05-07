@@ -6,7 +6,7 @@ require_once "db_korzina.php";
 $category = 'page3'; // Категория для этой страницы
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM products WHERE category = :category");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM products WHERE category = :category");
     $stmt->execute(['category' => $category]);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -23,7 +23,7 @@ try {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="materials.css">
     <link rel="icon" href="images/logo.png">
-    <title>Пиломатериалы</title>
+    <title>Строительные материалы</title>
 </head>
 
 <body>
@@ -61,7 +61,7 @@ try {
             </div>
         </div>
         <div class="pilomaterials">
-            <h1 class="zagolovok-offers">Пиломатериалы</h1>
+            <h1 class="zagolovok-offers">Строительные материалы</h1>
             <div class="all-materials">
                 <?php foreach ($products as $product): ?>
                     <div class="material">

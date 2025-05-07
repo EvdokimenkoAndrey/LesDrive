@@ -18,7 +18,7 @@ try {
     $userId = $_SESSION['user_id'];
 
     // Получаем все товары из корзины
-    $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
     $stmt->execute(['user_id' => $userId]);
     $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -32,7 +32,7 @@ try {
     $totalPrice += $transportPrice;
 
     // Сохраняем заказ в таблицу orders
-    $orderStmt = $pdo->prepare("INSERT INTO orders (user_id, name, phone, address, total_price, transport, created_at) VALUES (:user_id, :name, :phone, :address, :total_price, :transport, NOW())");
+    $orderStmt = $korzina_pdo->prepare("INSERT INTO orders (user_id, name, phone, address, total_price, transport, created_at) VALUES (:user_id, :name, :phone, :address, :total_price, :transport, NOW())");
     $orderStmt->execute([
         'user_id' => $userId,
         'name' => $name,
@@ -43,11 +43,11 @@ try {
     ]);
 
     // Получаем ID созданного заказа
-    $orderId = $pdo->lastInsertId();
+    $orderId = $korzina_pdo->lastInsertId();
 
     // Переносим товары из корзины в таблицу order_items
     foreach ($cartItems as $item) {
-        $orderItemStmt = $pdo->prepare("INSERT INTO order_items (order_id, product_name, product_price, quantity, service, transport) VALUES (:order_id, :product_name, :product_price, :quantity, :service, :transport)");
+        $orderItemStmt = $korzina_pdo->prepare("INSERT INTO order_items (order_id, product_name, product_price, quantity, service, transport) VALUES (:order_id, :product_name, :product_price, :quantity, :service, :transport)");
         $orderItemStmt->execute([
             'order_id' => $orderId,
             'product_name' => $item['product_name'],
@@ -59,7 +59,7 @@ try {
     }
 
     // Очищаем корзину
-    $clearCartStmt = $pdo->prepare("DELETE FROM cart WHERE user_id = :user_id");
+    $clearCartStmt = $korzina_pdo->prepare("DELETE FROM cart WHERE user_id = :user_id");
     $clearCartStmt->execute(['user_id' => $userId]);
 
     // Перенаправляем на страницу подтверждения заказа

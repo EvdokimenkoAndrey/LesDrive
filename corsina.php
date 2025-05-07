@@ -7,7 +7,7 @@ try {
     $userId = $_SESSION['user_id'];
 
 
-    $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
     $stmt->execute([':user_id' => $userId]);
     $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -34,6 +34,7 @@ try {
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="login_register.css">
   <link rel="stylesheet" href="corsina.css">
+  <link rel="icon" href="images/logo.png">
   <title>Корзина</title>
 </head>
 

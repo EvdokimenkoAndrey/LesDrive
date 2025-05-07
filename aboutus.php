@@ -10,6 +10,7 @@ session_start();
   <link rel="stylesheet" href="aboutus.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="services.css">
+  <link rel="icon" href="images/logo.png">
   <title>О нас</title>
 </head>
 

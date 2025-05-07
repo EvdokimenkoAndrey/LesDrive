@@ -16,18 +16,18 @@ try {
     $userId = $_SESSION['user_id'];
 
     // Проверяем, есть ли товар уже в корзине
-    $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id AND product_name = :product_name");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id AND product_name = :product_name");
     $stmt->execute(['user_id' => $userId, 'product_name' => $productName]);
     $existingItem = $stmt->fetch();
 
     if ($existingItem) {
         // Если товар уже есть, увеличиваем количество
         $newQuantity = $existingItem['quantity'] + 1;
-        $updateStmt = $pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
+        $updateStmt = $korzina_pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
         $updateStmt->execute(['quantity' => $newQuantity, 'id' => $existingItem['id']]);
     } else {
         // Если товара нет, добавляем его в корзину
-        $insertStmt = $pdo->prepare("INSERT INTO cart (user_id, product_name, product_price, product_image, service, quantity) VALUES (:user_id, :product_name, :product_price, :product_image, :service, 1)");
+        $insertStmt = $korzina_pdo->prepare("INSERT INTO cart (user_id, product_name, product_price, product_image, service, quantity) VALUES (:user_id, :product_name, :product_price, :product_image, :service, 1)");
         $insertStmt->execute([
             'user_id' => $userId,
             'product_name' => $productName,

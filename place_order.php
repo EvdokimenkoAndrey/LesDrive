@@ -14,7 +14,7 @@ try {
   $userId = $_SESSION['user_id'];
 
   // Получаем все товары из корзины
-  $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
+  $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
   $stmt->execute(['user_id' => $userId]);
   $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,6 +50,7 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="login_register.css">
+  <link rel="icon" href="images/logo.png">
   <title>Оформление заказа</title>
 </head>
 
@@ -97,35 +98,49 @@ try {
         <label for="address">Доставка:</label>
 
         <div class="delivery-order">
-          <div class="three-transports">
-            <div class="transport">
-              <input type="radio" name="transport" id="truck" class="transport-radio" value="Грузовой автомобиль|500">
-              <p class="transports">Грузовой автомобиль (500 руб.)</p>
-            </div>
-            <div class="transport">
-              <input type="radio" name="transport" id="gazel" class="transport-radio" value="Газель|300">
-              <p class="transports">Газель (300 руб.)</p>
-            </div>
-            <div class="transport">
-              <input type="radio" name="transport" id="forest-truck" class="transport-radio" value="Лесовоз|700">
-              <p class="transports">Лесовоз (700 руб.)</p>
-            </div>
-          </div>
-          <div class="three-transports">
-            <div class="transport">
-              <input type="radio" name="transport" id="manipulator" class="transport-radio" value="Манипуляторы|600">
-              <p class="transports">Манипуляторы (600 руб.)</p>
-            </div>
-            <div class="transport">
-              <input type="radio" name="transport" id="furgon" class="transport-radio" value="Автомобиль с кузовом-фургоном|400">
-              <p class="transports">Автомобиль с кузовом-фургоном (400 руб.)</p>
-            </div>
-            <div class="transport">
-              <input type="radio" name="transport" id="refrigerator" class="transport-radio" value="Рефрижераторы|800">
-              <p class="transports">Рефрижераторы (800 руб.)</p>
-            </div>
-          </div>
+    <div class="three-transports">
+        <div class="transport">
+            <input type="radio" name="transport" id="truck" class="transport-radio" value="Грузовой автомобиль|500">
+            <p class="transports">Грузовой автомобиль (500 руб.)</p>
         </div>
+        <div class="transport">
+            <input type="radio" name="transport" id="gazel" class="transport-radio" value="Газель|300">
+            <p class="transports">Газель (300 руб.)</p>
+        </div>
+        <div class="transport">
+            <input type="radio" name="transport" id="forest-truck" class="transport-radio" value="Лесовоз|700">
+            <p class="transports">Лесовоз (700 руб.)</p>
+        </div>
+    </div>
+    <div class="three-transports">
+        <div class="transport">
+            <input type="radio" name="transport" id="manipulator" class="transport-radio" value="Манипуляторы|600">
+            <p class="transports">Манипуляторы (600 руб.)</p>
+        </div>
+        <div class="transport">
+            <input type="radio" name="transport" id="furgon" class="transport-radio" value="Автомобиль с кузовом-фургоном|400">
+            <p class="transports">Автомобиль с кузовом-фургоном (400 руб.)</p>
+        </div>
+        <div class="transport">
+            <input type="radio" name="transport" id="refrigerator" class="transport-radio" value="Рефрижераторы|800">
+            <p class="transports">Рефрижераторы (800 руб.)</p>
+        </div>
+    </div>
+    <div class="transport">
+        <input type="radio" name="transport" id="pickup" class="transport-radio" value="Самовывоз|0">
+        <p class="transports">Самовывоз (бесплатно)</p>
+    </div>
+</div>
+
+<!-- Блок с картой -->
+<div class="pickup-map" style="display: none;">
+    <div class="email karts">
+        <img src="images/karts.png" class="kart">
+        <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">
+            г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13
+        </a>
+    </div>
+</div>
         <!-- Информация о заказе -->
         <div class="order-summary">
           <p>Количество товаров: <span id="total-quantity"><?= $totalQuantity ?></span></p>
@@ -178,50 +193,7 @@ try {
       </div>
       <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
     </footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Получаем элементы из DOM
-      const transportRadios = document.querySelectorAll('.transport-radio');
-      const deliveryPriceElement = document.getElementById('delivery-price');
-      const totalPriceElement = document.getElementById('total-price');
-      const productPriceElement = document.getElementById('product-price');
-
-      // Инициализация базовых значений
-      let productPrice = parseFloat(productPriceElement.textContent.replace(/[^0-9.-]+/g, ""));
-      let deliveryPrice = 0;
-      let lastSelectedRadio = null; // Переменная для хранения последней выбранной радиокнопки
-
-      // Функция для обновления общей стоимости
-      function updateTotalPrice() {
-        const total = productPrice + deliveryPrice;
-        totalPriceElement.textContent = `${total.toFixed(2)} руб.`;
-      }
-
-      // Добавляем обработчик событий на каждую радиокнопку
-      transportRadios.forEach(radio => {
-        radio.addEventListener('click', function() {
-          if (lastSelectedRadio === this && this.checked) {
-            // Если нажата уже выбранная радиокнопка, сбрасываем её
-            this.checked = false;
-            lastSelectedRadio = null; // Обнуляем последнюю выбранную кнопку
-            deliveryPrice = 0; // Сбрасываем стоимость доставки
-          } else {
-            // Если выбрана новая радиокнопка
-            lastSelectedRadio = this; // Сохраняем текущую радиокнопку
-            const [transportName, transportCost] = this.value.split('|');
-            deliveryPrice = parseFloat(transportCost); // Устанавливаем новую стоимость доставки
-          }
-
-          // Обновляем стоимость доставки и общую стоимость
-          deliveryPriceElement.textContent = deliveryPrice > 0 ? `${deliveryPrice.toFixed(2)} руб.` : '0 руб.';
-          updateTotalPrice();
-        });
-      });
-
-      // Инициализация при загрузке страницы
-      updateTotalPrice();
-    });
-  </script>
+  <script src="place_order.js"></script>
 </body>
 
 </html>

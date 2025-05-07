@@ -9,7 +9,7 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="images/logo.png">
-  <title>Страница "Каталог"</title>
+  <title>Каталог</title>
 </head>
 
 <body>

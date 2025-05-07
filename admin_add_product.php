@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Добавляем товар в базу данных
             try {
-                $stmt = $pdo->prepare("INSERT INTO products (product_name, product_price, product_image, category) VALUES (:product_name, :product_price, :product_image, :category)");
+                $stmt = $korzina_pdo->prepare("INSERT INTO products (product_name, product_price, product_image, category) VALUES (:product_name, :product_price, :product_image, :category)");
                 $stmt->execute([
                     'product_name' => $productName,
                     'product_price' => $productPrice,

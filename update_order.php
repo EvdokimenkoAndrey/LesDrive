@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once 'db_korzina.php';
 require_once "db_korzina.php";
 
 if (!isset($_SESSION['user_id'])) {
@@ -15,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['transport_id'])) {
 
     try {
         // Получаем информацию о выбранном транспорте
-        $stmt = $pdo->prepare("SELECT * FROM transports WHERE id = :id");
+        $stmt = $korzina_pdo->prepare("SELECT * FROM transports WHERE id = :id");
         $stmt->execute(['id' => $transportId]);
         $transport = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['transport_id'])) {
         }
 
         // Обновляем заказ пользователя
-        $updateStmt = $pdo->prepare("
+        $updateStmt = $korzina_pdo->prepare("
             UPDATE order_items 
             SET transport_id = :transport_id 
             WHERE user_id = :user_id

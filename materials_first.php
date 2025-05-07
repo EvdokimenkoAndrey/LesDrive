@@ -6,7 +6,7 @@ require_once "db_korzina.php";
 $category = 'page1'; // Категория для этой страницы
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM products WHERE category = :category");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM products WHERE category = :category");
     $stmt->execute(['category' => $category]);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
