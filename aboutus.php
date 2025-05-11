@@ -100,7 +100,7 @@ session_start();
       <h1 class="zagolovok-offers">Директора нашей компании</h1>
       <div class="directors_people">
         <div class="image_directors">
-          <img src="images/services/director1.png" class="img_aboutus">
+          <img src="images/services/director1.jpg" class="img_aboutus">
           <div class="overlay-text">
             <div class="director-question-item">
               <div class="director-question">
@@ -113,7 +113,7 @@ session_start();
           </div>
         </div>
         <div class="image_directors">
-          <img src="images/services/director2.png" class="img_aboutus">
+          <img src="images/services/director2.jpg" class="img_aboutus">
           <div class="overlay-text">
             <div class="director-question-item">
               <div class="director-question">

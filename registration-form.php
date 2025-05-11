@@ -20,7 +20,7 @@ unset($_SESSION['errorMessage']);
   <title>Форма регистрации</title>
 </head>
 
-<body>
+<body style="gap:0px">
   <main>
     <div class="create-line">
       <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)">

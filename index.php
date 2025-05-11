@@ -31,37 +31,36 @@ $reviews_chunks = array_chunk($reviews, 3);
 
 <body>
   <main>
-    <div class="create-line">
-      <header>
-        <div class="menu">
-          <div class="Logo">
-            <a href="index.php" class="link_logo">
-              <img src="images/logo.png" class="logo">
-              <h1 class="zagolovok">ЛесДрайв</h1>
-            </a>
-          </div>
-          <ul>
-            <li><a href="catalog.php" class="punkts">Каталог</a></li>
-            <li><a href="aboutus.php" class="punkts">О нас</a></li>
-            <li><a href="services.php" class="punkts">Услуги</a></li>
-            <li><a href="comments.php" class="punkts">Отзывы</a></li>
-          </ul>
-          <div class="icons">
-            <a href="login-form.php">
-              <?php
-              if (isset($_SESSION['user_id'])) : ?>
-                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
-          <?php else: ?>
-            <img src="images/LogIn.png" class="korzina"></a>
-          <?php endif; ?>
-          <a href="corsina.php">
-            <img src="images/corsina.png" class="korzina"></a>
-          </div>
+    <header>
+      <div class="menu">
+        <div class="Logo">
+          <a href="index.php" class="link_logo">
+            <img src="images/logo.png" class="logo">
+            <h1 class="zagolovok">ЛесДрайв</h1>
+          </a>
         </div>
-      </header>
-      <div class="class-header-img">
-        <img src="images/header1.png" class="header-img">
+        <ul>
+          <li><a href="catalog.php" class="punkts">Каталог</a></li>
+          <li><a href="aboutus.php" class="punkts">О нас</a></li>
+          <li><a href="services.php" class="punkts">Услуги</a></li>
+          <li><a href="comments.php" class="punkts">Отзывы</a></li>
+        </ul>
+        <div class="icons">
+          <a href="login-form.php">
+        <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']);
+              ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
+        <?php else: ?>
+          <img src="images/LogIn.png" class="korzina"></a>
+        <?php endif; ?>
+        <a href="corsina.php">
+          <img src="images/corsina.png" class="korzina"></a>
+        </div>
       </div>
+    </header>
+    <div class="class-header-img">
+      <img src="images/header1.png" class="header-img">
     </div>
     <div class="offers">
       <h1 class="zagolovok-offers">Наши предложения</h1>
@@ -139,7 +138,7 @@ $reviews_chunks = array_chunk($reviews, 3);
         </div>
       </div>
       <div class="product">
-        <img src="images/product-three.png" class="brusok" id="brusok" style="width: 160px;">
+        <img src="images/product-three.png" class="brusok" id="brusok">
         <div class="brusok-class" id="brusok-class">
           <div>
             <h1>Рубанок</h1>
@@ -188,9 +187,9 @@ $reviews_chunks = array_chunk($reviews, 3);
         <?php endforeach; ?>
       <?php endif; ?>
       <a href="comments.php" class="punkts watch">
-      <button class="choose_reviews">
-        Посмотреть отзывы
-      </button></a>
+        <button class="choose_reviews">
+          Посмотреть отзывы
+        </button></a>
     </div>
     <div class="questions">
       <h1 class="zagolovok-offers">Часто задаваемые вопросы</h1>

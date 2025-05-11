@@ -76,11 +76,13 @@ try {
 
                                 <div class="price-service-container">
                                     <p class="price"><?= htmlspecialchars($product['product_price']) ?> р за шт.</p>
-                                    <select name="service" id="service" required>
-                                        <option value="Без услуги">Без услуги</option>
-                                        <option value="Обработка">Обработка</option>
-                                        <option value="Распил">Распил</option>
-                                    </select>
+                                        <?php if ($product['has_service'] == 1): ?>
+                                            <select name="service" id="service" required>
+                                                <option value="Без услуги">Без услуги</option>
+                                                <option value="Обработка">Обработка</option>
+                                                <option value="Распил">Распил</option>
+                                            </select>
+                                        <?php endif; ?>
                                 </div>
 
                                 <button type="submit" class="corsina-button">В корзину</button>
