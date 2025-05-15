@@ -39,35 +39,35 @@ try {
 </head>
 
 <body>
-<div class="create-line">
-      <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)">
-        <div class="menu">
-          <div class="Logo">
-            <a href="index.php" class="link_logo">
-              <img src="images/logo.png" class="logo">
-              <h1 class="zagolovok">ЛесДрайв</h1>
-            </a>
-          </div>
-          <ul>
-            <li><a href="catalog.php" class="punkts">Каталог</a></li>
-            <li><a href="aboutus.php" class="punkts">О нас</a></li>
-            <li><a href="services.php" class="punkts">Услуги</a></li>
-            <li><a href="comments.php" class="punkts">Отзывы</a></li>
-          </ul>
-          <div class="icons">
-            <a href="login-form.php">
-              <?php
-              if (isset($_SESSION['user_id'])) : ?>
-                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
-          <?php else: ?>
-            <img src="images/LogIn.png" class="korzina"></a>
-          <?php endif; ?>
-          <a href="corsina.php">
-            <img src="images/corsina.png" class="korzina"></a>
-          </div>
+  <div class="create-line">
+    <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)">
+      <div class="menu">
+        <div class="Logo">
+          <a href="index.php" class="link_logo">
+            <img src="images/logo.png" class="logo">
+            <h1 class="zagolovok">ЛесДрайв</h1>
+          </a>
         </div>
-      </header>
-  <main>
+        <ul>
+          <li><a href="catalog.php" class="punkts">Каталог</a></li>
+          <li><a href="aboutus.php" class="punkts">О нас</a></li>
+          <li><a href="services.php" class="punkts">Услуги</a></li>
+          <li><a href="comments.php" class="punkts">Отзывы</a></li>
+        </ul>
+        <div class="icons">
+          <a href="login-form.php">
+            <?php
+            if (isset($_SESSION['user_id'])) : ?>
+              <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
+        <?php else: ?>
+          <img src="images/LogIn.png" class="korzina"></a>
+        <?php endif; ?>
+        <a href="corsina.php">
+          <img src="images/corsina.png" class="korzina"></a>
+        </div>
+      </div>
+    </header>
+    <main>
       <div class="corzina">
         <?php if (!isset($_SESSION['user_id'])): ?>
           <div class="error-message error-corsina">
@@ -86,36 +86,36 @@ try {
               <div class="product_corzina">
                 <?php foreach ($cartItems as $item): ?>
                   <div class="cart-item">
-    <div class="cart-item-top">
-        <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
-        <div class="cart-item-details">
-            <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
-            <div class="cart-item-price">Цена за шт: <?= number_format($item['product_price'], 2) ?> руб.</div>
-            <div class="cart-item-service">
-                Услуга: <?= $item['service'] ? htmlspecialchars($item['service']) : 'Без услуги' ?>
-            </div>
-        </div>
-    </div>
-    <div class="cart-item-bottom">
-        <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
-        <div class="control">
-            <div class="quantity-control">
-                <form action="update_quantity" method="POST" class="quantity-form">
-                    <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
-                    <button type="submit" name="action" value="decrease" class="quantity-button minus">-</button>
-                    <span class="quantity-value"><?= $item['quantity'] ?></span>
-                    <button type="submit" name="action" value="increase" class="quantity-button plus">+</button>
-                </form>
-            </div>
-            <form action="delete_corsina" method="POST" class="delete-form">
-                <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
-                <button type="submit" class="delete-button" style="box-shadow: 0 0 0px;">
-                    <img src="images/delete_icon.png" alt="Удалить" class="delete_icon">
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
+                    <div class="cart-item-top">
+                      <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
+                      <div class="cart-item-details">
+                        <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
+                        <div class="cart-item-price">Цена за шт: <?= number_format($item['product_price'], 2) ?> руб.</div>
+                        <div class="cart-item-service">
+                          Услуга: <?= $item['service'] ? htmlspecialchars($item['service']) : 'Без услуги' ?>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="cart-item-bottom">
+                      <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
+                      <div class="control">
+                        <div class="quantity-control">
+                          <form action="update_quantity" method="POST" class="quantity-form">
+                            <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
+                            <button type="submit" name="action" value="decrease" class="quantity-button minus">-</button>
+                            <span class="quantity-value"><?= $item['quantity'] ?></span>
+                            <button type="submit" name="action" value="increase" class="quantity-button plus">+</button>
+                          </form>
+                        </div>
+                        <form action="delete_corsina" method="POST" class="delete-form">
+                          <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
+                          <button type="submit" class="delete-button" style="box-shadow: 0 0 0px;">
+                            <img src="images/delete_icon.png" alt="Удалить" class="delete_icon">
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 <?php endforeach; ?>
               </div>
               <div class="checkout-form-container">
@@ -133,46 +133,46 @@ try {
             </div>
       </div>
       <footer>
-    <div class="pages">
-      <p class="zagolovok-footer">ЛесДрайв</p>
-      <div class="categories">
-        <div class="first_categories">
-          <a href="catalog.php" class="punkts-footer">Каталог</a>
-          <a href="services.php" class="punkts-footer">Услуги</a>
-          <a href="aboutus.php" class="punkts-footer">О нас</a>
-          <a href="comments.php" class="punkts-footer">Отзывы</a>
-          <a href="login-form.php" class="punkts-footer">Войти</a>
+        <div class="pages">
+          <p class="zagolovok-footer">ЛесДрайв</p>
+          <div class="categories">
+            <div class="first_categories">
+              <a href="catalog.php" class="punkts-footer">Каталог</a>
+              <a href="services.php" class="punkts-footer">Услуги</a>
+              <a href="aboutus.php" class="punkts-footer">О нас</a>
+              <a href="comments.php" class="punkts-footer">Отзывы</a>
+              <a href="login-form.php" class="punkts-footer">Войти</a>
+            </div>
+            <hr>
+            <div class="first_categories">
+              <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+              <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+              <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+              <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
+            </div>
+          </div>
         </div>
-        <hr>
-        <div class="first_categories">
-          <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
-          <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
-          <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
-          <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
+        <div class="information">
+          <div class="email_num">
+            <div class="email">
+              <img src="images/mail.png" class="info_img">
+              <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
+            </div>
+            <div class="email">
+              <img src="images/phone.png" class="info_img">
+              <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
+            </div>
+          </div>
+          <div class="email_num">
+            <div class="email karts">
+              <img src="images/karts.png" class="info_img kart">
+              <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="information">
-      <div class="email_num">
-        <div class="email">
-          <img src="images/mail.png" class="info_img">
-          <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
-        </div>
-        <div class="email">
-          <img src="images/phone.png" class="info_img">
-          <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
-        </div>
-      </div>
-      <div class="email_num">
-        <div class="email karts">
-          <img src="images/karts.png" class="info_img kart">
-          <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
-        </div>
-      </div>
-    </div>
-    <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
-  </footer>
-  </main>
+        <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
+      </footer>
+    </main>
 
 </body>
 

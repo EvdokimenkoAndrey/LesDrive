@@ -118,7 +118,7 @@ footer {
     gap: 20px;
 }
 .logout {
-    font-size: 16px;
+    font-size: 19px;
     color: black;
     text-decoration: none;
 }
@@ -655,7 +655,7 @@ select {
         font-size: 12px;
     }
     .logout {
-        font-size: 13px
+        font-size: 15px
     }
     .welcome {
         font-size: 20px;
@@ -723,7 +723,9 @@ select {
     .text-comment1 {
         font-size: 10px; /* Уменьшаем размер текста */
     }
-
+    .button-logout {
+        margin: 0 auto;
+    }
     h2 {
         font-size: 14px; /* Уменьшаем размер заголовка */
     }

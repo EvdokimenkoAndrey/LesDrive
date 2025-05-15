@@ -2,7 +2,6 @@
 session_start();
 require_once 'db.php';
 
-// Очистка предыдущих сообщений
 unset($_SESSION['successMessage']);
 unset($_SESSION['errorMessage']);
 
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Все поля должны быть заполнены.";
     }
 
-    // Проверка размера изображения
+    // Проверка загрузки изображения
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         if ($_FILES['image']['size'] > 1 * 1024 * 1024) {
             $errors[] = "Размер изображения слишком большой. Максимальный размер: 1 МБ.";
@@ -77,17 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['profile_image'] = $profileImage;
             $_SESSION['image_type'] = $imageType;
 
-            // Перенаправляем на главную страницу
-            header("Location: index.php");
+            // Перенаправляем пользователя на страницу личного кабинета
+            header("Location: user.php");
             exit();
         } catch (PDOException $e) {
             $errors[] = "Ошибка при регистрации: " . $e->getMessage();
         }
     }
 
-    // Если есть ошибки, сохраняем их в сессии
+    // Если есть ошибки, сохраняем их в сессию и перенаправляем обратно на форму регистрации
     if (!empty($errors)) {
-        $_SESSION['errorMessage'] = $errors; // Сохраняем массив ошибок
+        $_SESSION['errorMessage'] = $errors; 
         header("Location: registration-form.php");
         exit();
     }

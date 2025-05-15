@@ -84,12 +84,12 @@ $reviews_chunks = array_chunk($reviews, 3);
           </div>
           <div class="slides">
             <img src="images/header-image 5.png" class="slide-image">
-            <div class="text-slider">Идеальные размеры для вашего проекта! Бесплатный распил при заказе от 50 м³.</div>
+            <div class="text-slider">В продаже: эксклюзивные породы древесины для дизайнерских проектов!</div>
           </div>
-          <div class="slides">
+          <!-- <div class="slides">
             <img src="images/header-image 3.png" class="slide-image">
             <div class="text-slider">Идеальные размеры для вашего проекта! Бесплатный распил при заказе от 50 м³.</div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="bttn-slider">

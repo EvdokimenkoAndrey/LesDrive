@@ -9,118 +9,139 @@ if (!isset($_SESSION['user_id'])) {
 
 // Подключение к базе данных
 require_once 'db.php';
+
 $successMessage = $_SESSION['successMessage'] ?? '';
 $errorMessage = $_SESSION['errorMessage'] ?? [];
 
 // Очистка сообщений после отображения
 unset($_SESSION['successMessage']);
 unset($_SESSION['errorMessage']);
+
 // Получение данных пользователя из базы данных
 $stmt = $pdo->prepare("
-    SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
-    FROM users 
-    WHERE id = :id
+SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
+FROM users 
+WHERE id = :id
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Получение отзывов
 $stmt = $pdo->prepare("
-    SELECT r.id, r.username, r.comment, r.created_at, r.is_approved, u.profile_image, u.image_type
-    FROM reviews r
-    LEFT JOIN users u ON r.user_id = u.id
-    ORDER BY r.created_at DESC
+SELECT r.id, r.username, r.comment, r.created_at, r.is_approved, u.profile_image, u.image_type
+FROM reviews r
+LEFT JOIN users u ON r.user_id = u.id
+ORDER BY r.created_at DESC
 ");
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $reviews_chunks = array_chunk($reviews, 3);
-
-// Обработка POST-запроса для обновления данных
+// Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Обработка аватара
+    if (isset($_FILES['new_image']) && $_FILES['new_image']['error'] === UPLOAD_ERR_OK) {
+        // Проверка размера файла (не более 1 МБ)
+        if ($_FILES['new_image']['size'] > 1 * 1024 * 1024) {
+            $errorMessage[] = "Размер изображения слишком большой. Максимальный размер: 1 МБ.";
+        } else {
+            // Чтение данных изображения
+            $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
+            $imageType = $_FILES['new_image']['type'];
+
+            // Обновление изображения в базе данных
+            $update_stmt = $pdo->prepare("
+    UPDATE users 
+    SET profile_image = :profile_image, 
+        image_type = :image_type 
+    WHERE id = :id
+");
+            $update_stmt->execute([
+                ':profile_image' => $imageData,
+                ':image_type' => $imageType,
+                ':id' => $_SESSION['user_id']
+            ]);
+
+            // Обновление данных в сессии
+            $_SESSION['profile_image'] = $imageData;
+            $_SESSION['image_type'] = $imageType;
+            $successMessage = "Изображение успешно обновлено!";
+        }
+    }
+
+    // Обработка одобрения/удаления отзывов
     if (isset($_POST['approve'])) {
         $review_id = $_POST['review_id'];
         $update_stmt = $pdo->prepare("
             UPDATE reviews 
             SET is_approved = 1 
             WHERE id = :id
-        ");
+            ");
         $update_stmt->execute([':id' => $review_id]);
         $_SESSION['successMessage'] = "Отзыв успешно одобрен!";
+        header("Location: admin.php");
+        exit;
     } elseif (isset($_POST['delete'])) {
         $review_id = $_POST['review_id'];
         $delete_stmt = $pdo->prepare("
             DELETE FROM reviews 
             WHERE id = :id
-        ");
+            ");
         $delete_stmt->execute([':id' => $review_id]);
         $_SESSION['successMessage'] = "Отзыв успешно удален!";
+        header("Location: admin.php");
+        exit;
     }
-
-    // Перенаправление обратно на страницу админа
-    header("Location: admin.php");
-    exit;
-    // Обновление аватара
-    if (isset($_FILES['new_image']) && $_FILES['new_image']['error'] === UPLOAD_ERR_OK) {
-        // Проверка размера файла (не более 1 МБ)
-        if ($_FILES['new_image']['size'] > 1 * 1024 * 1024) {
-            die("Размер изображения слишком большой. Максимальный размер: 1 МБ.");
-        }
-
-        // Чтение данных изображения
-        $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
-        $imageType = $_FILES['new_image']['type'];
-
-        // Обновление изображения в базе данных
-        $update_stmt = $pdo->prepare("
-            UPDATE users 
-            SET profile_image = :profile_image, 
-                image_type = :image_type 
-            WHERE id = :id
-        ");
-        $update_stmt->execute([
-            ':profile_image' => $imageData,
-            ':image_type' => $imageType,
-            ':id' => $_SESSION['user_id']
-        ]);
-
-        // Обновление данных в сессии
-        $_SESSION['profile_image'] = $imageData;
-        $_SESSION['image_type'] = $imageType;
-    }
-
-    // Обработка остальных полей (имя, фамилия и т.д.)
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $middle_name = trim($_POST['middle_name']);
     $phone = trim($_POST['phone']);
     $address = trim($_POST['address']);
 
-    $update_stmt = $pdo->prepare("
-        UPDATE users 
-        SET first_name = :first_name, 
-            last_name = :last_name, 
-            middle_name = :middle_name, 
-            phone = :phone, 
-            address = :address 
-        WHERE id = :id
-    ");
-    $update_stmt->execute([
-        ':first_name' => $first_name ?: null,
-        ':last_name' => $last_name ?: null,
-        ':middle_name' => $middle_name ?: null,
-        ':phone' => $phone ?: null,
-        ':address' => $address ?: null,
-        ':id' => $_SESSION['user_id']
-    ]);
+    if (empty($first_name)) {
+        $errorMessage[] = "Поле 'Имя' обязательно для заполнения.";
+    }
+    if (empty($last_name)) {
+        $errorMessage[] = "Поле 'Фамилия' обязательно для заполнения.";
+    }
+    if (!empty($phone) && !preg_match('/^\+?[0-9]{10,15}$/', $phone)) {
+        $errorMessage[] = "Некорректный формат телефона.";
+    }
 
-    // Обновление данных в сессии
-    $_SESSION['first_name'] = $first_name ?: null;
-    $_SESSION['last_name'] = $last_name ?: null;
-    $_SESSION['middle_name'] = $middle_name ?: null;
-    $_SESSION['phone'] = $phone ?: null;
-    $_SESSION['address'] = $address ?: null;
+    if (empty($errorMessage)) {
+        // Обновление данных пользователя в базе данных
+        $update_stmt = $pdo->prepare("
+            UPDATE users 
+            SET first_name = :first_name, 
+                last_name = :last_name, 
+                middle_name = :middle_name, 
+                phone = :phone, 
+                address = :address 
+            WHERE id = :id
+            ");
+        $update_stmt->execute([
+            ':first_name' => $first_name ?: null,
+            ':last_name' => $last_name ?: null,
+            ':middle_name' => $middle_name ?: null,
+            ':phone' => $phone ?: null,
+            ':address' => $address ?: null,
+            ':id' => $_SESSION['user_id']
+        ]);
 
-    // Перенаправление обратно в личный кабинет
-    header("Location: user.php");
-    exit;
+        // Обновление данных в сессии
+        $_SESSION['first_name'] = $first_name ?: null;
+        $_SESSION['last_name'] = $last_name ?: null;
+        $_SESSION['middle_name'] = $middle_name ?: null;
+        $_SESSION['phone'] = $phone ?: null;
+        $_SESSION['address'] = $address ?: null;
+
+        $_SESSION['successMessage'] = "Данные успешно обновлены!";
+        header("Location: admin.php");
+        exit;
+    } else {
+        $_SESSION['errorMessage'] = $errorMessage;
+        header("Location: admin.php");
+        exit;
+    }
 }
 ?>
 
@@ -246,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <select id="product_category" name="product_category" required>
                         <option value="page1">Страница 1 (Пиломатериалы)</option>
                         <option value="page2">Страница 2 (Материалы для отделки)</option>
-                        <option value="page3">Страница 3 (Строительтные материалы)</option>
+                        <option value="page3">Страница 3 (Строительные материалы)</option>
                         <option value="page4">Страница 4 (Инструменты и крепеж)</option>
                     </select>
                     <button type="submit" class="add-product">Добавить товар</button>
@@ -300,45 +321,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         </main>
         <footer style="margin-top: 100px;">
-      <div class="pages">
-        <p class="zagolovok-footer">ЛесДрайв</p>
-        <div class="categories">
-          <div class="first_categories">
-            <a href="catalog.php" class="punkts-footer">Каталог</a>
-            <a href="services.php" class="punkts-footer">Услуги</a>
-            <a href="aboutus.php" class="punkts-footer">О нас</a>
-            <a href="comments.php" class="punkts-footer">Отзывы</a>
-            <a href="login-form.php" class="punkts-footer">Войти</a>
-          </div>
-          <hr>
-          <div class="first_categories">
-            <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
-            <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
-            <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
-            <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
-          </div>
-        </div>
-      </div>
-      <div class="information">
-        <div class="email_num">
-          <div class="email">
-            <img src="images/mail.png" class="info_img">
-            <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
-          </div>
-          <div class="email">
-            <img src="images/phone.png" class="info_img">
-            <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
-          </div>
-        </div>
-        <div class="email_num">
-          <div class="email karts">
-            <img src="images/karts.png" class="info_img kart">
-            <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
-          </div>
-        </div>
-      </div>
-      <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
-    </footer>
+            <div class="pages">
+                <p class="zagolovok-footer">ЛесДрайв</p>
+                <div class="categories">
+                    <div class="first_categories">
+                        <a href="catalog.php" class="punkts-footer">Каталог</a>
+                        <a href="services.php" class="punkts-footer">Услуги</a>
+                        <a href="aboutus.php" class="punkts-footer">О нас</a>
+                        <a href="comments.php" class="punkts-footer">Отзывы</a>
+                        <a href="login-form.php" class="punkts-footer">Войти</a>
+                    </div>
+                    <hr>
+                    <div class="first_categories">
+                        <a href="material_first.php" class="punkts-footer">Пиломатериалы</a>
+                        <a href="materials_scnd.php" class="punkts-footer">Материалы для отделки</a>
+                        <a href="materials_third.php" class="punkts-footer">Строительные материалы</a>
+                        <a href="materials_forth.php" class="punkts-footer">Инструменты и крепеж</a>
+                    </div>
+                </div>
+            </div>
+            <div class="information">
+                <div class="email_num">
+                    <div class="email">
+                        <img src="images/mail.png" class="info_img">
+                        <a href="mailto:lesdrive@mail.ru" class="address">lesdrive@mail.ru</a>
+                    </div>
+                    <div class="email">
+                        <img src="images/phone.png" class="info_img">
+                        <a href="tel:+79123456789" class="address">+7 (912) 345-67-89</a>
+                    </div>
+                </div>
+                <div class="email_num">
+                    <div class="email karts">
+                        <img src="images/karts.png" class="info_img kart">
+                        <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
+                    </div>
+                </div>
+            </div>
+            <p class="ooo">2024 ООО "Пиломаркет"<br>Информация на сайте не является публичной офертой</p>
+        </footer>
         <script src="upload-image.js"></script>
         <script src="custom-upload.js"></script>
 </body>
