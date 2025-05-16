@@ -368,7 +368,7 @@ select {
     color: white;
     width: 50%;
     padding: 15px;
-    border-radius: 0px 0px 0px 5px;
+    border-radius: 0px 0px 5px 5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -615,7 +615,7 @@ select {
 }
 .order-card-admin {
     gap: 40px;
-    width: 400px;
+    width: calc(33.33% - 15px);
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -639,11 +639,14 @@ select {
 .rejected-badge {
     width: 100%;
     background-color: #c0303e;
-    border-radius: 0px 0px 0px 5px;    
+    border-radius: 0px 0px 5px 5px;    
 }
 .three_orders {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Равномерное распределение карточек */
+    gap: 20px; /* Отступ между карточками */
+    flex-wrap: wrap; /* Перенос карточек на новую строку при необходимости */
+    margin-bottom: 30px; /* Отступ между группами карточек */
 }
   /* .place-order-button:hover {
     background-color: #dabf7a;
@@ -669,6 +672,19 @@ select {
     }
     .sign_inputs {
         font-size: 20px;
+    }
+    .order-card-admin {
+        gap: 0;
+    }
+    .order-header-admin span {
+        font-size: 14px;
+    }
+    .order_items {
+        font-size: 14px;
+    }
+    .order-items-admin {
+        font-size: 15px;
+        gap: 0;
     }
 }
 @media (max-width: 910px) {
@@ -711,6 +727,22 @@ select {
     }
     .dashboard {
         gap: 10px;
+    }
+    .order-card-admin {
+        width: calc(50% - 15px); /* Две карточки в строке */
+    }
+        .order-card-admin {
+        gap: 0;
+    }
+    .order-header-admin span {
+        font-size: 12px;
+    }
+    .order_items {
+        font-size: 14px;
+    }
+    .order-items-admin {
+        font-size: 15px;
+        gap: 0;
     }
 }
 @media (max-width: 768px) {
@@ -877,6 +909,12 @@ select {
     .bttn-save {
         margin-top: -20px;
     }
+    .order_items {
+        font-size: 12px;
+    }
+    .order-items-admin {
+        font-size: 12px;
+    }
 }
 @media (max-width: 450px) {
     .zag_login {
@@ -986,5 +1024,8 @@ select {
     .product-image-container {
         width: 100px;
         height: 70px;
+    }
+    .order-card-admin {
+        width: calc(100% - 15px); /* Две карточки в строке */
     }
 }
