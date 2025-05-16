@@ -34,22 +34,15 @@ $reviews_chunks = array_chunk($reviews, 3);
 
 // Получение заказов
 $stmt = $korzina_pdo->prepare("
-SELECT o.id AS order_id, o.name, o.phone, o.address, o.transport, o.total_price, o.created_at, o.is_approved
-FROM orders o
-ORDER BY o.created_at DESC
+    SELECT o.id AS order_id, o.name, o.phone, o.address, o.transport, o.total_price, o.created_at, o.is_approved
+    FROM orders o
+    ORDER BY o.created_at DESC
 ");
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($orders as &$order) {
-    $itemsStmt = $korzina_pdo->prepare("
-        SELECT product_name, product_price, quantity, service 
-        FROM order_items 
-        WHERE order_id = :order_id
-    ");
-    $itemsStmt->execute([':order_id' => $order['order_id']]);
-    $order['items'] = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
-}
+// Разделение заказов на группы по 3
+$order_chunks = array_chunk($orders, 3);
 
 // Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -353,71 +346,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Новый блок: Управление заказами -->
         <div class="admin-orders">
             <h1 class="zagolovok-offers">Управление заказами</h1>
-            <div class="all-admin-orders">
-            <?php if (empty($orders)): ?>
-                <p style="text-align: center; color: #777;">Нет заказов для обработки.</p>
-            <?php else: ?>
-                <?php foreach ($orders as $order): ?>
-                    <div class="order-card order-card-admin">
-                        <div class="order-header">
-                            <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
-                            <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
+                <?php if (empty($orders)): ?>
+                    <p style="text-align: center; color: #777;">Нет заказов для обработки.</p>
+                <?php else: ?>
+                    <?php foreach ($order_chunks as $chunk): ?>
+                        <div class="three_orders">
+                            <?php foreach ($chunk as $order): ?>
+                                <?php
+                                // Загрузка товаров для текущего заказа
+                                $itemsStmt = $korzina_pdo->prepare("
+                            SELECT product_name, product_price, quantity, service 
+                            FROM order_items 
+                            WHERE order_id = :order_id
+                        ");
+                                $itemsStmt->execute([':order_id' => $order['order_id']]);
+                                $order['items'] = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+                                ?>
+                                <div class="order-card order-card-admin">
+                                    <div class="order-header order-header-admin">
+                                        <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
+                                        <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
+                                    </div>
+                                    <div class="order-details">
+                                        <div class="info_orders">
+                                            <p class="order_items"><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
+                                            <p class="order_items"><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
+                                        </div>
+                                        <div class="info_orders">
+                                            <p class="order_items"><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
+                                            <p class="order_items"><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
+                                        </div>
+                                        <div class="info_orders">
+                                            <p class="order_items"><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
+                                            <p class="order_items"><strong>Статус:</strong>
+                                                <?php if ($order['is_approved'] == 0): ?>
+                                                    В обработке
+                                                <?php elseif ($order['is_approved'] == 1): ?>
+                                                    Одобрен
+                                                <?php else: ?>
+                                                    Отклонен
+                                                <?php endif; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="order-items order-items-admin">
+                                        <h3 class="order_items">Товары в заказе:</h3>
+                                        <ul class="order-items-admin">
+                                            <?php foreach ($order['items'] as $item): ?>
+                                                <li>
+                                                    <?= htmlspecialchars($item['product_name']) ?> -
+                                                    <?= htmlspecialchars($item['quantity']) ?> шт. по
+                                                    <?= htmlspecialchars(number_format($item['product_price'], 2)) ?> руб.
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                    <div class="moderation-actions">
+                                        <?php if ($order['is_approved'] == 0): ?>
+                                            <form method="POST" action="" class="inline-form">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
+                                                <button type="submit" name="approve_order" class="bttn-kind">Одобрить</button>
+                                            </form>
+                                            <form method="POST" action="" class="inline-form">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
+                                                <button type="submit" name="reject_order" class="bttn-delete">Отказаться</button>
+                                            </form>
+                                        <?php elseif ($order['is_approved'] == 1): ?>
+                                            <span class="approved-badge approved-badge-orders">Одобрен</span>
+                                        <?php else: ?>
+                                            <span class="rejected-badge approved-badge">Отклонен</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                        <div class="order-details">
-                            <div class="info_orders">
-                            <p class="order_items"><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
-                            <p class="order_items"><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
-                            </div>
-                            <div class="info_orders">
-                            <p class="order_items"><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
-                            <p class="order_items"><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
-                            </div>
-                            <div class="info_orders">
-                            <p class="order_items"><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
-                            <p class="order_items"><strong>Статус:</strong>
-                                <?php if ($order['is_approved'] == 0): ?>
-                                    В обработке
-                                <?php elseif ($order['is_approved'] == 1): ?>
-                                    Одобрен
-                                <?php else: ?>
-                                    Отклонен
-                                <?php endif; ?>
-                            </p>
-                            </div>
-                        </div>
-                        <div class="order-items order-items-admin">
-                            <h3 class="order_items">Товары в заказе:</h3>
-                            <ul class="order-items-admin">
-                                <?php foreach ($order['items'] as $item): ?>
-                                    <li>
-                                        <?= htmlspecialchars($item['product_name']) ?> -
-                                        <?= htmlspecialchars($item['quantity']) ?> шт. по
-                                        <?= htmlspecialchars(number_format($item['product_price'], 2)) ?> руб.
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                        <div class="moderation-actions">
-                            <?php if ($order['is_approved'] == 0): ?>
-                                <form method="POST" action="" class="inline-form">
-                                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
-                                    <button type="submit" name="approve_order" class="bttn-kind">Одобрить</button>
-                                </form>
-                                <form method="POST" action="" class="inline-form">
-                                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
-                                    <button type="submit" name="reject_order" class="bttn-delete">Отказаться</button>
-                                </form>
-                            <?php elseif ($order['is_approved'] == 1): ?>
-                                <span class="approved-badge approved-badge-orders">Одобрен</span>
-                            <?php else: ?>
-                                <span class="rejected-badge">Отклонен</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
-        </div>
         </main>
         <footer style="margin-top: 100px;">
             <div class="pages">

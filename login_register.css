@@ -603,30 +603,47 @@ select {
 }
 .order-details {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     gap: 15px;
+    padding: 15px;
 }
 .info_orders {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 10px;
 }
 .order-card-admin {
     gap: 40px;
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+}
+.order-header-admin {
+    padding: 15px;
 }
 .order-items-admin {
     display: flex;
     flex-direction: column;
     gap: 10px;
     font-size: 17px;
+    padding: 15px;
 }
 .approved-badge-orders {
     width: 100%;
 }
-.order_items {
-    font-size: 19px;
+.all-admin-orders {
+    display: flex;
+}
+.rejected-badge {
+    width: 100%;
+    background-color: #c0303e;
+    border-radius: 0px 0px 0px 5px;    
+}
+.three_orders {
+    display: flex;
+    justify-content: space-between;
 }
   /* .place-order-button:hover {
     background-color: #dabf7a;
