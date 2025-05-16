@@ -1,22 +1,18 @@
 <?php
 session_start();
-
 // Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
 }
-
 // Подключение к базе данных
 require_once 'db.php';
-
+require_once 'db_korzina.php';
 $successMessage = $_SESSION['successMessage'] ?? '';
 $errorMessage = $_SESSION['errorMessage'] ?? [];
-
 // Очистка сообщений после отображения
 unset($_SESSION['successMessage']);
 unset($_SESSION['errorMessage']);
-
 // Получение данных пользователя из базы данных
 $stmt = $pdo->prepare("
 SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
@@ -25,7 +21,6 @@ WHERE id = :id
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
 // Получение отзывов
 $stmt = $pdo->prepare("
 SELECT r.id, r.username, r.comment, r.created_at, r.is_approved, u.profile_image, u.image_type
@@ -36,6 +31,26 @@ ORDER BY r.created_at DESC
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $reviews_chunks = array_chunk($reviews, 3);
+
+// Получение заказов
+$stmt = $korzina_pdo->prepare("
+SELECT o.id AS order_id, o.name, o.phone, o.address, o.transport, o.total_price, o.created_at, o.is_approved
+FROM orders o
+ORDER BY o.created_at DESC
+");
+$stmt->execute();
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($orders as &$order) {
+    $itemsStmt = $korzina_pdo->prepare("
+        SELECT product_name, product_price, quantity, service 
+        FROM order_items 
+        WHERE order_id = :order_id
+    ");
+    $itemsStmt->execute([':order_id' => $order['order_id']]);
+    $order['items'] = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 // Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Обработка аватара
@@ -47,27 +62,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Чтение данных изображения
             $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
             $imageType = $_FILES['new_image']['type'];
-
             // Обновление изображения в базе данных
             $update_stmt = $pdo->prepare("
-    UPDATE users 
-    SET profile_image = :profile_image, 
-        image_type = :image_type 
-    WHERE id = :id
-");
+                UPDATE users 
+                SET profile_image = :profile_image, 
+                    image_type = :image_type 
+                WHERE id = :id
+            ");
             $update_stmt->execute([
                 ':profile_image' => $imageData,
                 ':image_type' => $imageType,
                 ':id' => $_SESSION['user_id']
             ]);
-
             // Обновление данных в сессии
             $_SESSION['profile_image'] = $imageData;
             $_SESSION['image_type'] = $imageType;
             $successMessage = "Изображение успешно обновлено!";
         }
     }
-
     // Обработка одобрения/удаления отзывов
     if (isset($_POST['approve'])) {
         $review_id = $_POST['review_id'];
@@ -75,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             UPDATE reviews 
             SET is_approved = 1 
             WHERE id = :id
-            ");
+        ");
         $update_stmt->execute([':id' => $review_id]);
         $_SESSION['successMessage'] = "Отзыв успешно одобрен!";
         header("Location: admin.php");
@@ -85,18 +97,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $delete_stmt = $pdo->prepare("
             DELETE FROM reviews 
             WHERE id = :id
-            ");
+        ");
         $delete_stmt->execute([':id' => $review_id]);
         $_SESSION['successMessage'] = "Отзыв успешно удален!";
         header("Location: admin.php");
         exit;
     }
+    // Обработка заказов
+    if (isset($_POST['approve_order'])) {
+        $order_id = $_POST['order_id'];
+        $update_stmt = $korzina_pdo->prepare("
+            UPDATE orders 
+            SET is_approved = 1 
+            WHERE id = :id
+        ");
+        $update_stmt->execute([':id' => $order_id]);
+        $_SESSION['successMessage'] = "Заказ успешно одобрен!";
+        header("Location: admin.php");
+        exit;
+    } elseif (isset($_POST['reject_order'])) {
+        $order_id = $_POST['order_id'];
+        $update_stmt = $korzina_pdo->prepare("
+            UPDATE orders 
+            SET is_approved = -1 
+            WHERE id = :id
+        ");
+        $update_stmt->execute([':id' => $order_id]);
+        $_SESSION['successMessage'] = "Заказ успешно отклонен!";
+        header("Location: admin.php");
+        exit;
+    }
+
+    // Обновление данных пользователя
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $middle_name = trim($_POST['middle_name']);
     $phone = trim($_POST['phone']);
     $address = trim($_POST['address']);
-
     if (empty($first_name)) {
         $errorMessage[] = "Поле 'Имя' обязательно для заполнения.";
     }
@@ -106,7 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($phone) && !preg_match('/^\+?[0-9]{10,15}$/', $phone)) {
         $errorMessage[] = "Некорректный формат телефона.";
     }
-
     if (empty($errorMessage)) {
         // Обновление данных пользователя в базе данных
         $update_stmt = $pdo->prepare("
@@ -117,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 phone = :phone, 
                 address = :address 
             WHERE id = :id
-            ");
+        ");
         $update_stmt->execute([
             ':first_name' => $first_name ?: null,
             ':last_name' => $last_name ?: null,
@@ -126,14 +162,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':address' => $address ?: null,
             ':id' => $_SESSION['user_id']
         ]);
-
         // Обновление данных в сессии
         $_SESSION['first_name'] = $first_name ?: null;
         $_SESSION['last_name'] = $last_name ?: null;
         $_SESSION['middle_name'] = $middle_name ?: null;
         $_SESSION['phone'] = $phone ?: null;
         $_SESSION['address'] = $address ?: null;
-
         $_SESSION['successMessage'] = "Данные успешно обновлены!";
         header("Location: admin.php");
         exit;
@@ -144,10 +178,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -156,7 +188,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" href="images/logo.png">
     <title>Личный кабинет</title>
 </head>
-
 <body>
     <div class="create-line">
         <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)" class="header-admin">
@@ -259,10 +290,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="info-product">
                     <label for="product_name" class="sign_product">Название товара:</label>
                     <input type="text" id="product_name" name="product_name" class="register login" required>
-
                     <label for="product_price" class="sign_product">Цена товара (в рублях):</label>
                     <input type="number" step="0.01" id="product_price" name="product_price" class="register login" required>
-
                     <label for="product_category" class="sign_product">Категория (страница):</label>
                     <select id="product_category" name="product_category" required>
                         <option value="page1">Страница 1 (Пиломатериалы)</option>
@@ -276,7 +305,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="comments" style="padding: 0;">
             <h1 class="zagolovok-offers">Модерация отзывов</h1>
-
             <?php if (empty($reviews)): ?>
                 <p style="text-align: center; color: #777;">Нет отзывов для модерации.</p>
             <?php else: ?>
@@ -319,6 +347,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
+
+        <!-- Новый блок: Управление заказами -->
+        <div class="admin-orders">
+            <h1 class="zagolovok-offers">Управление заказами</h1>
+            <?php if (empty($orders)): ?>
+                <p style="text-align: center; color: #777;">Нет заказов для обработки.</p>
+            <?php else: ?>
+                <?php foreach ($orders as $order): ?>
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
+                            <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
+                        </div>
+                        <div class="order-details">
+                            <p><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
+                            <p><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
+                            <p><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
+                            <p><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
+                            <p><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
+                            <p><strong>Статус:</strong>
+                                <?php if ($order['is_approved'] == 0): ?>
+                                    В обработке
+                                <?php elseif ($order['is_approved'] == 1): ?>
+                                    Одобрен
+                                <?php else: ?>
+                                    Отклонен
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <div class="order-items">
+                            <h3>Товары в заказе:</h3>
+                            <ul>
+                                <?php foreach ($order['items'] as $item): ?>
+                                    <li>
+                                        <?= htmlspecialchars($item['product_name']) ?> - 
+                                        <?= htmlspecialchars($item['quantity']) ?> шт. по 
+                                        <?= htmlspecialchars(number_format($item['product_price'], 2)) ?> руб.
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="moderation-actions">
+                            <?php if ($order['is_approved'] == 0): ?>
+                                <form method="POST" action="" class="inline-form">
+                                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
+                                    <button type="submit" name="approve_order" class="bttn-kind">Одобрить</button>
+                                </form>
+                                <form method="POST" action="" class="inline-form">
+                                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
+                                    <button type="submit" name="reject_order" class="bttn-delete">Отказаться</button>
+                                </form>
+                            <?php elseif ($order['is_approved'] == 1): ?>
+                                <span class="approved-badge">Одобрен</span>
+                            <?php else: ?>
+                                <span class="rejected-badge">Отклонен</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
         </main>
         <footer style="margin-top: 100px;">
             <div class="pages">
@@ -354,7 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="email_num">
                     <div class="email karts">
                         <img src="images/karts.png" class="info_img kart">
-                        <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
+                        <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64 " class="address">г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13</a>
                     </div>
                 </div>
             </div>
@@ -363,5 +452,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script src="upload-image.js"></script>
         <script src="custom-upload.js"></script>
 </body>
-
 </html>

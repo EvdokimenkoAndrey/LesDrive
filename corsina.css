@@ -140,7 +140,7 @@ header {
 
   .quantity-form {
     display: flex;
-    gap: 30px;
+    gap: 10px;
     align-items: center;
   }
 
