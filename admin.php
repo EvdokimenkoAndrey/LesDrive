@@ -180,6 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,6 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" href="images/logo.png">
     <title>Личный кабинет</title>
 </head>
+
 <body>
     <div class="create-line">
         <header style="box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1)" class="header-admin">
@@ -351,22 +353,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Новый блок: Управление заказами -->
         <div class="admin-orders">
             <h1 class="zagolovok-offers">Управление заказами</h1>
+            <div class="all-admin-orders">
             <?php if (empty($orders)): ?>
                 <p style="text-align: center; color: #777;">Нет заказов для обработки.</p>
             <?php else: ?>
                 <?php foreach ($orders as $order): ?>
-                    <div class="order-card">
+                    <div class="order-card order-card-admin">
                         <div class="order-header">
                             <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
                             <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
                         </div>
                         <div class="order-details">
-                            <p><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
-                            <p><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
-                            <p><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
-                            <p><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
-                            <p><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
-                            <p><strong>Статус:</strong>
+                            <div class="info_orders">
+                            <p class="order_items"><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
+                            <p class="order_items"><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
+                            </div>
+                            <div class="info_orders">
+                            <p class="order_items"><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
+                            <p class="order_items"><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
+                            </div>
+                            <div class="info_orders">
+                            <p class="order_items"><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
+                            <p class="order_items"><strong>Статус:</strong>
                                 <?php if ($order['is_approved'] == 0): ?>
                                     В обработке
                                 <?php elseif ($order['is_approved'] == 1): ?>
@@ -375,14 +383,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     Отклонен
                                 <?php endif; ?>
                             </p>
+                            </div>
                         </div>
-                        <div class="order-items">
-                            <h3>Товары в заказе:</h3>
-                            <ul>
+                        <div class="order-items order-items-admin">
+                            <h3 class="order_items">Товары в заказе:</h3>
+                            <ul class="order-items-admin">
                                 <?php foreach ($order['items'] as $item): ?>
                                     <li>
-                                        <?= htmlspecialchars($item['product_name']) ?> - 
-                                        <?= htmlspecialchars($item['quantity']) ?> шт. по 
+                                        <?= htmlspecialchars($item['product_name']) ?> -
+                                        <?= htmlspecialchars($item['quantity']) ?> шт. по
                                         <?= htmlspecialchars(number_format($item['product_price'], 2)) ?> руб.
                                     </li>
                                 <?php endforeach; ?>
@@ -399,7 +408,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <button type="submit" name="reject_order" class="bttn-delete">Отказаться</button>
                                 </form>
                             <?php elseif ($order['is_approved'] == 1): ?>
-                                <span class="approved-badge">Одобрен</span>
+                                <span class="approved-badge approved-badge-orders">Одобрен</span>
                             <?php else: ?>
                                 <span class="rejected-badge">Отклонен</span>
                             <?php endif; ?>
@@ -407,6 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            </div>
         </div>
         </main>
         <footer style="margin-top: 100px;">
@@ -452,4 +462,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script src="upload-image.js"></script>
         <script src="custom-upload.js"></script>
 </body>
+
 </html>

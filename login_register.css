@@ -596,6 +596,38 @@ select {
 .pickup-map .address:hover {
     text-decoration: underline;
 }
+.admin-orders {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+.order-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
+}
+.info_orders {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.order-card-admin {
+    gap: 40px;
+}
+.order-items-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 17px;
+}
+.approved-badge-orders {
+    width: 100%;
+}
+.order_items {
+    font-size: 19px;
+}
   /* .place-order-button:hover {
     background-color: #dabf7a;
   } */
