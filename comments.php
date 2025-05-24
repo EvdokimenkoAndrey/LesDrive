@@ -3,7 +3,6 @@ session_start();
 
 require_once 'db.php';
 
-// Получение только одобренных отзывов из базы данных с аватарами пользователей
 $stmt = $pdo->prepare("
     SELECT r.id, r.username, r.comment, r.created_at, u.profile_image, u.image_type
     FROM reviews r
@@ -14,7 +13,6 @@ $stmt = $pdo->prepare("
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Разделение отзывов на группы по 3 отзыва
 $reviews_chunks = array_chunk($reviews, 3);
 ?>
 <!DOCTYPE html>
@@ -69,24 +67,27 @@ $reviews_chunks = array_chunk($reviews, 3);
       <?php if (empty($reviews)): ?>
         <p style="text-align: center; color: #777;">Пока нет одобренных отзывов.</p>
       <?php else: ?>
-        <!-- Отображение отзывов в контейнерах по 3 отзыва -->
         <?php foreach ($reviews_chunks as $chunk): ?>
           <div class="three_comments">
             <?php foreach ($chunk as $review): ?>
               <div class="first-comment">
                 <div class="class1-comments">
-                  <!-- Отображение аватара пользователя -->
-                  <?php if (!empty($review['profile_image']) && !empty($review['image_type'])): ?>
-                    <img src="data:<?php echo htmlspecialchars($review['image_type']); ?>;base64,<?php echo base64_encode($review['profile_image']); ?>"
+                  <?php if (!empty($review['profile_image']) && 
+                  !empty($review['image_type'])): ?>
+                    <img src="data:<?php echo 
+                    htmlspecialchars($review['image_type']); ?>;base64,
+                    <?php echo base64_encode($review['profile_image']); ?>"
                       alt="Avatar" class="image-comment1">
                   <?php else: ?>
-                    <img src="images/default_avatar.png" alt="Default Avatar" class="image-comment1">
+                    <img src="images/default_avatar.png" alt="Default Avatar" 
+                    class="image-comment1">
                   <?php endif; ?>
                   <h2><?= htmlspecialchars($review['username']) ?></h2>
                 </div>
                 <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
                 <small>
-                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
+                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', 
+                  strtotime($review['created_at']))) ?>
                 </small>
               </div>
             <?php endforeach; ?>
@@ -94,9 +95,9 @@ $reviews_chunks = array_chunk($reviews, 3);
         <?php endforeach; ?>
       <?php endif; ?>
       <a href="write_comment.php" class="punkts watch">
-      <button class="choose_reviews">
-        Написать рецензию
-      </button></a>
+        <button class="choose_reviews">
+          Написать рецензию
+        </button></a>
     </div>
     <footer>
       <div class="pages">

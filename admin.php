@@ -1,47 +1,44 @@
 <?php
 session_start();
-// Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
 }
-// Подключение к базе данных
 require_once 'db.php';
 require_once 'db_korzina.php';
+
 $successMessage = $_SESSION['successMessage'] ?? '';
 $errorMessage = $_SESSION['errorMessage'] ?? [];
-// Очистка сообщений после отображения
+
 unset($_SESSION['successMessage']);
 unset($_SESSION['errorMessage']);
-// Получение данных пользователя из базы данных
 $stmt = $pdo->prepare("
-SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
-FROM users 
-WHERE id = :id
+    SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
+    FROM users 
+    WHERE id = :id
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // Получение отзывов
 $stmt = $pdo->prepare("
-SELECT r.id, r.username, r.comment, r.created_at, r.is_approved, u.profile_image, u.image_type
-FROM reviews r
-LEFT JOIN users u ON r.user_id = u.id
-ORDER BY r.created_at DESC
+    SELECT r.id, r.username, r.comment, r.created_at, r.is_approved, u.profile_image, u.image_type
+    FROM reviews r
+    LEFT JOIN users u ON r.user_id = u.id
+    ORDER BY r.created_at DESC
 ");
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $reviews_chunks = array_chunk($reviews, 3);
 
-// Получение заказов
 $stmt = $korzina_pdo->prepare("
-    SELECT o.id AS order_id, o.name, o.phone, o.address, o.transport, o.total_price, o.created_at, o.is_approved
+    SELECT o.id AS order_id, o.name, o.phone, o.address, 
+    o.transport, o.total_price, o.created_at, o.is_approved
     FROM orders o
     ORDER BY o.created_at DESC
 ");
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Разделение заказов на группы по 3
 $order_chunks = array_chunk($orders, 3);
 
 // Обработка POST-запроса
@@ -73,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $successMessage = "Изображение успешно обновлено!";
         }
     }
-    // Обработка одобрения/удаления отзывов
     if (isset($_POST['approve'])) {
         $review_id = $_POST['review_id'];
         $update_stmt = $pdo->prepare("
@@ -96,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: admin.php");
         exit;
     }
-    // Обработка заказов
     if (isset($_POST['approve_order'])) {
         $order_id = $_POST['order_id'];
         $update_stmt = $korzina_pdo->prepare("
@@ -231,7 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="profile-image-container" id="profile-image-container">
                         <?php if (!empty($_SESSION['profile_image'])): ?>
                             <label for="new_image" class="profile-image-label">
-                                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" alt="Profile Image" class="profile-image clickable" id="current-profile-image">
+                                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); 
+                                ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" 
+                                alt="Profile Image" class="profile-image clickable" id="current-profile-image">
                             </label>
                         <?php endif; ?>
                         <input type="file" id="new_image" name="new_image" accept="image/jpeg, image/png, image/gif" style="display: none;">
@@ -276,7 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="add-product bttn-save">Сохранить изменения</button>
         </form>
         <div class="form-product">
-            <form action="admin_add_product" method="POST" class="inputs_product" enctype="multipart/form-data">
+            <form action="admin_add_product" method="POST" class="inputs_product" 
+            enctype="multipart/form-data">
                 <h1 class="zagolovok-add">Добавление нового товара</h1>
                 <label for="image-upload" class="custom-upload">
                     <i>+</i>
@@ -284,9 +282,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="file" id="image-upload" accept="image/*" name="product_image">
                 <div class="info-product">
                     <label for="product_name" class="sign_product">Название товара:</label>
-                    <input type="text" id="product_name" name="product_name" class="register login" required>
+                    <input type="text" id="product_name" name="product_name" 
+                    class="register login" required>
                     <label for="product_price" class="sign_product">Цена товара (в рублях):</label>
-                    <input type="number" step="0.01" id="product_price" name="product_price" class="register login" required>
+                    <input type="number" step="0.01" id="product_price" name="product_price" 
+                    class="register login" required>
                     <label for="product_category" class="sign_product">Категория (страница):</label>
                     <select id="product_category" name="product_category" required>
                         <option value="page1">Страница 1 (Пиломатериалы)</option>
@@ -303,18 +303,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if (empty($reviews)): ?>
                 <p style="text-align: center; color: #777;">Нет отзывов для модерации.</p>
             <?php else: ?>
-                <!-- Отображение отзывов в контейнерах по 3 отзыва -->
                 <?php foreach ($reviews_chunks as $chunk): ?>
                     <div class="three_comments">
                         <?php foreach ($chunk as $review): ?>
                             <div class="first-comment">
                                 <div class="class1-comments">
-                                    <!-- Отображение аватара пользователя -->
-                                    <?php if (!empty($review['profile_image']) && !empty($review['image_type'])): ?>
-                                        <img src="data:<?php echo htmlspecialchars($review['image_type']); ?>;base64,<?php echo base64_encode($review['profile_image']); ?>"
+                                    <?php if (!empty($review['profile_image']) && 
+                                    !empty($review['image_type'])): ?>
+                                        <img src="data:<?php 
+                                        echo htmlspecialchars($review['image_type']); ?>;base64,
+                                        <?php echo base64_encode($review['profile_image']); ?>"
                                             alt="Avatar" class="image-comment1">
                                     <?php else: ?>
-                                        <img src="images/default_avatar.png" alt="Default Avatar" class="image-comment1">
+                                        <img src="images/default_avatar.png" alt="Default Avatar" 
+                                        class="image-comment1">
                                     <?php endif; ?>
                                     <h2><?= htmlspecialchars($review['username']) ?></h2>
                                 </div>
@@ -343,7 +345,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         </div>
 
-        <!-- Новый блок: Управление заказами -->
         <div class="admin-orders">
             <h1 class="zagolovok-offers">Управление заказами</h1>
             <?php if (empty($orders)): ?>
@@ -353,7 +354,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="three_orders">
                         <?php foreach ($chunk as $order): ?>
                             <?php
-                            // Загрузка товаров для текущего заказа
                             $itemsStmt = $korzina_pdo->prepare("
                             SELECT product_name, product_price, quantity, service 
                             FROM order_items 
@@ -369,15 +369,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div class="order-details">
                                     <div class="info_orders">
-                                        <p class="order_items"><strong>Пользователь:</strong> <?= htmlspecialchars($order['name']) ?></p>
-                                        <p class="order_items"><strong>Телефон:</strong> <?= htmlspecialchars($order['phone']) ?></p>
+                                        <p class="order_items"><strong>Пользователь:</strong> 
+                                        <?= htmlspecialchars($order['name']) ?></p>
+                                        <p class="order_items"><strong>Телефон:</strong> 
+                                        <?= htmlspecialchars($order['phone']) ?></p>
                                     </div>
                                     <div class="info_orders">
-                                        <p class="order_items"><strong>Адрес доставки:</strong> <?= htmlspecialchars($order['address']) ?></p>
-                                        <p class="order_items"><strong>Транспорт:</strong> <?= htmlspecialchars($order['transport']) ?></p>
+                                        <p class="order_items"><strong>Адрес доставки:</strong> 
+                                        <?= htmlspecialchars($order['address']) ?></p>
+                                        <p class="order_items"><strong>Транспорт:</strong> 
+                                        <?= htmlspecialchars($order['transport']) ?></p>
                                     </div>
                                     <div class="info_orders">
-                                        <p class="order_items"><strong>Общая стоимость:</strong> <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
+                                        <p class="order_items"><strong>Общая стоимость:</strong> 
+                                        <?= htmlspecialchars(number_format($order['total_price'], 2)) ?> руб.</p>
                                         <p class="order_items"><strong>Статус:</strong>
                                             <?php if ($order['is_approved'] == 0): ?>
                                                 В обработке
@@ -404,12 +409,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="moderation-actions">
                                     <?php if ($order['is_approved'] == 0): ?>
                                         <form method="POST" action="" class="inline-form">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
-                                            <button type="submit" name="approve_order" class="bttn-kind">Одобрить</button>
+                                            <input type="hidden" name="order_id" value="<?= 
+                                            htmlspecialchars($order['order_id']) ?>">
+                                            <button type="submit" name="approve_order" 
+                                            class="bttn-kind">Одобрить</button>
                                         </form>
                                         <form method="POST" action="" class="inline-form">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
-                                            <button type="submit" name="reject_order" class="bttn-delete">Отказаться</button>
+                                            <input type="hidden" name="order_id" value="<?= 
+                                            htmlspecialchars($order['order_id']) ?>">
+                                            <button type="submit" name="reject_order" 
+                                            class="bttn-delete">Отказаться</button>
                                         </form>
                                     <?php elseif ($order['is_approved'] == 1): ?>
                                         <span class="approved-badge approved-badge-orders">Одобрен</span>

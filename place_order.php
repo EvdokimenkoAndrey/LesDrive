@@ -3,22 +3,18 @@ session_start();
 require_once 'db.php';
 require_once "db_korzina.php";
 
-// Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
   header("Location: login-form.php");
   exit;
 }
 
 try {
-  // Получаем ID текущего пользователя из сессии
   $userId = $_SESSION['user_id'];
 
-  // Получаем все товары из корзины
   $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id");
   $stmt->execute(['user_id' => $userId]);
   $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  // Вычисляем общее количество товаров и общую стоимость
   $totalQuantity = 0;
   $totalPrice = 0;
 
@@ -35,7 +31,6 @@ try {
     $transportPrice = (float)$transportPrice;
   }
 
-  // Вычисляем общую стоимость с учетом транспорта
   $finalTotalPrice = $totalPrice + $transportPrice;
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -87,61 +82,69 @@ try {
       <h1>Оформление заказа</h1>
       <form action="confirm_order" method="POST" class="order-form">
         <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" value="<?= htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
+        <input type="text" id="name" name="name" value="<?= 
+        htmlspecialchars($_SESSION['first_name'] ?? '') ?>">
 
         <label for="phone">Телефон:</label>
-        <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($_SESSION['phone']) ?>">
+        <input type="text" id="phone" name="phone" value="<?= 
+        htmlspecialchars($_SESSION['phone']) ?>">
 
         <label for="address">Адрес доставки:</label>
-        <textarea id="address" name="address" rows="4" required><?= htmlspecialchars($_SESSION['address']) ?></textarea>
+        <textarea id="address" name="address" rows="4" required><?= 
+        htmlspecialchars($_SESSION['address']) ?></textarea>
 
         <label for="address">Доставка:</label>
-
         <div class="delivery-order">
           <div class="three-transports">
             <div class="transport">
-              <input type="radio" name="transport" id="truck" class="transport-radio" value="Грузовой автомобиль|500">
+              <input type="radio" name="transport" id="truck" class="transport-radio" 
+              value="Грузовой автомобиль|500">
               <p class="transports">Грузовой автомобиль (500 руб.)</p>
             </div>
             <div class="transport">
-              <input type="radio" name="transport" id="gazel" class="transport-radio" value="Газель|300">
+              <input type="radio" name="transport" id="gazel" class="transport-radio" 
+              value="Газель|300">
               <p class="transports">Газель (300 руб.)</p>
             </div>
             <div class="transport">
-              <input type="radio" name="transport" id="forest-truck" class="transport-radio" value="Лесовоз|700">
+              <input type="radio" name="transport" id="forest-truck" class="transport-radio" 
+              value="Лесовоз|700">
               <p class="transports">Лесовоз (700 руб.)</p>
             </div>
           </div>
           <div class="three-transports">
             <div class="transport">
-              <input type="radio" name="transport" id="manipulator" class="transport-radio" value="Манипуляторы|600">
+              <input type="radio" name="transport" id="manipulator" class="transport-radio" 
+              value="Манипуляторы|600">
               <p class="transports">Манипуляторы (600 руб.)</p>
             </div>
             <div class="transport">
-              <input type="radio" name="transport" id="furgon" class="transport-radio" value="Автомобиль с кузовом-фургоном|400">
+              <input type="radio" name="transport" id="furgon" class="transport-radio" 
+              value="Автомобиль с кузовом-фургоном|400">
               <p class="transports">Автомобиль с кузовом-фургоном (400 руб.)</p>
             </div>
             <div class="transport">
-              <input type="radio" name="transport" id="refrigerator" class="transport-radio" value="Рефрижераторы|800">
+              <input type="radio" name="transport" id="refrigerator" class="transport-radio" 
+              value="Рефрижераторы|800">
               <p class="transports">Рефрижераторы (800 руб.)</p>
             </div>
           </div>
           <div class="transport">
-            <input type="radio" name="transport" id="pickup" class="transport-radio" value="Самовывоз|0">
+            <input type="radio" name="transport" id="pickup" class="transport-radio" 
+            value="Самовывоз|0">
             <p class="transports">Самовывоз (бесплатно)</p>
           </div>
         </div>
 
-        <!-- Блок с картой -->
         <div class="pickup-map" style="display: none;">
           <div class="email karts">
             <img src="images/karts.png" class="kart">
-            <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" class="address">
+            <a href="https://yandex.ru/maps/213/moscow/house/protopopovskiy_pereulok_19s12/Z04YcARpTUcPQFtvfXt5cHtqZw==/?indoorLevel=1&ll=37.639428%2C55.781793&z=16.64" 
+            class="address">
               г. Москва, пер. Протопоповский, д. 19 стр. 12, эт/ком 3/13
             </a>
           </div>
         </div>
-        <!-- Информация о заказе -->
         <div class="order-summary">
           <p>Количество товаров: <span id="total-quantity"><?= $totalQuantity ?></span></p>
           <p>Стоимость товаров: <span id="product-price"><?= number_format($totalPrice, 2) ?> руб.</span></p>

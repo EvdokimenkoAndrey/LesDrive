@@ -14,7 +14,6 @@ session_start();
 
 <body>
   <main>
-    <div class="create-line">
       <header>
         <div class="menu">
           <div class="Logo">
@@ -33,7 +32,9 @@ session_start();
             <a href="login-form.php">
               <?php
               if (isset($_SESSION['user_id'])) : ?>
-                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
+                <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,
+                <?php echo base64_encode($_SESSION['profile_image']); ?>" 
+                class="korzina profile-image"></a>
           <?php else: ?>
             <img src="images/LogIn.png" class="korzina"></a>
           <?php endif; ?>
@@ -118,5 +119,4 @@ session_start();
     </footer>
   </main>
 </body>
-
 </html>

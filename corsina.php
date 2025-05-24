@@ -87,24 +87,31 @@ try {
                 <?php foreach ($cartItems as $item): ?>
                   <div class="cart-item">
                     <div class="cart-item-top">
-                      <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
+                      <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= 
+                      htmlspecialchars($item['product_name']) ?>" class="cart_item_img">
                       <div class="cart-item-details">
                         <div class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></div>
-                        <div class="cart-item-price">Цена за шт: <?= number_format($item['product_price'], 2) ?> руб.</div>
+                        <div class="cart-item-price">Цена за шт: 
+                          <?= number_format($item['product_price'], 2) 
+                        ?> руб.</div>
                         <div class="cart-item-service">
-                          Услуга: <?= $item['service'] ? htmlspecialchars($item['service']) : 'Без услуги' ?>
+                          Услуга: <?= $item['service'] ? htmlspecialchars($item['service'])
+                           : 'Без услуги' ?>
                         </div>
                       </div>
                     </div>
                     <div class="cart-item-bottom">
-                      <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * $item['quantity'], 2) ?> руб.</div>
+                      <div class="cart-item-total">Общая цена: <?= number_format($item['product_price'] * 
+                      $item['quantity'], 2) ?> руб.</div>
                       <div class="control">
                         <div class="quantity-control">
                           <form action="update_quantity" method="POST" class="quantity-form">
                             <input type="hidden" name="cart_item_id" value="<?= $item['id'] ?>">
-                            <button type="submit" name="action" value="decrease" class="quantity-button minus">-</button>
+                            <button type="submit" name="action" value="decrease" class="quantity-button minus">
+                              -</button>
                             <span class="quantity-value"><?= $item['quantity'] ?></span>
-                            <button type="submit" name="action" value="increase" class="quantity-button plus">+</button>
+                            <button type="submit" name="action" value="increase" class="quantity-button plus">
+                              +</button>
                           </form>
                         </div>
                         <form action="delete_corsina" method="POST" class="delete-form">
@@ -122,8 +129,10 @@ try {
                 <h2 class="zagolovok_order">Оформление заказа</h2>
                 <form action="place_order" method="POST" class="checkout-form">
                   <div class="order-summary">
-                    <p>Количество товаров: <span class="total-quantity"><?= $totalQuantity ?></span></p>
-                    <p>Общая стоимость: <span class="total-price"><?= number_format($totalPrice, 2) ?> руб.</span></p>
+                    <p>Количество товаров: <span class="total-quantity"><?= $totalQuantity ?>
+                  </span></p>
+                    <p>Общая стоимость: <span class="total-price"><?= number_format($totalPrice, 2) 
+                    ?> руб.</span></p>
                   </div>
                   <button type="submit" class="place-order-button">Перейти к оформлению</button>
                 </form>

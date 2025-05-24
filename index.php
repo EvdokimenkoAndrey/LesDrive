@@ -3,7 +3,6 @@ session_start();
 
 require_once 'db.php';
 
-// Получение только одобренных отзывов из базы данных с аватарами пользователей
 $stmt = $pdo->prepare("
     SELECT r.id, r.username, r.comment, r.created_at, u.profile_image, u.image_type
     FROM reviews r
@@ -15,7 +14,6 @@ $stmt = $pdo->prepare("
 $stmt->execute();
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Разделение отзывов на группы по 3 отзыва
 $reviews_chunks = array_chunk($reviews, 3);
 ?>
 <!DOCTYPE html>
@@ -50,7 +48,8 @@ $reviews_chunks = array_chunk($reviews, 3);
         <?php
             if (isset($_SESSION['user_id'])) : ?>
               <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']);
-              ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" class="korzina profile-image"></a>
+              ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" 
+              class="korzina profile-image"></a>
         <?php else: ?>
           <img src="images/LogIn.png" class="korzina"></a>
         <?php endif; ?>
@@ -68,28 +67,29 @@ $reviews_chunks = array_chunk($reviews, 3);
         <div class="slider">
           <div class="slides">
             <img src="images/header-image 1.png" class="slide-image">
-            <div class="text-slider">Весеняя распродажа! Скидки до 25% на пиломатериалы для строительства.</div>
+            <div class="text-slider">Весеняя распродажа! Скидки до 25% на 
+              пиломатериалы для строительства.</div>
           </div>
           <div class="slides">
             <img src="images/header-image 2.png" class="slide-image">
-            <div class="text-slider">Доставим материалы за 24 часа! Удобный расчет стоимости онлайн.</div>
+            <div class="text-slider">Доставим материалы за 24 часа! Удобный 
+              расчет стоимости онлайн.</div>
           </div>
           <div class="slides">
             <img src="images/header-image 3.png" class="slide-image">
-            <div class="text-slider">Идеальные размеры для вашего проекта! Бесплатный распил при заказе от 50 м³.</div>
+            <div class="text-slider">Идеальные размеры для вашего проекта! 
+              Бесплатный распил при заказе от 50 м³.</div>
           </div>
           <div class="slides">
             <img src="images/header-image 4.png" class="slide-image">
-            <div class="text-slider">100% качество — проверено временем! Достойная гарантия на все товары.</div>
+            <div class="text-slider">100% качество — проверено временем! 
+              Достойная гарантия на все товары.</div>
           </div>
           <div class="slides">
             <img src="images/header-image 5.png" class="slide-image">
-            <div class="text-slider">В продаже: эксклюзивные породы древесины для дизайнерских проектов!</div>
+            <div class="text-slider">В продаже: эксклюзивные породы 
+              древесины для дизайнерских проектов!</div>
           </div>
-          <!-- <div class="slides">
-            <img src="images/header-image 3.png" class="slide-image">
-            <div class="text-slider">Идеальные размеры для вашего проекта! Бесплатный распил при заказе от 50 м³.</div>
-          </div> -->
         </div>
       </div>
       <div class="bttn-slider">
@@ -99,9 +99,11 @@ $reviews_chunks = array_chunk($reviews, 3);
     </div>
     <div class="div-forest">
       <img src="images/forest.png" class="forest">
-      <div class="animated-text" id="textContainer">ЛесДрайв — ваш проводник в мире качественных лесоматериалов. Мы
-        предоставляем всё необходимое для строительства, отделки и уникальных проектов. Наша миссия — помогать вам
-        реализовывать идеи, предлагая материалы, которым можно доверять. С нами легко строить, создавая прочное будущее!
+      <div class="animated-text" id="textContainer">ЛесДрайв — ваш проводник 
+        в мире качественных лесоматериалов. Мы предоставляем всё необходимое 
+        для строительства, отделки и уникальных проектов. Наша миссия — 
+        помогать вам реализовывать идеи, предлагая материалы, которым 
+        можно доверять. С нами легко строить, создавая прочное будущее!
       </div>
     </div>
     <div class="products">
@@ -120,7 +122,8 @@ $reviews_chunks = array_chunk($reviews, 3);
           <div class="brusok-class">
             <div>
               <h1>Брусок</h1>
-              <p class="des-brusok">Идеальный брусок для каркасного строительства</p>
+              <p class="des-brusok">Идеальный брусок для каркасного 
+                строительства</p>
             </div>
             <a class="link-materials" href="materials_first.php">
               <button class="buy">Купить</button></a>
@@ -131,7 +134,8 @@ $reviews_chunks = array_chunk($reviews, 3);
           <div class="brusok-class parket" id="brusok-class"">
             <div>
               <h1>Плинтус</h1>
-              <p class=" des-brusok">Качественный деревянный плинтус для пола</p>
+              <p class=" des-brusok">Качественный деревянный плинтус 
+                для пола</p>
           </div>
           <a class="link-materials" href="materials_third.php">
             <button class="buy">Купить</button></a>
@@ -142,7 +146,8 @@ $reviews_chunks = array_chunk($reviews, 3);
         <div class="brusok-class" id="brusok-class">
           <div>
             <h1>Рубанок</h1>
-            <p class="des-brusok">Надежный электрический рубанок мощностью 750 Вт</p>
+            <p class="des-brusok">Надежный электрический рубанок 
+              мощностью 750 Вт</p>
           </div>
           <a class="link-materials" href="materials_first.php">
             <button class="buy">Купить</button></a>
@@ -162,24 +167,28 @@ $reviews_chunks = array_chunk($reviews, 3);
       <?php if (empty($reviews)): ?>
         <p style="text-align: center; color: #777;">Пока нет одобренных отзывов.</p>
       <?php else: ?>
-        <!-- Отображение отзывов в контейнерах по 3 отзыва -->
         <?php foreach ($reviews_chunks as $chunk): ?>
           <div class="three_comments">
             <?php foreach ($chunk as $review): ?>
               <div class="first-comment">
                 <div class="class1-comments">
-                  <!-- Отображение аватара пользователя -->
-                  <?php if (!empty($review['profile_image']) && !empty($review['image_type'])): ?>
-                    <img src="data:<?php echo htmlspecialchars($review['image_type']); ?>;base64,<?php echo base64_encode($review['profile_image']); ?>"
+                  <?php if (!empty($review['profile_image']) && 
+                  !empty($review['image_type'])): ?>
+                    <img src="data:<?php echo 
+                    htmlspecialchars($review['image_type']); ?>;base64,
+                    <?php echo base64_encode($review['profile_image']); ?>"
                       alt="Avatar" class="image-comment1">
                   <?php else: ?>
-                    <img src="images/default_avatar.png" alt="Default Avatar" class="image-comment1">
+                    <img src="images/default_avatar.png" alt="Default Avatar" 
+                    class="image-comment1">
                   <?php endif; ?>
                   <h2><?= htmlspecialchars($review['username']) ?></h2>
                 </div>
-                <p class="text-comment1"><?= htmlspecialchars($review['comment']) ?></p>
+                <p class="text-comment1"><?= 
+                htmlspecialchars($review['comment']) ?></p>
                 <small>
-                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', strtotime($review['created_at']))) ?>
+                  Опубликовано: <?= htmlspecialchars(date('d.m.Y H:i', 
+                  strtotime($review['created_at']))) ?>
                 </small>
               </div>
             <?php endforeach; ?>
@@ -200,7 +209,9 @@ $reviews_chunks = array_chunk($reviews, 3);
             <span class="toggle-icon">+</span>
           </div>
           <div class="answer">
-            Да, мы осуществляем доставку по всему региону и в соседние области. Для удаленных районов сроки и стоимость доставки уточняются индивидуально. </div>
+            Да, мы осуществляем доставку по всему региону и в соседние области. 
+            Для удаленных районов сроки и стоимость доставки уточняются 
+            индивидуально. </div>
         </div>
         <div class="question-item">
           <div class="question">
@@ -208,7 +219,8 @@ $reviews_chunks = array_chunk($reviews, 3);
             <span class="toggle-icon">+</span>
           </div>
           <div class="answer">
-            Да, мы предоставляем все необходимые документы: сертификаты качества, счета и накладные.
+            Да, мы предоставляем все необходимые документы: сертификаты качества, 
+            счета и накладные.
           </div>
         </div>
         <div class="question-item">
@@ -217,7 +229,8 @@ $reviews_chunks = array_chunk($reviews, 3);
             <span class="toggle-icon">+</span>
           </div>
           <div class="answer">
-            Да, мы можем выполнить распил древесины по вашим размерам, а также обработать материалы для увеличения их долговечности. </div>
+            Да, мы можем выполнить распил древесины по вашим размерам, а также 
+            обработать материалы для увеличения их долговечности. </div>
         </div>
         <div class="question-item">
           <div class="question">
@@ -225,7 +238,9 @@ $reviews_chunks = array_chunk($reviews, 3);
             <span class="toggle-icon">+</span>
           </div>
           <div class="answer">
-            Сроки доставки зависят от объема и вашего местоположения. Мы стараемся доставить заказы в течение 1–3 рабочих дней. </div>
+            Сроки доставки зависят от объема и вашего местоположения. 
+            Мы стараемся доставить заказы в течение 1–3 рабочих дней. 
+          </div>
         </div>
       </div>
     </div>
@@ -272,5 +287,4 @@ $reviews_chunks = array_chunk($reviews, 3);
   </main>
   <script src="script.js"></script>
 </body>
-
 </html>

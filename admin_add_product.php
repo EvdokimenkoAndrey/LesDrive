@@ -3,7 +3,6 @@ session_start();
 require_once 'db.php';
 require_once 'db_korzina.php';
 
-// Очистка предыдущих сообщений
 unset($_SESSION['successMessage']);
 unset($_SESSION['errorMessage']);
 
@@ -17,12 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productPrice = trim($_POST['product_price']);
     $productCategory = trim($_POST['product_category']);
 
-    // Проверяем, был ли загружен файл
     if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'images/materials/'; // Папка для хранения изображений
-        $uploadFile = $uploadDir . basename($_FILES['product_image']['name']); // Полный путь к файлу
+        $uploadDir = 'images/materials/'; 
+        $uploadFile = $uploadDir . basename($_FILES['product_image']['name']); 
 
-        // Проверяем, является ли файл изображением
         $imageFileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($imageFileType, $allowedExtensions)) {
@@ -31,14 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Перемещаем файл в папку
         if (move_uploaded_file($_FILES['product_image']['tmp_name'], $uploadFile)) {
-            // Файл успешно загружен
             $productImage = $uploadFile;
 
-            // Добавляем товар в базу данных
             try {
-                $stmt = $korzina_pdo->prepare("INSERT INTO products (product_name, product_price, product_image, category) VALUES (:product_name, :product_price, :product_image, :category)");
+                $stmt = $korzina_pdo->prepare("INSERT INTO products (product_name, product_price, 
+                product_image, category) VALUES (:product_name, :product_price, 
+                :product_image, :category)");
                 $stmt->execute([
                     'product_name' => $productName,
                     'product_price' => $productPrice,

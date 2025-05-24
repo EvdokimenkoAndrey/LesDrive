@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Проверка авторизации
 if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
@@ -12,7 +11,6 @@ require_once 'db.php';
 $successMessage = '';
 $errorMessage = '';
 
-// Получение данных пользователя
 $stmt = $pdo->prepare("
     SELECT first_name, profile_image, image_type 
     FROM users 
@@ -21,7 +19,6 @@ $stmt = $pdo->prepare("
 $stmt->execute([':user_id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Обработка POST-запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment = trim($_POST['comment']);
 
@@ -29,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMessage = "Пожалуйста, напишите отзыв.";
     } else {
         try {
-// Добавление отзыва в базу данных
             $insert_stmt = $pdo->prepare("
                 INSERT INTO reviews (user_id, username, comment)
                 VALUES (:user_id, :username, :comment)
@@ -40,10 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':comment' => $comment
             ]);
 
-            // Установка сообщения в сессии
-            $_SESSION['successMessage'] = "Ваш отзыв отправлен на модерацию и будет опубликован после проверки.";
+            $_SESSION['successMessage'] = "Ваш отзыв отправлен на модерацию 
+            и будет опубликован после проверки.";
 
-            // Перенаправление на ту же страницу (Post/Redirect/Get)
             header("Location: write_comment.php");
             exit;
         } catch (PDOException $e) {
@@ -52,9 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Получение сообщений из сессии
 $successMessage = $_SESSION['successMessage'] ?? '';
-unset($_SESSION['successMessage']); // Очистка сообщения после отображения
+unset($_SESSION['successMessage']);
 ?>
 
 <!DOCTYPE html>
@@ -113,7 +107,8 @@ unset($_SESSION['successMessage']); // Очистка сообщения пос�
       <h1 class="zagolovok-offers">Написать отзыв</h1>
 
       <form method="POST" action="" class="comment-form">
-        <textarea name="comment" placeholder="Напишите ваш отзыв..." rows="5" required maxlength="300"></textarea>
+        <textarea name="comment" placeholder="Напишите ваш отзыв..." 
+        rows="5" required maxlength="300"></textarea>
         <div class="char-counter">Осталось символов: <span id="counter">300</span></div>
         <button type="submit" class="bttn-login">Отправить отзыв</button>
     </form>
@@ -165,12 +160,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const counterElement = document.getElementById('counter');
     const maxLength = parseInt(textarea.getAttribute('maxlength'));
 
-    // Обновление счетчика при вводе текста
     textarea.addEventListener('input', function () {
         const remaining = maxLength - textarea.value.length;
         counterElement.textContent = remaining;
 
-        // Изменение цвета счетчика, если осталось мало символов
         if (remaining <= 10) {
             counterElement.style.color = 'red';
         } else {
@@ -178,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Инициализация счетчика при загрузке страницы
     counterElement.textContent = maxLength;
 });
 </script>

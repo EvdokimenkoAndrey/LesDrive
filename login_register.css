@@ -499,6 +499,7 @@ select {
 .transport {
     display: flex;
     align-items: center;
+    gap: 5px;
 }
 .three-transports {
     display: flex;
@@ -613,6 +614,9 @@ select {
     flex-direction: column;
     gap: 10px;
 }
+.order_items {
+    font-size: 20px;
+}
 .order-card-admin {
     gap: 40px;
     width: calc(33.33% - 15px);
@@ -648,6 +652,7 @@ select {
     flex-wrap: wrap; /* Перенос карточек на новую строку при необходимости */
     margin-bottom: 30px; /* Отступ между группами карточек */
 }
+
   /* .place-order-button:hover {
     background-color: #dabf7a;
   } */

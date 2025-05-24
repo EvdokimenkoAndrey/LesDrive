@@ -1,25 +1,27 @@
 <?php
 session_start();
 
-// Подключение к базе данных
 require_once 'db.php';
-// Проверка авторизации
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
 }
 
-// Получение данных пользователя из базы данных
 $stmt = $pdo->prepare("
-SELECT id, email, first_name, last_name, middle_name, phone, address, profile_image, image_type 
-FROM users 
-WHERE id = :id
+    SELECT id, email, first_name, last_name, middle_name, phone, 
+    address, profile_image, image_type 
+    FROM users 
+    WHERE id = :id
 ");
 $stmt->execute([':id' => $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 require_once "db_korzina.php";
+
 $orders_stmt = $korzina_pdo->prepare("
-    SELECT o.id AS order_id, o.name, o.phone, o.address, o.total_price, o.created_at, o.transport, o.is_approved
+    SELECT o.id AS order_id, o.name, o.phone, o.address, o.total_price, 
+    o.created_at, o.transport, o.is_approved
     FROM orders o
     WHERE o.user_id = :user_id
     ORDER BY o.created_at DESC
@@ -27,10 +29,10 @@ $orders_stmt = $korzina_pdo->prepare("
 $orders_stmt->execute([':user_id' => $_SESSION['user_id']]);
 $orders = $orders_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Для каждого заказа получаем список товаров
 foreach ($orders as &$order) {
     $items_stmt = $korzina_pdo->prepare("
-        SELECT oi.product_name, oi.product_price, oi.quantity, p.product_image AS product_image
+        SELECT oi.product_name, oi.product_price, oi.quantity, p.product_image 
+        AS product_image
         FROM order_items oi
         LEFT JOIN products p ON oi.product_name = p.product_name
         WHERE oi.order_id = :order_id
@@ -38,27 +40,21 @@ foreach ($orders as &$order) {
     $items_stmt->execute([':order_id' => $order['order_id']]);
     $order['items'] = $items_stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-unset($order); // Разрушаем ссылку
-// Обработка POST-запроса для обновления данных
+unset($order);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
 
-    // Обновление аватара
     if (isset($_FILES['new_image']) && $_FILES['new_image']['error'] === UPLOAD_ERR_OK) {
-        // Проверка размера файла (не более 1 МБ)
         if ($_FILES['new_image']['size'] > 1 * 1024 * 1024) {
             $errors[] = "Размер изображения слишком большой. Максимальный размер: 1 МБ.";
         } else {
-            // Чтение данных изображения
             $imageData = file_get_contents($_FILES['new_image']['tmp_name']);
             $imageType = $_FILES['new_image']['type'];
 
-            // Проверка типа файла
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!in_array($imageType, $allowedTypes)) {
                 $errors[] = "Недопустимый формат изображения. Разрешены только JPEG, PNG, GIF.";
             } else {
-                // Обновление изображения в базе данных
                 $update_stmt = $pdo->prepare("
             UPDATE users 
             SET profile_image = :profile_image, 
@@ -71,20 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':id' => $_SESSION['user_id']
                 ]);
 
-                // Обновление данных в сессии
                 $_SESSION['profile_image'] = $imageData;
                 $_SESSION['image_type'] = $imageType;
 
-                // Добавляем успешное сообщение
                 $_SESSION['successMessage'] = "Изображение успешно обновлено!";
             }
         }
     } elseif (isset($_FILES['new_image']) && $_FILES['new_image']['error'] !== UPLOAD_ERR_OK) {
-        // Логирование ошибок загрузки файла
         $errors[] = "Ошибка при загрузке изображения. Код ошибки: " . $_FILES['new_image']['error'];
     }
 
-    // Обработка остальных полей (имя, фамилия и т.д.)
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $middle_name = trim($_POST['middle_name']);
@@ -92,13 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['address']);
 
     $update_stmt = $pdo->prepare("
-UPDATE users 
-SET first_name = :first_name, 
-    last_name = :last_name, 
-    middle_name = :middle_name, 
-    phone = :phone, 
-    address = :address 
-WHERE id = :id
+        UPDATE users 
+        SET first_name = :first_name, 
+            last_name = :last_name, 
+            middle_name = :middle_name, 
+            phone = :phone, 
+            address = :address 
+        WHERE id = :id
 ");
     $update_stmt->execute([
         ':first_name' => $first_name ?: null,
@@ -109,20 +101,17 @@ WHERE id = :id
         ':id' => $_SESSION['user_id']
     ]);
 
-    // Обновление данных в сессии
     $_SESSION['first_name'] = $first_name ?: null;
     $_SESSION['last_name'] = $last_name ?: null;
     $_SESSION['middle_name'] = $middle_name ?: null;
     $_SESSION['phone'] = $phone ?: null;
     $_SESSION['address'] = $address ?: null;
 
-    // Если ошибок нет, добавляем успешное сообщение
     if (empty($errors)) {
         $_SESSION['successMessage'] = "Данные успешно обновлены!";
     } else {
-        $_SESSION['errorMessage'] = $errors; // Сохраняем массив ошибок
+        $_SESSION['errorMessage'] = $errors;
     }
-    // Перенаправление обратно в личный кабинет
     header("Location: user.php");
     exit;
 }
@@ -176,53 +165,65 @@ WHERE id = :id
                         <div class="profile-image-container" id="profile-image-container">
                             <?php if (!empty($_SESSION['profile_image'])): ?>
                                 <label for="new_image" class="profile-image-label">
-                                    <img src="data:<?php echo htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php echo base64_encode($_SESSION['profile_image']); ?>" alt="Profile Image" class="profile-image clickable" id="current-profile-image">
+                                    <img src="data:<?php echo 
+                                    htmlspecialchars($_SESSION['image_type']); ?>;base64,<?php 
+                                    echo base64_encode($_SESSION['profile_image']); ?>" 
+                                    alt="Profile Image" class="profile-image clickable" 
+                                    id="current-profile-image">
                                 </label>
                             <?php else: ?>
                                 <label for="new_image" class="profile-image-label">
                                     <p>Добавить аватар</p>
                                 </label>
                             <?php endif; ?>
-                            <input type="file" id="new_image" name="new_image" accept="image/jpeg, image/png, image/gif" style="display: none;">
+                            <input type="file" id="new_image" name="new_image" accept="image/jpeg, 
+                            image/png, image/gif" style="display: none;">
                         </div>
                         <div class="hello">
-                            <h1 class="welcome">Добро пожаловать, <?= htmlspecialchars($user['first_name']) ?>!</h1>
+                            <h1 class="welcome">Добро пожаловать, <?= 
+                            htmlspecialchars($user['first_name']) ?>!</h1>
                             <a href="logout.php" class="logout">Выйти из аккаунта</a>
                         </div>
                     </div>
-                    <div class="inputs_info">
-                        <div class="form-group-first">
-                            <div class="form-group">
-                                <label for="first_name" class="sign_inputs">Имя:</label>
-                                <input type="text" id="first_name" class="input_info" name="first_name" value="<?= htmlspecialchars($user['first_name'] ?? '') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name" class="sign_inputs">Фамилия:</label>
-                                <input type="text" id="last_name" class="input_info" name="last_name" value="<?= htmlspecialchars($user['last_name'] ?? '') ?>">
-                            </div>
-                        </div>
-                        <div class="form-group-first">
-                            <div class="form-group">
-                                <label for="middle_name" class="sign_inputs">Отчество:</label>
-                                <input type="text" id="middle_name" class="input_info" name="middle_name" value="<?= htmlspecialchars($user['middle_name'] ?? '') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="sign_inputs">Почта:</label>
-                                <input type="text" id="email" class="input_info" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group-first">
-                            <div class="form-group">
-                                <label for="phone" class="sign_inputs">Телефон:</label>
-                                <input type="text" id="phone" class="input_info" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="address" class="sign_inputs">Адрес:</label>
-                                <input type="text" id="address" class="input_info" name="address" value="<?= htmlspecialchars($user['address'] ?? '') ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit">Сохранить изменения</button>
+        <div class="inputs_info">
+            <div class="form-group-first">
+                <div class="form-group">
+                    <label for="first_name" class="sign_inputs">Имя:</label>
+                    <input type="text" id="first_name" class="input_info" name="first_name" 
+                    value="<?= htmlspecialchars($user['first_name'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="last_name" class="sign_inputs">Фамилия:</label>
+                    <input type="text" id="last_name" class="input_info" name="last_name" 
+                    value="<?= htmlspecialchars($user['last_name'] ?? '') ?>">
+                </div>
+            </div>
+            <div class="form-group-first">
+                <div class="form-group">
+                    <label for="middle_name" class="sign_inputs">Отчество:</label>
+                    <input type="text" id="middle_name" class="input_info" name="middle_name" 
+                    value="<?= htmlspecialchars($user['middle_name'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="sign_inputs">Почта:</label>
+                    <input type="text" id="email" class="input_info" name="email" 
+                    value="<?= htmlspecialchars($user['email'] ?? '') ?>" readonly>
+                </div>
+            </div>
+            <div class="form-group-first">
+                <div class="form-group">
+                    <label for="phone" class="sign_inputs">Телефон:</label>
+                    <input type="text" id="phone" class="input_info" name="phone" 
+                    value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="address" class="sign_inputs">Адрес:</label>
+                    <input type="text" id="address" class="input_info" name="address" 
+                    value="<?= htmlspecialchars($user['address'] ?? '') ?>">
+                </div>
+            </div>
+        </div>
+        <button type="submit">Сохранить изменения</button>
         </form>
         <div class="order-history">
             <h2>История заказов</h2>
@@ -234,48 +235,51 @@ WHERE id = :id
                         <div class="order-card">
                             <div class="order-header">
                                 <span>Заказ №<?= htmlspecialchars($order['order_id']) ?></span>
-                                <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime($order['created_at']))) ?></span>
+                                <span><?= htmlspecialchars(date('d.m.Y H:i', strtotime
+                                ($order['created_at']))) ?></span>
                             </div>
                             <ul class="order-items">
                                 <?php if (empty($order['items'])): ?>
                                     <li>Товары не найдены.</li>
+                <?php else: ?>
+                    <?php foreach ($order['items'] as $item): ?>
+                        <li class="order-item">
+                            <div class="product-image-container">
+                                <?php if (!empty($item['product_image'])): ?>
+                                    <img src="<?= htmlspecialchars($item['product_image'])
+                                        ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" 
+                                        class="product-image">
                                 <?php else: ?>
-                                    <?php foreach ($order['items'] as $item): ?>
-                                        <li class="order-item">
-                                            <!-- Изображение товара -->
-                                            <div class="product-image-container">
-                                                <?php if (!empty($item['product_image'])): ?>
-                                                    <img src="<?= htmlspecialchars($item['product_image']) ?>" alt="<?= htmlspecialchars($item['product_name']) ?>" class="product-image">
-                                                <?php else: ?>
-                                                    <span class="no-image">Нет изображения</span>
-                                                <?php endif; ?>
-                                            </div>
+                                    <span class="no-image">Нет изображения</span>
+                                <?php endif; ?>
+                            </div>
 
-                                            <!-- Детали товара -->
-                                            <div class="product-details">
-                                                <div class="product-name"><?= htmlspecialchars($item['product_name']) ?></div>
-                                                <div class="product-price"><?= htmlspecialchars($item['product_price']) ?> руб.</div>
-                                                <div class="product-quantity">Количество: <?= htmlspecialchars($item['quantity']) ?></div>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </ul>
-                            <div class="order-total">
-                                Итого: <strong><?= htmlspecialchars($order['total_price']) ?> руб.</strong>
-                            </div>
-                            <!-- Статус заказа -->
-                            <div class="order-status order_items">
-                                <?php if ($order['is_approved'] == 0): ?>
-                                    <p style="color: #f39c12;">Статус: В обработке</p>
-                                <?php elseif ($order['is_approved'] == 1): ?>
-                                    <p style="color: #2ecc71;">Статус: Одобрен</p>
-                                <?php elseif ($order['is_approved'] == -1): ?>
-                                    <p style="color: #e74c3c;">Статус: Отклонен</p>
-                                <?php endif; ?>
-                            </div>
+                        <div class="product-details">
+                            <div class="product-name"><?= 
+                            htmlspecialchars($item['product_name']) ?></div>
+                            <div class="product-price"><?= 
+                            htmlspecialchars($item['product_price']) ?> руб.</div>
+                            <div class="product-quantity">Количество: 
+                                <?= htmlspecialchars($item['quantity']) ?></div>
                         </div>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+                    <div class="order-total">
+                        Итого: <strong><?= htmlspecialchars($order['total_price']) ?> руб.</strong>
                     </div>
+                    <div class="order-status order_items">
+                        <?php if ($order['is_approved'] == 0): ?>
+                            <p style="color: #f39c12;" class="order_items">Статус: В обработке</p>
+                        <?php elseif ($order['is_approved'] == 1): ?>
+                            <p style="color: #2ecc71;" class="order_items">Статус: Одобрен</p>
+                        <?php elseif ($order['is_approved'] == -1): ?>
+                            <p style="color: #e74c3c;" class="order_items">Статус: Отклонен</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

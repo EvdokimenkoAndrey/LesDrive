@@ -52,11 +52,13 @@ session_start();
       <div class="value_mission">
         <div class="value">
           <h1 class="zag_value">Цель</h1>
-          <p class="text_value">Поставлять качественные лесоматериалы для реализации проектов клиентов.</p>
+          <p class="text_value">Поставлять качественные 
+            лесоматериалы для реализации проектов клиентов.</p>
         </div>
         <div class="value">
           <h1 class="zag_value">Миссия</h1>
-          <p class="text_value">Продвигать экологичность и надежность в строительстве через натуральные материалы.</p>
+          <p class="text_value">Продвигать экологичность и 
+            надежность в строительстве через натуральные материалы.</p>
         </div>
       </div>
       <div class="image">
@@ -108,7 +110,10 @@ session_start();
                 <span class="togle-icon">+</span>
               </div>
               <div class="answe">
-                Лариса Николаевна — опытный руководитель с более чем 15-летним стажем в деревообработке. Она направляет компанию к развитию, уделяя особое внимание качеству продукции и экологичности. </div>
+                Лариса Николаевна — опытный руководитель с более чем 
+                15-летним стажем в деревообработке. Она направляет компанию 
+                к развитию, уделяя особое внимание качеству продукции и 
+                экологичности. </div>
             </div>
           </div>
         </div>
@@ -121,7 +126,9 @@ session_start();
                 <span class="togle-icon">+</span>
               </div>
               <div class="answe">
-                Виктор Сергеевич отвечает за продажи и работу с клиентами. Его опыт и деловой подход помогают компании стабильно расти и укреплять партнерские связи. </div>
+                Виктор Сергеевич отвечает за продажи и работу с клиентами. 
+                Его опыт и деловой подход помогают компании стабильно 
+                расти и укреплять партнерские связи. </div>
             </div>
           </div>
         </div>
@@ -147,7 +154,8 @@ session_start();
         </div>
       </div>
       <div class="carts">
-        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Ab2cdec616796c54bea895862e8cc3fc04d27838464baaa4b279ba9188dfcc4f4&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
+        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Ab2cdec616796c54bea895862e8cc3fc04d27838464baaa4b279ba9188dfcc4f4&amp;source=constructor" 
+          width="100%" height="400" frameborder="0"></iframe>
       </div>
     </div>
     <footer>

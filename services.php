@@ -121,9 +121,12 @@ session_start();
                             <div class="text-recta">
                                 <h1>Услуги по распилу</h1>
                                 <ul class="list_uslugi">
-                                    <li>Подготовим материалы по индивидуальным размерам и формам.</li>
-                                    <li>Делаем скосы, вырезы и сложные формы для отделочных и строительных целей.</li>
-                                    <li>Доски, бруски, балки и другие материалы будут обработаны с максимальной точностью.</li>
+                                    <li>Подготовим материалы по индивидуальным 
+                                        размерам и формам.</li>
+                                    <li>Делаем скосы, вырезы и сложные формы 
+                                        для отделочных и строительных целей.</li>
+                                    <li>Доски, бруски, балки и другие материалы 
+                                        будут обработаны с максимальной точностью.</li>
                                 </ul>
                             </div>
                         </div>
@@ -138,9 +141,12 @@ session_start();
                             <div class="text-recta">
                                 <h1>Услуги по обработке</h1>
                                 <ul class="list_uslugi">
-                                    <li>Достигаем гладкости поверхности для покраски/лакировки.</li>
-                                    <li>Выполняем сверление и нарезку для упрощения сборки.</li>
-                                    <li>Создаем ровные края для удобного монтажа.</li>
+                                    <li>Достигаем гладкости поверхности для 
+                                        покраски/лакировки.</li>
+                                    <li>Выполняем сверление и нарезку для 
+                                        упрощения сборки.</li>
+                                    <li>Создаем ровные края для удобного 
+                                        монтажа.</li>
                                 </ul>
                             </div>
                         </div>
@@ -157,7 +163,8 @@ session_start();
                     <div class="advantage">
                         <img src="images/services/advantage1.png" class="advantage_img">
                         <p class="name_advantage">Современное оборудование</p>
-                        <p class="desc_advan">Высокоточная техника позволяет работать с материалами любой сложности.</p>
+                        <p class="desc_advan">Высокоточная техника позволяет работать 
+                            с материалами любой сложности.</p>
                     </div>
                     <div class="advantage">
                         <img src="images/services/advantage2.png" class="advantage_img">
@@ -174,17 +181,20 @@ session_start();
                     <div class="advantage">
                         <img src="images/services/advantage4.png" class="advantage_img">
                         <p class="name_advantage">Минимизация отходов</p>
-                        <p class="desc_advan">Рациональный подход к распилу снижает количество ненужных остатков.</p>
+                        <p class="desc_advan">Рациональный подход к распилу снижает 
+                            количество ненужных остатков.</p>
                     </div>
                     <div class="advantage">
                         <img src="images/services/advantage5.png" class="advantage_img">
                         <p class="name_advantage">Гарантия качества</p>
-                        <p class="desc_advan">Каждый этап контролируется для идеального результата.</p>
+                        <p class="desc_advan">Каждый этап контролируется для 
+                            идеального результата.</p>
                     </div>
                     <div class="advantage">
                         <img src="images/services/advantage6.png" class="advantage_img">
                         <p class="name_advantage">Широкий спектр услуг</p>
-                        <p class="desc_advan">Предлагаем стандартный и сложный распил, фигурную обработку под монтаж.</p>
+                        <p class="desc_advan">Предлагаем стандартный и сложный распил, 
+                            фигурную обработку под монтаж.</p>
                     </div>
                 </div>
             </div>

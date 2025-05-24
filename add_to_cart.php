@@ -6,28 +6,27 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login-form.php");
     exit;
 }
-
 try {
     $productName = $_POST['product_name'];
     $productPrice = $_POST['product_price'];
     $productImage = $_POST['product_image'];
-    $service = $_POST['service'] ?? null; // Получаем выбранную услугу (если есть)
+    $service = $_POST['service'] ?? null;
 
     $userId = $_SESSION['user_id'];
 
-    // Проверяем, есть ли товар уже в корзине
-    $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id AND product_name = :product_name");
+    $stmt = $korzina_pdo->prepare("SELECT * FROM cart WHERE user_id = :user_id 
+    AND product_name = :product_name");
     $stmt->execute(['user_id' => $userId, 'product_name' => $productName]);
     $existingItem = $stmt->fetch();
 
     if ($existingItem) {
-        // Если товар уже есть, увеличиваем количество
         $newQuantity = $existingItem['quantity'] + 1;
         $updateStmt = $korzina_pdo->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id");
         $updateStmt->execute(['quantity' => $newQuantity, 'id' => $existingItem['id']]);
     } else {
-        // Если товара нет, добавляем его в корзину
-        $insertStmt = $korzina_pdo->prepare("INSERT INTO cart (user_id, product_name, product_price, product_image, service, quantity) VALUES (:user_id, :product_name, :product_price, :product_image, :service, 1)");
+        $insertStmt = $korzina_pdo->prepare("INSERT INTO cart (user_id, product_name, 
+        product_price, product_image, service, quantity) VALUES (:user_id, :product_name, 
+        :product_price, :product_image, :service, 1)");
         $insertStmt->execute([
             'user_id' => $userId,
             'product_name' => $productName,
